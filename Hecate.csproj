@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -41,11 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainClass.cs" />
-    <Compile Include="RuleEval.cs" />
+    <Compile Include="StateExpression.cs" />
     <Compile Include="StoryGenerator.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="StateNode.cs" />
     <Compile Include="SymbolManager.cs" />
+    <Compile Include="Token.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data" />

@@ -1,0 +1,166 @@
+﻿/*
+*/
+using System;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+
+namespace Hecate
+{
+    /// <summary>
+    /// Description of StateExpression.
+    /// Uses Pratt's Top Down Recursion Parser
+    /// </summary>
+    public class StateExpression
+    {
+        
+        private Token[] tokens;
+        private int currentToken;
+        
+        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|[+\\-*\\/><!=]=?|\".*\"|[a-zA-Z0-9_]+|[.])");
+        private static Regex literalRegex = new Regex("^(\".*\"|[0-9]+([.][0-9]+)?)$");
+        
+        private static bool debugging = true;
+        
+        public StateExpression(string text, SymbolManager symbolManager)
+        {
+            this.DebugLog(text + "\n");
+            this.tokens = this.tokenize(text, symbolManager);
+            this.currentToken = 0;
+        }
+        
+        // Evaluates the expression
+        public StateNode evaluate() {
+            this.currentToken = 0;
+            StateNode returned = this.expression();
+            System.Console.WriteLine("RESULT: " + returned);
+            return returned;
+        }
+        
+        // The expression parser
+        private StateNode expression(int rightBindingPower=0) {
+            int t = this.currentToken;
+            this.currentToken++;
+            StateNode left = this.nullDenotation(this.tokens[t]);
+            while (rightBindingPower < this.leftBindingPower(this.tokens[this.currentToken])) {
+                t = this.currentToken;
+                this.currentToken++;
+                left = this.leftDenotation(this.tokens[t], left);
+            }
+            return left;
+        }
+        
+        // Advances the parser only if the current token is of the specified type
+        private void advance(int type) {
+            if (this.tokens[this.currentToken].type != type) {
+                throw new Exception("Syntax error: missin ending parenthesis.");
+            }
+            this.currentToken++;
+        }
+        
+        // Returns the left binding power of the token
+        private int leftBindingPower(Token token) {
+            switch (token.type) {
+                case SymbolManager.ASSIGN:
+                case SymbolManager.RETRACT:
+                    return 10;
+                case SymbolManager.EQUALS:
+                case SymbolManager.NOT_EQUALS:
+                case SymbolManager.LESS_THAN:
+                case SymbolManager.GREATER_THAN:
+                case SymbolManager.LESS_OR:
+                case SymbolManager.GREATER_OR:
+                    return 40;
+                case SymbolManager.ADD:
+                case SymbolManager.SUB:
+                    return 50;
+                case SymbolManager.MULTIPLY:
+                case SymbolManager.DIVIDE:
+                    return 60;
+                case SymbolManager.LEFT_PAREN:
+                case SymbolManager.DOT:
+                    return 80;
+                case SymbolManager.END_OF_EXPRESSION:
+                    return 0;
+                default: return 0;
+            }
+        }
+        
+        // The value of the literal
+        private StateNode nullDenotation(Token token) {
+            switch (token.type) {
+                case SymbolManager.LITERAL: return token.literal;
+                case SymbolManager.ADD: return this.expression(100);
+                case SymbolManager.SUB: return -this.expression(100);
+                case SymbolManager.LEFT_PAREN:
+                    StateNode expr = this.expression();
+                    this.advance(SymbolManager.RIGHT_PAREN);
+                    return expr;
+                default: throw new Exception("Syntax error: Invalid value!");
+            }
+        }
+        
+        // The left denotation of a token
+        private StateNode leftDenotation(Token token, StateNode left) {
+            StateNode right = this.expression(this.leftBindingPower(token));
+            switch (token.type) {
+                case SymbolManager.ADD: return (int)left + (int)right;
+                case SymbolManager.SUB: return left - right;
+                case SymbolManager.MULTIPLY: return left * right;
+                case SymbolManager.DIVIDE: return left / right;
+                case SymbolManager.ASSIGN: return right; // TODO
+                case SymbolManager.RETRACT: return right; // TODO
+                case SymbolManager.EQUALS: return left.Equals(right) ? 1 : 0;
+                case SymbolManager.NOT_EQUALS: return left.Equals(right) ? 0 : 1;
+                case SymbolManager.LESS_THAN: return left < right ? 1 : 0;
+                case SymbolManager.GREATER_THAN: return left > right ? 1 : 0;
+                case SymbolManager.LESS_OR: return left <= right ? 1 : 0;
+                case SymbolManager.GREATER_OR: return left >= right ? 1 : 0;
+                case SymbolManager.DOT: return "variable"; // TODO
+                case SymbolManager.ADD_TO: return (int)left + (int)right; // TODO
+                case SymbolManager.SUB_TO: return left - right; // TODO
+                case SymbolManager.MULTIPLY_TO: return left * right; // TODO
+                case SymbolManager.DIVIDE_TO: return left / right; // TODO
+                default: throw new Exception("Syntax error: Invalid operator!");
+            }
+        }
+        
+        // Splits the string into tokens
+        private Token[] tokenize(string text, SymbolManager symbolManager) {
+            
+            // Split the string into string tokens
+            Match match = StateExpression.tokenRegex.Match(text);
+            List<string> strings = new List<string>();
+            while (match.Success) {
+                this.DebugLog("[" + match.Groups[0] + "]");
+                
+                strings.Add(match.Groups[0].Value);
+                match = match.NextMatch();
+            }
+            this.DebugLog("\n");
+            
+            // Create the actual token array from the string tokens
+            this.tokens = new Token[strings.Count + 1];
+            int i = 0;
+            foreach (string s in strings) {
+                tokens[i] = Token.GetToken(s, symbolManager);
+                i++;
+            }
+            tokens[tokens.Length - 1] = new Token(SymbolManager.END_OF_EXPRESSION, null);
+            return tokens;
+        }
+        
+        public static StateExpression[] StringArrayToExpressionArray(string[] strings, SymbolManager symbolManager) {
+            StateExpression[] exprs = new StateExpression[strings.Length];
+            for (int i = 0; i < strings.Length; i++) {
+                exprs[i] = new StateExpression(strings[i], symbolManager);
+            }
+            return exprs;
+        }
+        
+        private void DebugLog(string text) {
+            if (StateExpression.debugging) {
+                System.Console.Write(text);
+            }
+        }
+    }
+}

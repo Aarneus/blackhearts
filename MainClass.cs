@@ -17,6 +17,9 @@ namespace Hecate
             StoryGenerator generator = new StoryGenerator();
             generator.ParseRuleFile("E:\\Code\\C#\\Hecate\\Data\\Test.hec");
             
+            generator.GenerateStory("");
+            
+            
             // End on input
             System.Console.ReadKey();
             

@@ -25,7 +25,9 @@ namespace Hecate
         
         
         public string GenerateStory(string startingSymbol) {
-            return "WIP";
+            // TODO
+            StateExpression exp = new StateExpression("a.b", this.symbolManager);
+            return exp.evaluate();
         }
         
         

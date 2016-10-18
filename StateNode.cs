@@ -28,8 +28,23 @@ namespace Hecate
 		
 		
 		// Implicit operators
+		public override bool Equals(object obj)
+        {
+		    StateNode sn = (StateNode)obj;
+		    if (this.stateValue is string) {
+		        return this.stateValue.Equals(sn);
+		    }
+		    return this.stateValue == (double)sn;
+        }
+
+		
 		// Initialize as int
 		public static implicit operator StateNode(int stateValue) {
+	            return new StateNode(stateValue); 
+        }
+		
+		// Initialize as double
+		public static implicit operator StateNode(double stateValue) {
 	            return new StateNode(stateValue); 
         }
 		
@@ -43,12 +58,17 @@ namespace Hecate
 		    return (int)var.stateValue;
 		}
 		
+		// Treated as double
+		public static implicit operator double(StateNode var) {
+		    return (double)var.stateValue;
+		}
+		
 		// Treated as string
 		public static implicit operator string(StateNode var) {
-		    if (var.stateValue is string) {
+		    if (!(var.stateValue is string)) {
 		        return "" + var.stateValue;
 		    }
-		    return var.stateValue;
+		    return (string)var.stateValue;
 		}
 	}
 }

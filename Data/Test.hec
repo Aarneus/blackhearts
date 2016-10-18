@@ -12,7 +12,7 @@ b -> "npentu"
 
 
 # Test
-d abulaf koko.Ponga.dong -> "", = tamagotchi "JOULUKUUSI", "JOU", 2, + 2 3
+d abulaf koko.Ponga.dong -> "", tamagotchi = "JOULUKUUSI", "JOU", 2, + 2 3
 
 # Complex evals are TODO
-# e -> "", = abo (2 + (12 - 32))
+e -> "", abo = (2 + (12 - 32))

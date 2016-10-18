@@ -12,20 +12,20 @@ namespace Hecate
     {
         private int name;
         private string text;
-        private RuleEval[] evals;
-        private RuleEval[] parameters;
+        private StateExpression[] exprs;
+        private StateExpression[] parameters;
         
         private static Regex ruleRegex = new Regex("(.*) -> (\"[^\"]*\")(, )?(.*)");
         
         public Rule(int name, string text) : this(name, text, null, new string[0], new string[0]) {}
-        public Rule(int name, string text, SymbolManager symbolManager, string[] evals) : this(name, text, symbolManager, evals, new string[0]) {}
-        public Rule(int name, string text, SymbolManager symbolManager, string[] evals, string[] parameters)
+        public Rule(int name, string text, SymbolManager symbolManager, string[] exprs) : this(name, text, symbolManager, exprs, new string[0]) {}
+        public Rule(int name, string text, SymbolManager symbolManager, string[] exprs, string[] parameters)
         {
             this.name = name;
             this.text = text;
             
-            this.evals = RuleEval.StringArrayToEvalArray(evals, symbolManager);
-            this.parameters = RuleEval.StringArrayToEvalArray(parameters, symbolManager);
+            this.exprs = StateExpression.StringArrayToExpressionArray(exprs, symbolManager);
+            this.parameters = StateExpression.StringArrayToExpressionArray(parameters, symbolManager);
         }
         
         public Rule(string line, SymbolManager symbolManager) 
@@ -38,7 +38,7 @@ namespace Hecate
                 string text = ruleMatch.Groups[2].Value.Trim();
                 string evalstring = ruleMatch.Groups[4].Value.Trim();
                 
-                System.Console.WriteLine(": " + leftside + "; " + text + "; " + evalstring);
+                //System.Console.WriteLine(": " + leftside + "; " + text + "; " + evalstring);
                 
                 // Separate the name from the parameters
                 string[] nameAndParameters = Rule.SplitHelper(leftside, ' ');
@@ -53,8 +53,8 @@ namespace Hecate
                 // Finalize
                 this.name = name;
                 this.text = text;
-                this.evals = RuleEval.StringArrayToEvalArray(evals, symbolManager);
-                this.parameters = RuleEval.StringArrayToEvalArray(parameters, symbolManager);
+                this.exprs = StateExpression.StringArrayToExpressionArray(evals, symbolManager);
+                this.parameters = StateExpression.StringArrayToExpressionArray(parameters, symbolManager);
             }
         }
         
