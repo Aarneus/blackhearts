@@ -12,18 +12,77 @@ namespace Hecate
 	{
 		private Dictionary<int, StateNode> children;
 		private dynamic stateValue;
+		private StateNode parent;
+		private int parentName;
 		
-	    public StateNode(dynamic stateValue) {
+	    public StateNode(dynamic stateValue, StateNode parent=null, int parentName=0) {
 			this.children = new Dictionary<int, StateNode>();
 			this.stateValue = stateValue;
+			this.parent = parent;
+			this.parentName = parentName;
         }
 		
+		public dynamic getValue() {
+		    return this.stateValue;
+		}
+		
+		public StateNode setValue(dynamic setValue) {
+		    this.stateValue = setValue;
+		    return this;
+		}
+		
 		// Returns the child variable according to the given name
-		public StateNode getSubvariable(int name) {
+		public StateNode getSubvariable(int name, bool createIfNull=false) {
 		    if (this.children.ContainsKey(name)) {
 		        return this.children[name];
 		    }
-		    throw new ArgumentException();
+		    else if (createIfNull) {
+		        this.children[name] = new StateNode(0, this, name);
+		        return this.children[name];
+		    }
+		    throw new ArgumentException("Invalid variable.");
+		}
+		
+		// Sets the value of the child variable
+		public StateNode setSubvariable(int name, StateNode setValue) {
+		    if (!this.children.ContainsKey(name)) {
+		            this.children[name] = new StateNode(setValue.stateValue);
+		    }
+		    else {
+		        this.children[name].setValue(setValue.stateValue);
+		    }
+		    return this.children[name];
+		}
+		
+		// Destroys the subvariable (and all named with it)
+		public StateNode removeSubvariable(int name) {
+		    if (this.children.ContainsKey(name)) {
+		        StateNode subvar = this.children[name];
+		        this.children.Remove(name);
+		        return subvar;
+		        
+		    }
+		    throw new ArgumentException("Invalid variable.");
+		}
+		
+		// Removes this node from it's parent
+		public StateNode removeFromParent() {
+		    if (this.parent != null) {
+		        this.parent.removeSubvariable(this.parentName);
+		        return this;
+		    }
+		    throw new ArgumentException("Invalid variable.");
+		}
+		
+		// Debug print to the console the whole tree
+		public void printTree(SymbolManager symbolManager, int name, int level=0) {
+		    for (int i = 0; i < level; i++) {
+		        System.Console.Write(" ");
+		    }
+		    System.Console.WriteLine(symbolManager.getString(name) + ": " + this.stateValue);
+		    foreach (KeyValuePair<int, StateNode> node in children) {
+		        node.Value.printTree(symbolManager, node.Key, level + 1);
+		    }
 		}
 		
 		
@@ -36,7 +95,6 @@ namespace Hecate
 		    }
 		    return this.stateValue == (double)sn;
         }
-
 		
 		// Initialize as int
 		public static implicit operator StateNode(int stateValue) {

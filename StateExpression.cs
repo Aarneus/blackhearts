@@ -15,6 +15,8 @@ namespace Hecate
         
         private Token[] tokens;
         private int currentToken;
+        private StateNode rootNode;
+        private bool createSubvars = false;
         
         private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|[+\\-*\\/><!=]=?|\".*\"|[a-zA-Z0-9_]+|[.])");
         private static Regex literalRegex = new Regex("^(\".*\"|[0-9]+([.][0-9]+)?)$");
@@ -29,10 +31,11 @@ namespace Hecate
         }
         
         // Evaluates the expression
-        public StateNode evaluate() {
+        public StateNode evaluate(StateNode rootNode) {
+            this.rootNode = rootNode;
             this.currentToken = 0;
             StateNode returned = this.expression();
-            System.Console.WriteLine("RESULT: " + returned);
+            System.Console.WriteLine("RESULT: " + returned + "\n");
             return returned;
         }
         
@@ -61,7 +64,12 @@ namespace Hecate
         private int leftBindingPower(Token token) {
             switch (token.type) {
                 case SymbolManager.ASSIGN:
-                case SymbolManager.RETRACT:
+                case SymbolManager.ADD_TO:
+                case SymbolManager.SUB_TO:
+                case SymbolManager.MULTIPLY_TO:
+                case SymbolManager.DIVIDE_TO:
+                case SymbolManager.LET:
+                case SymbolManager.DEL:
                     return 10;
                 case SymbolManager.EQUALS:
                 case SymbolManager.NOT_EQUALS:
@@ -87,14 +95,24 @@ namespace Hecate
         
         // The value of the literal
         private StateNode nullDenotation(Token token) {
+            StateNode expr;
             switch (token.type) {
                 case SymbolManager.LITERAL: return token.literal;
+                case SymbolManager.VARIABLE: return this.rootNode.getSubvariable(token.literal, this.createSubvars);
                 case SymbolManager.ADD: return this.expression(100);
                 case SymbolManager.SUB: return -this.expression(100);
                 case SymbolManager.LEFT_PAREN:
-                    StateNode expr = this.expression();
+                    expr = this.expression();
                     this.advance(SymbolManager.RIGHT_PAREN);
                     return expr;
+                case SymbolManager.LET:
+                    this.createSubvars = true;
+                    expr = this.expression(79);
+                    this.createSubvars = false;
+                    return expr;
+                case SymbolManager.DEL:
+                    StateNode node = this.expression(79);
+                    return node.removeFromParent();
                 default: throw new Exception("Syntax error: Invalid value!");
             }
         }
@@ -107,19 +125,24 @@ namespace Hecate
                 case SymbolManager.SUB: return left - right;
                 case SymbolManager.MULTIPLY: return left * right;
                 case SymbolManager.DIVIDE: return left / right;
-                case SymbolManager.ASSIGN: return right; // TODO
-                case SymbolManager.RETRACT: return right; // TODO
                 case SymbolManager.EQUALS: return left.Equals(right) ? 1 : 0;
                 case SymbolManager.NOT_EQUALS: return left.Equals(right) ? 0 : 1;
                 case SymbolManager.LESS_THAN: return left < right ? 1 : 0;
                 case SymbolManager.GREATER_THAN: return left > right ? 1 : 0;
                 case SymbolManager.LESS_OR: return left <= right ? 1 : 0;
                 case SymbolManager.GREATER_OR: return left >= right ? 1 : 0;
-                case SymbolManager.DOT: return "variable"; // TODO
-                case SymbolManager.ADD_TO: return (int)left + (int)right; // TODO
-                case SymbolManager.SUB_TO: return left - right; // TODO
-                case SymbolManager.MULTIPLY_TO: return left * right; // TODO
-                case SymbolManager.DIVIDE_TO: return left / right; // TODO
+                case SymbolManager.DOT: 
+                    return left.getSubvariable(right, this.createSubvars);
+                case SymbolManager.ASSIGN:
+                    return left.setValue(right.getValue());
+                case SymbolManager.ADD_TO:
+                    return left.setValue((int)left + (int)right);
+                case SymbolManager.SUB_TO: 
+                    return left.setValue(left - right);
+                case SymbolManager.MULTIPLY_TO: 
+                    return left.setValue(left * right);
+                case SymbolManager.DIVIDE_TO: 
+                    return left.setValue(left / right);
                 default: throw new Exception("Syntax error: Invalid operator!");
             }
         }
@@ -141,8 +164,10 @@ namespace Hecate
             // Create the actual token array from the string tokens
             this.tokens = new Token[strings.Count + 1];
             int i = 0;
+            int prevToken = 0;
             foreach (string s in strings) {
-                tokens[i] = Token.GetToken(s, symbolManager);
+                tokens[i] = Token.GetToken(s, prevToken, symbolManager);
+                prevToken = tokens[i].type;
                 i++;
             }
             tokens[tokens.Length - 1] = new Token(SymbolManager.END_OF_EXPRESSION, null);

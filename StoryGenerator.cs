@@ -10,7 +10,7 @@ namespace Hecate
     /// </summary>
     public class StoryGenerator
     {
-        private StateNode rootVariable;
+        private StateNode rootNode;
         private Dictionary<int, List<Rule>> rules;
         private SymbolManager symbolManager;
         
@@ -18,7 +18,7 @@ namespace Hecate
         
         public StoryGenerator()
         {
-            this.rootVariable = new StateNode(0);
+            this.rootNode = new StateNode(42);
             this.rules = new Dictionary<int, List<Rule>>();
             this.symbolManager = new SymbolManager();
         }
@@ -26,8 +26,22 @@ namespace Hecate
         
         public string GenerateStory(string startingSymbol) {
             // TODO
-            StateExpression exp = new StateExpression("a.b", this.symbolManager);
-            return exp.evaluate();
+            StateExpression exp = new StateExpression("let a.b.c = 12", this.symbolManager);
+            exp.evaluate(rootNode);
+            exp = new StateExpression("let a.d = 3", this.symbolManager);
+            exp.evaluate(rootNode);
+            exp = new StateExpression("del a.b", this.symbolManager);
+            exp.evaluate(rootNode);
+            exp = new StateExpression("let a.(a.d) = 11", this.symbolManager);
+            exp.evaluate(rootNode);
+            
+            exp = new StateExpression("a.3 += 10", this.symbolManager);
+            exp.evaluate(rootNode);
+            
+            System.Console.WriteLine("\nTREE:");
+            this.rootNode.printTree(this.symbolManager, symbolManager.getInt("root"));
+            
+            return "";
         }
         
         

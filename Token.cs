@@ -24,18 +24,29 @@ namespace Hecate
             this.literal = literal;
         }
         
-        public static Token GetToken(string s, SymbolManager symbolManager) {
+        public static Token GetToken(string s, int prevToken, SymbolManager symbolManager) {
             Token token = null;
             
-            // Literals
-            if (Token.stringRegex.IsMatch(s)) {
+            // Commands
+            if (s.Equals("let") || s.Equals("del")) {
+                token = new Token(symbolManager.getInt(s), null);
+            }
+            // Literal string
+            else if (Token.stringRegex.IsMatch(s)) {
                 token = new Token(SymbolManager.LITERAL, s.Substring(1, s.Length - 2));
             }
+            // Literal number
             else if (Token.numberRegex.IsMatch(s)) {
                 token = new Token(SymbolManager.LITERAL, Convert.ToInt32(s));
             }
+            // Variable path - first one is a variable, the others are literals
             else if (Token.variableRegex.IsMatch(s)) {
-                token = new Token(SymbolManager.LITERAL, symbolManager.getInt(s));
+                if (prevToken == SymbolManager.DOT) {
+                    token = new Token(SymbolManager.LITERAL, symbolManager.getInt(s));
+                }
+                else  {
+                    token = new Token(SymbolManager.VARIABLE, symbolManager.getInt(s));
+                }
             }
             // Not a literal
             else {

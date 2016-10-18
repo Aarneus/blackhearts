@@ -16,13 +16,14 @@ namespace Hecate
         private Dictionary<int, string> strings;
         private int currentSymbolIndex;
         
+        public const int VARIABLE = -1;
         public const int LITERAL = 0;
         public const int ADD = 1;
         public const int SUB = 2;
         public const int MULTIPLY = 3;
         public const int DIVIDE = 4;
         public const int ASSIGN = 5;
-        public const int RETRACT = 6;
+        public const int NEGATE = 6; //TODO
         public const int EQUALS = 7;
         public const int NOT_EQUALS = 8;
         public const int LESS_THAN = 9;
@@ -36,9 +37,11 @@ namespace Hecate
         public const int SUB_TO = 17;
         public const int MULTIPLY_TO = 18;
         public const int DIVIDE_TO = 19;
-        public const int END_OF_EXPRESSION = 20;
+        public const int LET = 20;
+        public const int DEL = 21;
+        public const int END_OF_EXPRESSION = 22;
         
-        public const int FIRST_SYMBOL = 21;
+        public const int FIRST_SYMBOL = 23;
         
         public SymbolManager()
         {
@@ -50,7 +53,7 @@ namespace Hecate
                 {"*", SymbolManager.MULTIPLY},
                 {"/", SymbolManager.DIVIDE},
                 {"=", SymbolManager.ASSIGN},
-                {"!", SymbolManager.RETRACT},
+                {"!", SymbolManager.NEGATE},
                 {"==", SymbolManager.EQUALS},
                 {"!=", SymbolManager.NOT_EQUALS},
                 {"<", SymbolManager.LESS_THAN},
@@ -64,6 +67,8 @@ namespace Hecate
                 {"-=", SymbolManager.SUB_TO},
                 {"*=", SymbolManager.MULTIPLY_TO},
                 {"/=", SymbolManager.DIVIDE_TO},
+                {"let", SymbolManager.LET},
+                {"del", SymbolManager.DEL},
                 {"$$$", SymbolManager.END_OF_EXPRESSION}
             };
             this.strings = new Dictionary<int, string>();
