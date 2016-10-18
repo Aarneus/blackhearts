@@ -11,13 +11,11 @@ namespace Hecate
 	public class StateNode
 	{
 		private Dictionary<int, StateNode> children;
-		private int valueInt;
-		private string valueString;
+		private dynamic stateValue;
 		
-	    public StateNode(int valueInt=0, string valueString="") {
+	    public StateNode(dynamic stateValue) {
 			this.children = new Dictionary<int, StateNode>();
-			this.valueInt = valueInt;
-			this.valueString = valueString;
+			this.stateValue = stateValue;
         }
 		
 		// Returns the child variable according to the given name
@@ -31,29 +29,26 @@ namespace Hecate
 		
 		// Implicit operators
 		// Initialize as int
-		public static implicit operator StateNode(int value) {
-	            return new StateNode(value); 
+		public static implicit operator StateNode(int stateValue) {
+	            return new StateNode(stateValue); 
         }
 		
 		// Initialize as string
-		public static implicit operator StateNode(string value) {
-	            return new StateNode(-1, value); 
+		public static implicit operator StateNode(string stateValue) {
+	            return new StateNode(stateValue); 
 	    }
 		
 		// Treated as int
 		public static implicit operator int(StateNode var) {
-		    if (var.valueString.Equals("")) {
-		        throw new ArithmeticException();
-		    }
-		    return var.valueInt;
+		    return (int)var.stateValue;
 		}
 		
 		// Treated as string
 		public static implicit operator string(StateNode var) {
-		    if (var.valueString.Equals("")) {
-		        return "" + var.valueInt;
+		    if (var.stateValue is string) {
+		        return "" + var.stateValue;
 		    }
-		    return var.valueString;
+		    return var.stateValue;
 		}
 	}
 }

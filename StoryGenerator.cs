@@ -18,7 +18,7 @@ namespace Hecate
         
         public StoryGenerator()
         {
-            this.rootVariable = new StateNode(0, "");
+            this.rootVariable = new StateNode(0);
             this.rules = new Dictionary<int, List<Rule>>();
             this.symbolManager = new SymbolManager();
         }
