@@ -113,6 +113,9 @@ namespace Hecate
 		        }
 		        return false;
 		    }
+		    if (b == null) {
+		        return false;
+		    }
 		    return a.Equals(b);
 		}
 		
