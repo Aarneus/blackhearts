@@ -1,8 +1,7 @@
 ﻿
 # Scenes
+plot_scene -> "[=>scene main]\n", main.phase < 7, main.phase <= sub.phase, main.phase += 1
+plot_scene -> "[=>scene sub]\n", sub.phase < 7, main.phase >= sub.phase, sub.phase += 1
 
-# scene -> "", let main.phase = 7, let sub.phase = 7
-
-
-scene -> "MAIN [main.phase]\n", main.phase < 7, main.phase <= sub.phase, main.phase += 1
-scene -> "SUB [sub.phase]\n", sub.phase < 7, main.phase >= sub.phase, sub.phase += 1
+scene Plot -> "MAIN [Plot.phase]", Plot.plot == 1
+scene Plot -> "SUB [Plot.phase]", Plot.plot == 2

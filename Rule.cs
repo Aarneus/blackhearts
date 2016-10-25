@@ -111,13 +111,28 @@ namespace Hecate
                 return false;
             }
             
+             // Push local stack before evaluations
+            StateExpression.PushLocalStack();
+            
+            // Bind parameters
+            for (int i = 0; i < this.parameters.Length; i++) {
+                StateNode parameter = this.parameters[i].evaluate(generator, rootNode);
+                parameter.replaceWith(parameters[i]);
+            }
+            
             // If all conditions return true
             foreach (StateExpression c in this.conditions) {
                 int result = c.evaluate(this.generator, rootNode);
                 if (result == 0) {
+                    StateExpression.PopLocalStack();
                     return false;
                 }
             }
+            
+            // Pop local stack after evaluations
+            StateExpression.PopLocalStack();
+            
+            
             return true;
         }
         
