@@ -12,5 +12,5 @@ plot -> "[=>scene][=>plot]", subplot.phase != 7
 plot -> "", mainplot.phase == 7, subplot.phase ==  7
 
 # Story outlines
-init_story -> "[=>init_mainplot][=>init_subplot]", let mainplot.phase = -1, let subplot.phase = 0
+init_story -> "[=>init_mainplot][=>init_subplot]", let mainplot.phase = 0, let subplot.phase = 0
 

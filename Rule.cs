@@ -2,6 +2,7 @@
 */
 using System;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace Hecate
 {
@@ -12,7 +13,8 @@ namespace Hecate
     {
         private int name;
         private string text;
-        private StateExpression[] exprs;
+        private StateExpression[] effects;
+        private StateExpression[] conditions;
         private StateExpression[] parameters;
         private StateExpression[] insets;
         
@@ -28,7 +30,7 @@ namespace Hecate
             this.name = name;
             this.generator = generator;
             this.setText(text, symbolManager);
-            this.exprs = StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager);
+            this.setExpressions(StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager));
             this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager);
         }
         
@@ -58,7 +60,7 @@ namespace Hecate
                 this.name = name;
                 this.generator = generator;
                 this.setText(text, symbolManager);
-                this.exprs = StateExpression.StringArrayToExpressionArray(evals, generator, symbolManager);
+                this.setExpressions(StateExpression.StringArrayToExpressionArray(evals, generator, symbolManager));
                 this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager);
             }
         }
@@ -74,7 +76,7 @@ namespace Hecate
             }
             
             // Evaluate all basic expressions
-            foreach (StateExpression e in this.exprs) {
+            foreach (StateExpression e in this.effects) {
                 e.evaluate(generator, rootNode);
             }
             
@@ -84,8 +86,14 @@ namespace Hecate
             return result;
         }
         
-        // TODO
+        // Returns true if all conditions return true
         public bool check(StateNode rootNode) {
+            foreach (StateExpression c in this.conditions) {
+                int result = c.evaluate(this.generator, rootNode);
+                if (result == 0) {
+                    return false;
+                }
+            }
             return true;
         }
         
@@ -114,6 +122,25 @@ namespace Hecate
         	    }
         	}
             this.text = text.Substring(1, text.Length - 2);
+        }
+        
+        
+        
+        // Save the expressions in two groups; conditions and effects
+        private void setExpressions(StateExpression[] exprs) {
+            List<StateExpression> conditions = new List<StateExpression>();
+            List<StateExpression> effects = new List<StateExpression>();
+            
+            foreach (StateExpression ex in exprs) {
+                if (ex.isCondition()) {
+                    conditions.Add(ex);
+                }
+                else {
+                    effects.Add(ex);
+                }
+            }
+            this.conditions = conditions.ToArray();
+            this.effects = effects.ToArray();
         }
         
         public static string[] splitHelper(string text, char separator) {

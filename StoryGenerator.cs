@@ -37,12 +37,22 @@ namespace Hecate
             //TODO: add parameters and conditions
             // Choose a rule
             if (this.rules.ContainsKey(rule)) {
-                int r = this.rules[rule].Count;
-                r = this.random.Next(r);
-                return this.rules[rule][r].execute(this, this.rootNode);
+                Rule chosen = null;
+                int count = 1;
+                
+                foreach (Rule r in this.rules[rule]) {
+                    if (r.check(this.rootNode)) {
+                        if (this.random.Next(count) == 0) {
+                            chosen = r;
+                            count += 1;
+                        }
+                    }
+                }
+                
+                if (chosen != null) {
+                    return chosen.execute(this, this.rootNode);
+                }
             }
-            
-            System.Console.WriteLine("NOPE: " + this.symbolManager.getString(rule));
             
             return "";
         }

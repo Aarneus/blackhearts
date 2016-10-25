@@ -108,6 +108,20 @@ namespace Hecate
             return this.integers[symbol];
         }
         
+        // Returns true if the symbol is a conditional (>=, ==, <, etc)
+        public static bool isConditionalOperator(int symbol) {
+            switch (symbol) {
+                case EQUALS:
+                case NOT_EQUALS:
+                case LESS_THAN:
+                case GREATER_THAN:
+                case LESS_OR:
+                case GREATER_OR:
+                    return true;
+                default: return false;
+            }
+        }
+        
         
     }
 }

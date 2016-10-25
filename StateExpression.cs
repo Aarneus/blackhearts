@@ -15,6 +15,7 @@ namespace Hecate
         
         private Token[] tokens;
         private int currentToken;
+        private bool condition;
         private StateNode rootNode;
         private SymbolManager symbolManager;
         private StoryGenerator generator;
@@ -30,6 +31,7 @@ namespace Hecate
             this.DebugLog(text + "\n");
             this.generator = generator;
             this.symbolManager = symbolManager;
+            this.condition = false;
             this.tokens = this.tokenize(text);
             this.currentToken = 0;
         }
@@ -180,6 +182,12 @@ namespace Hecate
             foreach (string s in strings) {
                 tokens[i] = Token.getToken(s, prevToken, this.symbolManager);
                 prevToken = tokens[i].type;
+                
+                // Even one conditional token marks this expression as a condition
+                if (SymbolManager.isConditionalOperator(tokens[i].type)) {
+                    this.condition = true;
+                }
+                
                 this.DebugLog("[" + tokens[i].type + "]");
                 i++;
             }
@@ -187,6 +195,11 @@ namespace Hecate
             tokens[tokens.Length - 1] = new Token(SymbolManager.END_OF_EXPRESSION, null);
             return tokens;
         }
+        
+        public bool isCondition() {
+            return this.condition;
+        }
+        
         
         public static StateExpression[] StringArrayToExpressionArray(string[] strings, StoryGenerator generator, SymbolManager symbolManager) {
             StateExpression[] exprs = new StateExpression[strings.Length];
