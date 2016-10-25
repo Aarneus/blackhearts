@@ -3,4 +3,31 @@
 plot_scene => "[=>scene main]\n", main.phase < 7, main.phase <= side.phase, main.phase += 1
 plot_scene => "[=>scene side]\n", side.phase < 7, main.phase >= side.phase, side.phase += 1
 
-scene Plot => "[Plot.plot] [Plot.phase]"
+#scene Plot => "[Plot.plot] [Plot.phase]"
+
+
+# Phase 1 - Hook
+scene P => "This is our hero, [P.main_actor.name]", P.phase == 1
+
+
+# Phase 2 - Twist 1
+scene P => "The phone rings. It's a job. Time to get dirty.", P.phase == 2
+
+
+# Phase 3 - Pinch 1
+scene P => "Oh, this is tougher than anybody thought.", P.phase == 3
+
+# Phase 4 - Midpoint
+scene P => "That's it, we're done screwing around.", P.phase == 4
+
+
+# Phase 5 - Pinch 2
+scene P => "Oh shit, they're closing in!", P.phase == 5
+
+
+# Phase 6 - Twist 2
+scene P => "But I have this weapon!.", P.phase == 6
+
+
+# Phase 7 - Resolution
+scene P => "We'll take cash, please.", P.phase == 7

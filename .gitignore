@@ -1,3 +1,14 @@
 [Bb]in
 *.dll
 obj
+obj/Debug/Hecate.pdb
+bin/Debug/Hecate.exe
+bin/Debug/Hecate.pdb
+obj/Debug/Hecate.csprojResolveAssemblyReference.cache
+obj/Debug/Hecate.exe
+obj/Debug/Hecate.pdb
+bin/Debug/Hecate.exe
+bin/Debug/Hecate.pdb
+obj/Debug/Hecate.csprojResolveAssemblyReference.cache
+obj/Debug/Hecate.exe
+obj/Debug/Hecate.pdb
