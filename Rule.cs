@@ -68,16 +68,17 @@ namespace Hecate
         
         // Executes the rule
         public string execute(StoryGenerator generator, StateNode rootNode) {
+            
+            // Evaluate effects before insets to avoid rabbithole
+            foreach (StateExpression e in this.effects) {
+                e.evaluate(generator, rootNode);
+            }
+            
             // Replace all inset expressions with their evals
             string result = this.text;
             for (int i = 0; i < this.insets.Length; i++) {
                 StateNode eval = this.insets[i].evaluate(generator, rootNode);
                 result = result.Replace("[" + i + "]", eval);
-            }
-            
-            // Evaluate all basic expressions
-            foreach (StateExpression e in this.effects) {
-                e.evaluate(generator, rootNode);
             }
             
             // Add special characters
