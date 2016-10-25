@@ -27,7 +27,7 @@ namespace Hecate
         
         public string generate(string symbol) {
             
-            Rule tempRule = new Rule(SymbolManager.NULL, "\"" + symbol + "\"", this, this.symbolManager);
+            Rule tempRule = new Rule(0, "\"" + symbol + "\"", this, this.symbolManager);
             string text = tempRule.execute(new StateNode[0], this, this.rootNode);
             return text;
         }

@@ -2,10 +2,10 @@
 # Main plots
 init_main => "[=>plot_type main]", let main.plot = "MAIN", let main.phase = 0
 
-# Side plots - TODO
-init_side => "[=>plot_type side]", let side.plot = "SIDE", let side.phase = 7
+# Side plots
+init_side => "[=>plot_type side]", let side.plot = "SIDE", let side.phase = 0
 
 
 
 # Search
-plot_type P => "", let P.type = "SEARCH", let P.main_actor <- protagonist
+plot_type P => "", let P.type = "SEARCH", let P.searcher <- protagonist

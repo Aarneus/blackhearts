@@ -107,16 +107,12 @@ namespace Hecate
 		
 		// Compares two instances of StateNode
 		public static bool EqualNodes(StateNode a, StateNode b) {
-		    if (a == null || a.stateValue == null) {
-		        if (b == null || b.stateValue == null) {
+		    if (a == null) {
+		        if (b == null) {
 		            return true;
 		        }
 		        return false;
 		    }
-		    if (b == null || b.stateValue == null) {
-		        return false;
-		    }
-		    
 		    return a.Equals(b);
 		}
 		

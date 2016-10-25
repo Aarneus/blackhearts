@@ -12,5 +12,5 @@ plot => "[=>plot_scene][=>plot]", side.phase != 7
 plot => "", main.phase == 7, side.phase ==  7
 
 # Story outlines
-init_story => "[=>init_main_actor][=>init_main][=>init_side]"
+init_story => "[=>init_main][=>init_side]"
 
