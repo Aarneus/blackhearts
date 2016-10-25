@@ -107,6 +107,7 @@ namespace Hecate
         private StateNode nullDenotation(Token token) {
             StateNode expr;
             switch (token.type) {
+                case SymbolManager.NULL: return null;
                 case SymbolManager.LITERAL: return token.literal;
                 case SymbolManager.VARIABLE: return this.rootNode.getSubvariable(token.literal, this.createSubvars);
                 case SymbolManager.LOCAL: return StateExpression.localNode.getSubvariable(token.literal, this.createSubvars);
@@ -148,14 +149,14 @@ namespace Hecate
                 case SymbolManager.SUB: return left - right;
                 case SymbolManager.MULTIPLY: return left * right;
                 case SymbolManager.DIVIDE: return left / right;
-                case SymbolManager.EQUALS: return left.Equals(right) ? 1 : 0;
-                case SymbolManager.NOT_EQUALS: return left.Equals(right) ? 0 : 1;
+                case SymbolManager.EQUALS: return StateNode.EqualNodes(left, right) ? 1 : 0;
+                case SymbolManager.NOT_EQUALS: return StateNode.EqualNodes(left, right) ? 0 : 1;
                 case SymbolManager.LESS_THAN: return left < right ? 1 : 0;
                 case SymbolManager.GREATER_THAN: return left > right ? 1 : 0;
                 case SymbolManager.LESS_OR: return left <= right ? 1 : 0;
                 case SymbolManager.GREATER_OR: return left >= right ? 1 : 0;
                 case SymbolManager.DOT: 
-                    return left.getSubvariable(right, this.createSubvars);
+                    return left == null ? null : left.getSubvariable(right, this.createSubvars);
                 case SymbolManager.ASSIGN:
                     return left.setValue(right.getValue());
                 case SymbolManager.ADD_TO:

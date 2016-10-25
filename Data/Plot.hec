@@ -1,7 +1,7 @@
 ﻿
 
 # Main plots
-init_main -> "", let main.plot = 1, let main.phase = 0
+init_main -> "", let main.plot = "MAIN", let main.phase = 0
 
 # subs
-init_sub -> "", let sub.plot = 2, let sub.phase = 0
+init_sub -> "", let sub.plot = "SUB", let sub.phase = 0

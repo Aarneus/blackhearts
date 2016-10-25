@@ -1,4 +1,4 @@
-﻿# Comment
+﻿# Story
 story -> "[=>init_story][=>story_structure]"
 story_structure -> "[=>prologue][=>plot][=>epilogue]"
 

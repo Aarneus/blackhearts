@@ -18,7 +18,7 @@ namespace Hecate
             generator.parseRuleDirectory("E:\\Code\\C#\\Hecate\\Data");
             
             do {
-                string result = generator.generate("[=>story]");
+                string result = generator.generate("[=>test2]");
                 System.Console.WriteLine("\n== STORY\n" + result);
             } while (System.Console.ReadKey().KeyChar != 'q');
             

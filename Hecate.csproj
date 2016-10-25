@@ -53,6 +53,7 @@
     <Folder Include="Data" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Actor.hec" />
     <None Include="Data\Core.hec" />
     <None Include="Data\Plot.hec" />
     <None Include="Data\Scene.hec" />
