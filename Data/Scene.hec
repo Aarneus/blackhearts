@@ -1,6 +1,6 @@
 ﻿
 # Scenes
-plot_scene -> "[=>scene main]\n", main.phase < 7, main.phase <= sub.phase, main.phase += 1
-plot_scene -> "[=>scene sub]\n", sub.phase < 7, main.phase >= sub.phase, sub.phase += 1
+plot_scene => "[=>scene main]\n", main.phase < 7, main.phase <= side.phase, main.phase += 1
+plot_scene => "[=>scene side]\n", side.phase < 7, main.phase >= side.phase, side.phase += 1
 
-scene Plot -> "[Plot.plot] [Plot.phase]"
+scene Plot => "[Plot.plot] [Plot.phase]"

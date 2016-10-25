@@ -42,9 +42,10 @@ namespace Hecate
         public const int LET = 20;
         public const int DEL = 21;
         public const int CALL = 22;
-        public const int END_OF_EXPRESSION = 23;
+        public const int REPLACE = 23;
+        public const int END_OF_EXPRESSION = 24;
         
-        public const int FIRST_SYMBOL = 24;
+        public const int FIRST_SYMBOL = 25;
         
         public SymbolManager()
         {
@@ -73,6 +74,7 @@ namespace Hecate
                 {"let", SymbolManager.LET},
                 {"del", SymbolManager.DEL},
                 {"=>", SymbolManager.CALL},
+                {"<-", SymbolManager.REPLACE},
                 {"$$$", SymbolManager.END_OF_EXPRESSION}
             };
             this.strings = new Dictionary<int, string>();

@@ -1,15 +1,15 @@
 ﻿
 # Jou mang
-test -> "[=>a][=>b]", let kurba = 123
+test => "[=>a][=>b]", let kurba = 123
 
 # Eläin
-a -> "Kissa", let elain = "kissa"
-a -> "Koira", let elain = "koira"
+a => "Kissa", let elain = "kissa"
+a => "Koira", let elain = "koira"
 
 # Osa
-b -> "kala"
-b -> "npentu"
+b => "kala"
+b => "npentu"
 
 
-test2 -> "das", abu.dapa != null
-test2 -> "asd", abu.dapa == null
+
+test2 => "[abu.dapa.dogo]", let oppo.dapa.dogo = 12345, let abu.dapa <- oppo.dapa

@@ -24,7 +24,7 @@ namespace Hecate
         private static StateNode localNode;
         private static List<StateNode> localStack = new List<StateNode>();
         
-        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|=>|[+\\-*\\/><!=]=?|\".*\"|[a-zA-Z0-9_]+|[.])");
+        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|=>|<-|[+\\-*\\/><!=]=?|\".*\"|[a-zA-Z0-9_]+|[.])");
         private static Regex literalRegex = new Regex("^(\".*\"|[0-9]+([.][0-9]+)?)$");
         
         private static bool debugging = false;
@@ -73,6 +73,7 @@ namespace Hecate
         private int leftBindingPower(Token token) {
             switch (token.type) {
                 case SymbolManager.ASSIGN:
+                case SymbolManager.REPLACE:
                 case SymbolManager.ADD_TO:
                 case SymbolManager.SUB_TO:
                 case SymbolManager.MULTIPLY_TO:
@@ -113,7 +114,10 @@ namespace Hecate
                 case SymbolManager.LOCAL: return StateExpression.localNode.getSubvariable(token.literal, this.createSubvars);
                 case SymbolManager.ADD: return this.expression(100);
                 case SymbolManager.SUB: return -this.expression(100);
-                case SymbolManager.NEGATE: return this.expression(100) > 0 ? 0 : 1;
+                case SymbolManager.NEGATE: 
+                    StateNode result = this.expression(100);
+                    if (result == null) { return 1; }
+                    return result > 0 ? 0 : 1;
                 case SymbolManager.LEFT_PAREN:
                     bool temp = this.createSubvars;
                     this.createSubvars = false;
@@ -157,6 +161,8 @@ namespace Hecate
                 case SymbolManager.GREATER_OR: return left >= right ? 1 : 0;
                 case SymbolManager.DOT: 
                     return left == null ? null : left.getSubvariable(right, this.createSubvars);
+                case SymbolManager.REPLACE:
+                    return left.replaceWith(right);
                 case SymbolManager.ASSIGN:
                     return left.setValue(right.getValue());
                 case SymbolManager.ADD_TO:

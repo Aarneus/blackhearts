@@ -1,16 +1,16 @@
 ﻿# Story
-story -> "[=>init_story][=>story_structure]"
-story_structure -> "[=>prologue][=>plot][=>epilogue]"
+story => "[=>init_story][=>story_structure]"
+story_structure => "[=>prologue][=>plot][=>epilogue]"
 
 # Prologue and epilogue
-prologue -> "[=>plot_scene]"
-epilogue -> "[=>plot_scene]" 
+prologue => "[=>plot_scene]"
+epilogue => "[=>plot_scene]" 
 
-# Only start a scene if there is an unresolved main or sub
-plot -> "[=>plot_scene][=>plot]", main.phase != 7
-plot -> "[=>plot_scene][=>plot]", sub.phase != 7
-plot -> "", main.phase == 7, sub.phase ==  7
+# Only start a scene if there is an unresolved main or side
+plot => "[=>plot_scene][=>plot]", main.phase != 7
+plot => "[=>plot_scene][=>plot]", side.phase != 7
+plot => "", main.phase == 7, side.phase ==  7
 
 # Story outlines
-init_story -> "[=>init_main][=>init_sub]"
+init_story => "[=>init_main][=>init_side]"
 
