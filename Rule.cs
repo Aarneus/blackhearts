@@ -19,6 +19,7 @@ namespace Hecate
         private StateExpression[] insets;
         
         private StoryGenerator generator;
+        private SymbolManager symbolManager;
         
         private static Regex ruleRegex = new Regex("(.*) => (\"[^\"]*\")(, )?(.*)");
         private static Regex insetRegex = new Regex("\\[[^\\]]*\\]");
@@ -29,6 +30,7 @@ namespace Hecate
         {
             this.name = name;
             this.generator = generator;
+            this.symbolManager = symbolManager;
             this.setText(text, symbolManager);
             this.setExpressions(StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager));
             this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager);
@@ -64,6 +66,7 @@ namespace Hecate
                 // Finalize
                 this.name = name;
                 this.generator = generator;
+                this.symbolManager = symbolManager;
                 this.setText(text, symbolManager);
                 this.setExpressions(StateExpression.StringArrayToExpressionArray(evals, generator, symbolManager));
                 this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager);
@@ -73,34 +76,36 @@ namespace Hecate
         
         // Executes the rule
         public string execute(StateNode[] parameters, StoryGenerator generator, StateNode rootNode) {
-            
-            // Push local stack before evaluations
-            StateExpression.PushLocalStack();
-            
-            // Bind parameters
-            for (int i = 0; i < this.parameters.Length; i++) {
-                StateNode parameter = this.parameters[i].evaluate(generator, rootNode);
-                parameter.replaceWith(parameters[i]);
-            }
-            
-            // Evaluate effects before insets to avoid rabbithole
-            foreach (StateExpression e in this.effects) {
-                e.evaluate(generator, rootNode);
-            }
-            
-            // Replace all inset expressions with their evals
             string result = this.text;
-            for (int i = 0; i < this.insets.Length; i++) {
-                StateNode eval = this.insets[i].evaluate(generator, rootNode);
-                result = result.Replace("[" + i + "]", eval);
+            try {
+                // Push local stack before evaluations
+                StateExpression.PushLocalStack();
+                
+                // Bind parameters
+                for (int i = 0; i < this.parameters.Length; i++) {
+                    StateNode parameter = this.parameters[i].evaluate(generator, rootNode);
+                    parameter.replaceWith(parameters[i]);
+                }
+                
+                // Evaluate effects before insets to avoid rabbithole
+                foreach (StateExpression e in this.effects) {
+                    e.evaluate(generator, rootNode);
+                }
+                
+                // Replace all inset expressions with their evals
+                for (int i = 0; i < this.insets.Length; i++) {
+                    StateNode eval = this.insets[i].evaluate(generator, rootNode);
+                    result = result.Replace("[" + i + "]", eval);
+                }
+                
+                // Pop local stack after evaluations
+                StateExpression.PopLocalStack();
+                
+                // Add special characters
+                result = result.Replace("\\n", "\n");
+            } catch (Exception ex) {
+                throw new Exception("Error in rule: " + this.symbolManager.getString(this.name) + "\n" + ex.Message);
             }
-            
-            // Pop local stack after evaluations
-            StateExpression.PopLocalStack();
-            
-            // Add special characters
-            result = result.Replace("\\n", "\n");
-            
             return result;
         }
         
