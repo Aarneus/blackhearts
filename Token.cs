@@ -24,7 +24,7 @@ namespace Hecate
             this.literal = literal;
         }
         
-        public static Token GetToken(string s, int prevToken, SymbolManager symbolManager) {
+        public static Token getToken(string s, int prevToken, SymbolManager symbolManager) {
             Token token = null;
             
             // Commands
@@ -41,7 +41,7 @@ namespace Hecate
             }
             // Variable path - first one is a variable, the others are literals
             else if (Token.variableRegex.IsMatch(s)) {
-                if (prevToken == SymbolManager.DOT) {
+                if (prevToken == SymbolManager.DOT || prevToken == SymbolManager.CALL) {
                     token = new Token(SymbolManager.LITERAL, symbolManager.getInt(s));
                 }
                 else  {

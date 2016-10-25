@@ -13,7 +13,7 @@ namespace Hecate
         private StateNode rootNode;
         private Dictionary<int, List<Rule>> rules;
         private SymbolManager symbolManager;
-        
+        private Random random;
         
         
         public StoryGenerator()
@@ -21,55 +21,57 @@ namespace Hecate
             this.rootNode = new StateNode(42);
             this.rules = new Dictionary<int, List<Rule>>();
             this.symbolManager = new SymbolManager();
+            this.random = new Random();
         }
         
         
-        public string GenerateStory(string startingSymbol) {
-            // TODO
-            StateExpression exp = new StateExpression("let a.b.c = 12", this.symbolManager);
-            exp.evaluate(rootNode);
-            exp = new StateExpression("let a.d = 3", this.symbolManager);
-            exp.evaluate(rootNode);
-            exp = new StateExpression("del a.b", this.symbolManager);
-            exp.evaluate(rootNode);
-            exp = new StateExpression("let a.(a.d) = 11", this.symbolManager);
-            exp.evaluate(rootNode);
+        public string generate(string symbol) {
             
-            exp = new StateExpression("a.3 += 10", this.symbolManager);
-            exp.evaluate(rootNode);
+            Rule tempRule = new Rule(0, "\"" + symbol + "\"", this, this.symbolManager);
+            string text = tempRule.execute(this, this.rootNode);
+            return text;
+        }
+        
+        // Chooses an applicable rule and executes it
+        public string executeRule(int rule) {
+            //TODO: add parameters and conditions
+            // Choose a rule
+            if (this.rules.ContainsKey(rule)) {
+                int r = this.rules[rule].Count;
+                r = this.random.Next(r);
+                return this.rules[rule][r].execute(this, this.rootNode);
+            }
             
-            System.Console.WriteLine("\nTREE:");
-            this.rootNode.printTree(this.symbolManager, symbolManager.getInt("root"));
+            System.Console.WriteLine("NOPE: " + this.symbolManager.getString(rule));
             
             return "";
         }
         
         
-        
-        public void ParseRuleDirectory(string filepath) {
+        public void parseRuleDirectory(string filepath) {
             //TODO
         }
         
-        public void ParseRuleFile(string filename) {
+        public void parseRuleFile(string filename) {
             string line;
             System.IO.StreamReader file = new System.IO.StreamReader(filename);
             while((line = file.ReadLine()) != null)
             {
-               this.ParseRuleString(line);
+               this.parseRuleString(line);
             }
             file.Close();
         }
         
-        public void ParseRuleString(string line) {
+        public void parseRuleString(string line) {
             line = line.Trim();
             if (!line.Equals("") && !line.StartsWith("#")) {
-                Rule rule = new Rule(line, this.symbolManager);
-                int name = rule.GetName();
-                this.AddRule(name, rule);
+                Rule rule = new Rule(line, this, this.symbolManager);
+                int name = rule.getName();
+                this.addRule(name, rule);
             }
         }
         
-        private void AddRule(int name, Rule rule) {
+        private void addRule(int name, Rule rule) {
             if (!this.rules.ContainsKey(name)) {
                 this.rules[name] = new List<Rule>();
             }

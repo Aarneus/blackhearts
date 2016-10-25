@@ -39,9 +39,10 @@ namespace Hecate
         public const int DIVIDE_TO = 19;
         public const int LET = 20;
         public const int DEL = 21;
-        public const int END_OF_EXPRESSION = 22;
+        public const int CALL = 22;
+        public const int END_OF_EXPRESSION = 23;
         
-        public const int FIRST_SYMBOL = 23;
+        public const int FIRST_SYMBOL = 24;
         
         public SymbolManager()
         {
@@ -69,6 +70,7 @@ namespace Hecate
                 {"/=", SymbolManager.DIVIDE_TO},
                 {"let", SymbolManager.LET},
                 {"del", SymbolManager.DEL},
+                {"=>", SymbolManager.CALL},
                 {"$$$", SymbolManager.END_OF_EXPRESSION}
             };
             this.strings = new Dictionary<int, string>();

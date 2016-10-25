@@ -40,7 +40,7 @@ namespace Hecate
 		        this.children[name] = new StateNode(0, this, name);
 		        return this.children[name];
 		    }
-		    throw new ArgumentException("Invalid variable.");
+		    return null;
 		}
 		
 		// Sets the value of the child variable
@@ -96,6 +96,12 @@ namespace Hecate
 		    return this.stateValue == (double)sn;
         }
 		
+		public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+		
 		// Initialize as int
 		public static implicit operator StateNode(int stateValue) {
 	            return new StateNode(stateValue); 
@@ -123,6 +129,10 @@ namespace Hecate
 		
 		// Treated as string
 		public static implicit operator string(StateNode var) {
+		    if (var == null) {
+		        return "";
+		    }
+		    
 		    if (!(var.stateValue is string)) {
 		        return "" + var.stateValue;
 		    }

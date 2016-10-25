@@ -1,18 +1,12 @@
 ﻿
 # Jou mang
-test -> "[a][b]"
+test -> "[=>a][=>b]", let kurba = 123
 
 # Eläin
-a -> "Kissa", elain = "kissa"
-a -> "Koira", elain = "koira"
+a -> "Kissa", let elain = "kissa"
+a -> "Koira", let elain = "koira"
 
 # Osa
 b -> "kala"
 b -> "npentu"
 
-
-# Test
-d abulaf koko.Ponga.dong -> "", tamagotchi = "JOULUKUUSI", "JOU", 2, + 2 3
-
-# Complex evals are TODO
-e -> "", abo = (2 + (12 - 32))

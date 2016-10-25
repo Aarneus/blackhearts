@@ -16,26 +16,30 @@ namespace Hecate
         private Token[] tokens;
         private int currentToken;
         private StateNode rootNode;
+        private SymbolManager symbolManager;
+        private StoryGenerator generator;
         private bool createSubvars = false;
         
-        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|[+\\-*\\/><!=]=?|\".*\"|[a-zA-Z0-9_]+|[.])");
+        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|=>|[+\\-*\\/><!=]=?|\".*\"|[a-zA-Z0-9_]+|[.])");
         private static Regex literalRegex = new Regex("^(\".*\"|[0-9]+([.][0-9]+)?)$");
         
-        private static bool debugging = true;
+        private static bool debugging = false;
         
-        public StateExpression(string text, SymbolManager symbolManager)
+        public StateExpression(string text, StoryGenerator generator, SymbolManager symbolManager)
         {
             this.DebugLog(text + "\n");
-            this.tokens = this.tokenize(text, symbolManager);
+            this.generator = generator;
+            this.symbolManager = symbolManager;
+            this.tokens = this.tokenize(text);
             this.currentToken = 0;
         }
         
         // Evaluates the expression
-        public StateNode evaluate(StateNode rootNode) {
+        public StateNode evaluate(StoryGenerator generator, StateNode rootNode) {
             this.rootNode = rootNode;
             this.currentToken = 0;
             StateNode returned = this.expression();
-            System.Console.WriteLine("RESULT: " + returned + "\n");
+            this.DebugLog("RESULT: " + returned + "\n");
             return returned;
         }
         
@@ -55,7 +59,7 @@ namespace Hecate
         // Advances the parser only if the current token is of the specified type
         private void advance(int type) {
             if (this.tokens[this.currentToken].type != type) {
-                throw new Exception("Syntax error: missin ending parenthesis.");
+                throw new Exception("Syntax error: missing ending parenthesis.");
             }
             this.currentToken++;
         }
@@ -86,6 +90,7 @@ namespace Hecate
                     return 60;
                 case SymbolManager.LEFT_PAREN:
                 case SymbolManager.DOT:
+                case SymbolManager.CALL:
                     return 80;
                 case SymbolManager.END_OF_EXPRESSION:
                     return 0;
@@ -102,7 +107,10 @@ namespace Hecate
                 case SymbolManager.ADD: return this.expression(100);
                 case SymbolManager.SUB: return -this.expression(100);
                 case SymbolManager.LEFT_PAREN:
+                    bool temp = this.createSubvars;
+                    this.createSubvars = false;
                     expr = this.expression();
+                    this.createSubvars = temp;
                     this.advance(SymbolManager.RIGHT_PAREN);
                     return expr;
                 case SymbolManager.LET:
@@ -113,6 +121,10 @@ namespace Hecate
                 case SymbolManager.DEL:
                     StateNode node = this.expression(79);
                     return node.removeFromParent();
+                case SymbolManager.CALL:
+                    // TODO: parameters
+                    int rule = this.expression(79);
+                    return this.generator.executeRule(rule);
                 default: throw new Exception("Syntax error: Invalid value!");
             }
         }
@@ -148,7 +160,7 @@ namespace Hecate
         }
         
         // Splits the string into tokens
-        private Token[] tokenize(string text, SymbolManager symbolManager) {
+        private Token[] tokenize(string text) {
             
             // Split the string into string tokens
             Match match = StateExpression.tokenRegex.Match(text);
@@ -166,18 +178,20 @@ namespace Hecate
             int i = 0;
             int prevToken = 0;
             foreach (string s in strings) {
-                tokens[i] = Token.GetToken(s, prevToken, symbolManager);
+                tokens[i] = Token.getToken(s, prevToken, this.symbolManager);
                 prevToken = tokens[i].type;
+                this.DebugLog("[" + tokens[i].type + "]");
                 i++;
             }
+            this.DebugLog("\n");
             tokens[tokens.Length - 1] = new Token(SymbolManager.END_OF_EXPRESSION, null);
             return tokens;
         }
         
-        public static StateExpression[] StringArrayToExpressionArray(string[] strings, SymbolManager symbolManager) {
+        public static StateExpression[] StringArrayToExpressionArray(string[] strings, StoryGenerator generator, SymbolManager symbolManager) {
             StateExpression[] exprs = new StateExpression[strings.Length];
             for (int i = 0; i < strings.Length; i++) {
-                exprs[i] = new StateExpression(strings[i], symbolManager);
+                exprs[i] = new StateExpression(strings[i], generator, symbolManager);
             }
             return exprs;
         }
