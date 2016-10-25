@@ -21,6 +21,9 @@ namespace Hecate
         private StoryGenerator generator;
         private bool createSubvars = false;
         
+        private static StateNode localNode;
+        private static List<StateNode> localStack = new List<StateNode>();
+        
         private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|=>|[+\\-*\\/><!=]=?|\".*\"|[a-zA-Z0-9_]+|[.])");
         private static Regex literalRegex = new Regex("^(\".*\"|[0-9]+([.][0-9]+)?)$");
         
@@ -106,6 +109,7 @@ namespace Hecate
             switch (token.type) {
                 case SymbolManager.LITERAL: return token.literal;
                 case SymbolManager.VARIABLE: return this.rootNode.getSubvariable(token.literal, this.createSubvars);
+                case SymbolManager.LOCAL: return StateExpression.localNode.getSubvariable(token.literal, this.createSubvars);
                 case SymbolManager.ADD: return this.expression(100);
                 case SymbolManager.SUB: return -this.expression(100);
                 case SymbolManager.LEFT_PAREN:
@@ -124,9 +128,13 @@ namespace Hecate
                     StateNode node = this.expression(79);
                     return node.removeFromParent();
                 case SymbolManager.CALL:
-                    // TODO: parameters
                     int rule = this.expression(79);
-                    return this.generator.executeRule(rule);
+                    List<StateNode> parameters = new List<StateNode>();
+                    while (this.tokens[this.currentToken].type != SymbolManager.END_OF_EXPRESSION) {
+                        StateNode param = this.expression(0);
+                        parameters.Add(param);
+                    }
+                    return this.generator.executeRule(rule, parameters.ToArray());
                 default: throw new Exception("Syntax error: Invalid value!");
             }
         }
@@ -207,6 +215,19 @@ namespace Hecate
                 exprs[i] = new StateExpression(strings[i], generator, symbolManager);
             }
             return exprs;
+        }
+        
+        // Add a layer of scope insulation for a rule
+        public static void PushLocalStack() {
+            StateExpression.localStack.Add(StateExpression.localNode);
+            StateExpression.localNode = new StateNode(0, null, 0);
+        }
+        
+        // Remove a layer of scope insulation when a rule ends
+        public static void PopLocalStack() {
+            int last_index = StateExpression.localStack.Count - 1;
+            StateExpression.localNode = StateExpression.localStack[last_index];
+            StateExpression.localStack.RemoveAt(last_index);
         }
         
         private void DebugLog(string text) {

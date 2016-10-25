@@ -10,3 +10,7 @@ a -> "Koira", let elain = "koira"
 b -> "kala"
 b -> "npentu"
 
+
+test2 -> "[=>test3]", let paibon.pom.dom = 12
+test3 -> "[=>test4 paibon]"
+test4 X -> "Paibon: [X.pom.dom]"

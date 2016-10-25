@@ -56,6 +56,11 @@ namespace Hecate
                 // Separate the evaluations
                 string[] evals = Rule.splitHelper(evalstring, ',');
                 
+                // Massage the parameter strings from "X" to "let X = 0"
+                for (int i = 0; i < parameters.Length; i++) {
+                    parameters[i] = "let " + parameters[i] + " = 0";
+                }
+                
                 // Finalize
                 this.name = name;
                 this.generator = generator;
@@ -67,7 +72,16 @@ namespace Hecate
         
         
         // Executes the rule
-        public string execute(StoryGenerator generator, StateNode rootNode) {
+        public string execute(StateNode[] parameters, StoryGenerator generator, StateNode rootNode) {
+            
+            // Push local stack before evaluations
+            StateExpression.PushLocalStack();
+            
+            // Bind parameters
+            for (int i = 0; i < this.parameters.Length; i++) {
+                StateNode parameter = this.parameters[i].evaluate(generator, rootNode);
+                parameter.replaceWith(parameters[i]);
+            }
             
             // Evaluate effects before insets to avoid rabbithole
             foreach (StateExpression e in this.effects) {
@@ -81,14 +95,23 @@ namespace Hecate
                 result = result.Replace("[" + i + "]", eval);
             }
             
+            // Pop local stack after evaluations
+            StateExpression.PopLocalStack();
+            
             // Add special characters
             result = result.Replace("\\n", "\n");
             
             return result;
         }
         
-        // Returns true if all conditions return true
-        public bool check(StateNode rootNode) {
+        // Returns true when the rule can be executed with these parameters
+        public bool check(StateNode[] parameters, StateNode rootNode) {
+            // Must be given at least as much parameters as required
+            if (parameters.Length < this.parameters.Length) {
+                return false;
+            }
+            
+            // If all conditions return true
             foreach (StateExpression c in this.conditions) {
                 int result = c.evaluate(this.generator, rootNode);
                 if (result == 0) {

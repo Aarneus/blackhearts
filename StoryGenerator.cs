@@ -28,20 +28,19 @@ namespace Hecate
         public string generate(string symbol) {
             
             Rule tempRule = new Rule(0, "\"" + symbol + "\"", this, this.symbolManager);
-            string text = tempRule.execute(this, this.rootNode);
+            string text = tempRule.execute(new StateNode[0], this, this.rootNode);
             return text;
         }
         
         // Chooses an applicable rule and executes it
-        public string executeRule(int rule) {
-            //TODO: add parameters and conditions
+        public string executeRule(int rule, StateNode[] parameters) {
             // Choose a rule
             if (this.rules.ContainsKey(rule)) {
                 Rule chosen = null;
                 int count = 1;
                 
                 foreach (Rule r in this.rules[rule]) {
-                    if (r.check(this.rootNode)) {
+                    if (r.check(parameters, this.rootNode)) {
                         if (this.random.Next(count) == 0) {
                             chosen = r;
                             count += 1;
@@ -50,7 +49,7 @@ namespace Hecate
                 }
                 
                 if (chosen != null) {
-                    return chosen.execute(this, this.rootNode);
+                    return chosen.execute(parameters, this, this.rootNode);
                 }
             }
             

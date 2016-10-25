@@ -1,7 +1,7 @@
 ﻿
 
 # Main plots
-init_mainplot -> ""
+init_main -> ""
 
-# Subplots
-init_subplot -> ""
+# subs
+init_sub -> ""

@@ -54,6 +54,15 @@ namespace Hecate
 		    return this.children[name];
 		}
 		
+		// Replaces the node with the given tree
+		public StateNode setSubtree(int name, StateNode tree) {
+		    if (!(tree is StateNode)) {
+		        tree = new StateNode(tree.stateValue);
+		    }
+		    this.children[name] = tree;
+		    return tree;
+		}
+		
 		// Destroys the subvariable (and all named with it)
 		public StateNode removeSubvariable(int name) {
 		    if (this.children.ContainsKey(name)) {
@@ -71,7 +80,16 @@ namespace Hecate
 		        this.parent.removeSubvariable(this.parentName);
 		        return this;
 		    }
-		    throw new ArgumentException("Invalid variable.");
+		    throw new ArgumentException("Invalid parent variable.");
+		}
+		
+		// Replaces the node in it's parent's tree
+		public StateNode replaceWith(StateNode replacement) {
+		    if (this.parent != null) {
+		        this.parent.setSubtree(this.parentName, replacement);
+		          return this;
+		    }
+		    throw new ArgumentException("Invalid parent variable");
 		}
 		
 		// Debug print to the console the whole tree

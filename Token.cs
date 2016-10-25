@@ -41,11 +41,17 @@ namespace Hecate
             }
             // Variable path - first one is a variable, the others are literals
             else if (Token.variableRegex.IsMatch(s)) {
+                // Path literal or rule name
                 if (prevToken == SymbolManager.DOT || prevToken == SymbolManager.CALL) {
                     token = new Token(SymbolManager.LITERAL, symbolManager.getInt(s));
                 }
-                else  {
+                // Global variable name
+                else if (!char.IsUpper(s[0])) {
                     token = new Token(SymbolManager.VARIABLE, symbolManager.getInt(s));
+                }
+                // Local variable name
+                else {
+                    token = new Token(SymbolManager.LOCAL, symbolManager.getInt(s));
                 }
             }
             // Not a literal

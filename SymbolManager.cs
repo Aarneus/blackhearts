@@ -16,6 +16,7 @@ namespace Hecate
         private Dictionary<int, string> strings;
         private int currentSymbolIndex;
         
+        public const int LOCAL = -2;
         public const int VARIABLE = -1;
         public const int LITERAL = 0;
         public const int ADD = 1;
