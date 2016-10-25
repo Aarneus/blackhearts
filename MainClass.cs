@@ -15,15 +15,12 @@ namespace Hecate
             
             // Initialize generator
             StoryGenerator generator = new StoryGenerator();
-            generator.parseRuleFile("E:\\Code\\C#\\Hecate\\Data\\Test.hec");
+            generator.parseRuleDirectory("E:\\Code\\C#\\Hecate\\Data");
             
-            //string result = generator.generate("Eläin: [test]\nToinen: [test]");
-            string result = generator.generate("A: [=>test]\nB: [kurba]\nC: [12 +3]");
-            
-            System.Console.WriteLine(result);
-            
-            // End on input
-            System.Console.ReadKey();
+            do {
+                string result = generator.generate("[=>story]");
+                System.Console.WriteLine("== STORY\n" + result);
+            } while (System.Console.ReadKey().KeyChar != 'q');
             
             
         }

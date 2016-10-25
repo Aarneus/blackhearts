@@ -1,3 +1,8 @@
 ﻿
 # Scenes
-scene -> ""
+
+# scene -> "", let mainplot.phase = 7, let subplot.phase = 7
+
+
+scene -> "MAIN [mainplot.phase]\n", mainplot.phase += 1
+scene -> "SUB [subplot.phase]\n", subplot.phase += 1

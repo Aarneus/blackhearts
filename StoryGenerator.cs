@@ -49,7 +49,10 @@ namespace Hecate
         
         
         public void parseRuleDirectory(string filepath) {
-            //TODO
+            string[] files = System.IO.Directory.GetFiles(filepath, "*.hec");
+            foreach (string file in files) {
+                this.parseRuleFile(file);
+            }
         }
         
         public void parseRuleFile(string filename) {

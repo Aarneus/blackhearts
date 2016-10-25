@@ -1,16 +1,16 @@
 ﻿# Comment
-story -> "[init_story][story_structure]"
-story_structure -> "[prologue][plot][epilogue]"
+story -> "[=>init_story][=>story_structure]"
+story_structure -> "[=>prologue][=>plot][=>epilogue]"
 
 # Prologue and epilogue
-prologue -> "[scene]"
-epilogue -> "[scene]" 
+prologue -> "[=>scene]"
+epilogue -> "[=>scene]" 
 
 # Only start a scene if there is an unresolved main or subplot
-plot -> "[scene][plot]", != mainplot.phase 7
-plot -> "[scene][plot]", != subplot.phase 7
-plot -> "", == mainplot.phase 7, == subplot.phase 7
+plot -> "[=>scene][=>plot]", mainplot.phase != 7
+plot -> "[=>scene][=>plot]", subplot.phase != 7
+plot -> "", mainplot.phase == 7, subplot.phase ==  7
 
 # Story outlines
-init_story -> "[init_mainplot][init_subplot]", = mainplot.phase -1, = subplot.phase 0
+init_story -> "[=>init_mainplot][=>init_subplot]", let mainplot.phase = -1, let subplot.phase = 0
 

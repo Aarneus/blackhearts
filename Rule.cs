@@ -78,6 +78,9 @@ namespace Hecate
                 e.evaluate(generator, rootNode);
             }
             
+            // Add special characters
+            result = result.Replace("\\n", "\n");
+            
             return result;
         }
         
