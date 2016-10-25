@@ -112,6 +112,7 @@ namespace Hecate
                 case SymbolManager.LOCAL: return StateExpression.localNode.getSubvariable(token.literal, this.createSubvars);
                 case SymbolManager.ADD: return this.expression(100);
                 case SymbolManager.SUB: return -this.expression(100);
+                case SymbolManager.NEGATE: return this.expression(100) > 0 ? 0 : 1;
                 case SymbolManager.LEFT_PAREN:
                     bool temp = this.createSubvars;
                     this.createSubvars = false;
