@@ -1,0 +1,12 @@
+﻿# Actors
+init_main_actor => "[=>create_actor protagonist N G]", protagonist == null, let protagonist = 1, let N = "Rue", let G = "female"
+
+
+# Initializes an actor with the appropriate affixes
+create_actor A N G => "[=>set_pronouns A G]", let A.name = N, let A.gender = G
+
+# Set up the pronouns for an entity
+set_pronouns E Type => "", Type == "male", let E.he = "he", let E.him = "him", let E.his = "his", let E.he_s = "he's", let E.is = "is"
+set_pronouns E Type => "", Type == "female", let E.he = "she", let E.him = "her", let E.his = "her", let E.he_s = "she's", let E.is = "is"
+set_pronouns E Type => "", Type == "neutral", let E.he = "they", let E.him = "them", let E.his = "their", let E.he_s = "they're", let E.is = "are"
+set_pronouns E Type => "", Type == "object", let E.he = "it", let E.him = "it", let E.his = "its", let E.he_s = "it's", let E.is = "is"

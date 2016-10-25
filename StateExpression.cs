@@ -141,7 +141,7 @@ namespace Hecate
                         parameters.Add(param);
                     }
                     return this.generator.executeRule(rule, parameters.ToArray());
-                default: throw new Exception("Syntax error: Invalid value!");
+                    default: throw new Exception("Syntax error: Invalid value: " + symbolManager.getString(token.type));
             }
         }
         
