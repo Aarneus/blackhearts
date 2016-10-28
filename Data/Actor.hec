@@ -1,5 +1,7 @@
-﻿# Actors
-init_main_actor => "[=>create_actor protagonist N G]", protagonist == null, let protagonist = 1, let N = "Rue", let G = "female"
+﻿# Contains all the world state for characters
+
+# Main actors
+init_actors => "[=>create_actor rue N G]", rue == null, let rue = 1, let N = "Rue", let G = "female"
 
 
 # Initializes an actor with the appropriate affixes

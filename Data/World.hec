@@ -1,0 +1,12 @@
+﻿# Contains all world state for locations
+
+init_world => "[=>init_agency]"
+
+
+
+# Main locations
+init_agency => "[=>create_location agency]", let agency.name = "Agency"
+
+
+# Initializes a location with the appropriate affixes
+create_location L => "[=>set_pronouns L \"object\"]"
