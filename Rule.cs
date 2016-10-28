@@ -21,7 +21,7 @@ namespace Hecate
         private StoryGenerator generator;
         private SymbolManager symbolManager;
         
-        private static Regex ruleRegex = new Regex("(.*) => (\"[^\"]*\")(, )?(.*)");
+        private static Regex ruleRegex = new Regex("(.*) => (\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")(, )?(.*)");
         private static Regex insetRegex = new Regex("\\[[^\\]]*\\]");
         
         public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager) : this(name, text, generator, symbolManager, new string[0], new string[0]) {}
@@ -44,7 +44,8 @@ namespace Hecate
                 // Get the main parts of the rule
                 string leftside = ruleMatch.Groups[1].Value.Trim();
                 string text = ruleMatch.Groups[2].Value.Trim();
-                string evalstring = ruleMatch.Groups[4].Value.Trim();
+                string evalstring = ruleMatch.Groups[5].Value.Trim();
+                
                 
                 //System.Console.WriteLine(": " + leftside + "; " + text + "; " + evalstring);
                 
@@ -103,6 +104,8 @@ namespace Hecate
                 
                 // Add special characters
                 result = result.Replace("\\n", "\n");
+                result = result.Replace("\\\"", "\"");
+                
             } catch (Exception ex) {
                 throw new Exception("Error in rule: " + this.symbolManager.getString(this.name) + "\n" + ex.Message);
             }
@@ -156,6 +159,7 @@ namespace Hecate
         	    foreach (Capture capture in match.Captures) {
                     string replacer = "[" + index + "]";
                     string expr = capture.Value.Substring(1, capture.Length - 2);
+                    expr = expr.Replace("\\\"", "\"");
                     
                     text = text.Remove(capture.Index + offset, capture.Length);
                     text = text.Insert(capture.Index + offset, replacer);
@@ -165,6 +169,9 @@ namespace Hecate
                     index++;
         	    }
         	}
+            
+            //System.Console.Write("RULE: " + symbolManager.getString(this.name) + ": ");
+            //System.Console.WriteLine(text);
             this.text = text.Substring(1, text.Length - 2);
         }
         

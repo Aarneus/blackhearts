@@ -24,7 +24,7 @@ namespace Hecate
         private static StateNode localNode;
         private static List<StateNode> localStack = new List<StateNode>();
         
-        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|=>|<-|[+\\-*\\/><!=]=?|\".*\"|[a-zA-Z0-9_]+|[.])");
+        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|=>|<-|[+\\-*\\/><!=]=?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.])");
         private static Regex literalRegex = new Regex("^(\".*\"|[0-9]+([.][0-9]+)?)$");
         
         private static bool debugging = false;
@@ -44,7 +44,6 @@ namespace Hecate
             this.rootNode = rootNode;
             this.currentToken = 0;
             StateNode returned = this.expression();
-            this.DebugLog("RESULT: " + returned + "\n");
             return returned;
         }
         
@@ -185,7 +184,6 @@ namespace Hecate
             List<string> strings = new List<string>();
             while (match.Success) {
                 this.DebugLog("[" + match.Groups[0] + "]");
-                
                 strings.Add(match.Groups[0].Value);
                 match = match.NextMatch();
             }
