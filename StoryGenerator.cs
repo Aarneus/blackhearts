@@ -66,10 +66,15 @@ namespace Hecate
         
         public void parseRuleFile(string filename) {
             string line;
+            string rule = "";
             System.IO.StreamReader file = new System.IO.StreamReader(filename);
             while((line = file.ReadLine()) != null)
             {
-               this.parseRuleString(line);
+               rule += line;
+               if (!line.TrimEnd().EndsWith(",")) {
+                   this.parseRuleString(rule);
+                   rule = "";
+               }
             }
             file.Close();
         }
