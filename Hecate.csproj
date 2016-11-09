@@ -58,6 +58,7 @@
     <None Include="Data\Plot.hec" />
     <None Include="Data\Scene.hec" />
     <None Include="Data\Test.hec" />
+    <None Include="Data\Util.hec" />
     <None Include="Data\World.hec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

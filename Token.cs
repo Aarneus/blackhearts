@@ -28,7 +28,7 @@ namespace Hecate
             Token token = null;
             
             // Commands or null
-            if (s.Equals("let") || s.Equals("del") || s.Equals("null")) {
+            if (s.Equals("let") || s.Equals("del") || s.Equals("and") || s.Equals("or") || s.Equals("null")) {
                 token = new Token(symbolManager.getInt(s), null);
             }
             // Literal string

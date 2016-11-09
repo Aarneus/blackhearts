@@ -21,7 +21,7 @@ namespace Hecate
         private StoryGenerator generator;
         private SymbolManager symbolManager;
         
-        private static Regex ruleRegex = new Regex("(.*) => (\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")(, )?(.*)");
+        private static Regex ruleRegex = new Regex("(.*) => (\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")(,)?(.*)");
         private static Regex insetRegex = new Regex("\\[[^\\]]*\\]");
         
         public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager) : this(name, text, generator, symbolManager, new string[0], new string[0]) {}

@@ -79,6 +79,8 @@ namespace Hecate
                 case SymbolManager.DIVIDE_TO:
                 case SymbolManager.LET:
                 case SymbolManager.DEL:
+                case SymbolManager.AND:
+                case SymbolManager.OR:
                     return 10;
                 case SymbolManager.EQUALS:
                 case SymbolManager.NOT_EQUALS:
@@ -172,6 +174,10 @@ namespace Hecate
                     return left.setValue(left * right);
                 case SymbolManager.DIVIDE_TO: 
                     return left.setValue(left / right);
+                case SymbolManager.AND:
+                    return (left > 0) && (right > 0) ? 1 : 0;
+                case SymbolManager.OR:
+                    return (left > 0) || (right > 0) ? 1 : 0;
                 default: throw new Exception("Syntax error: Invalid operator!");
             }
         }
@@ -218,7 +224,7 @@ namespace Hecate
         public static StateExpression[] StringArrayToExpressionArray(string[] strings, StoryGenerator generator, SymbolManager symbolManager) {
             StateExpression[] exprs = new StateExpression[strings.Length];
             for (int i = 0; i < strings.Length; i++) {
-                exprs[i] = new StateExpression(strings[i], generator, symbolManager);
+                exprs[i] = new StateExpression(strings[i].Trim(), generator, symbolManager);
             }
             return exprs;
         }
