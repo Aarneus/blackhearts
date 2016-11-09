@@ -1,14 +1,33 @@
 ﻿# Contains all the world state for characters
 
 # Main actors
-init_actors => "[=>create_actor rue N G]", rue == null, let rue = 1, let N = "Rue", let G = "female"
+init_actors => "[=>actor_rue]"
+actor_rue => "[=>create_actor rue N G]", rue == null, let rue = 1, let N = "Rue", let G = "female", let main_actor <- rue
 
 
 # Initializes an actor with the appropriate affixes
 create_actor A N G => "[=>set_pronouns A G]", let A.name = N, let A.gender = G
 
-# Set up the pronouns for an entity
-set_pronouns E Type => "", Type == "male", let E.he = "he", let E.him = "him", let E.his = "his", let E.he_s = "he's", let E.is = "is"
-set_pronouns E Type => "", Type == "female", let E.he = "she", let E.him = "her", let E.his = "her", let E.he_s = "she's", let E.is = "is"
-set_pronouns E Type => "", Type == "neutral", let E.he = "they", let E.him = "them", let E.his = "their", let E.he_s = "they're", let E.is = "are"
-set_pronouns E Type => "", Type == "object", let E.he = "it", let E.him = "it", let E.his = "its", let E.he_s = "it's", let E.is = "is"
+# Creates a random actor
+create_random_actor A => "[=>random_gender_name G N][=>create_actor A N G]", let N = "", let G = ""
+random_gender_name G N => "[=>random_gender G][=>random_name G N]"
+
+# Choose random gender G
+random_gender G => "", G = "female"
+random_gender G => "", G = "male"
+
+# Female names
+random_name G N => "", N = "Annie", G == "female"
+random_name G N => "", N = "Claudia", G == "female"
+random_name G N => "", N = "Susan", G == "female"
+
+# Male names
+random_name G N => "", N = "Anthony", G == "male"
+random_name G N => "", N = "Benjamin", G == "male"
+random_name G N => "", N = "John", G == "male"
+
+# Neutral names
+random_name G N => "", N = "Murk"
+random_name G N => "", N = "Pallet"
+random_name G N => "", N = "Narm"
+

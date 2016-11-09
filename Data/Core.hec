@@ -8,8 +8,8 @@ prologue => ""
 epilogue => ""
 
 # Only start a scene if there is an unresolved main or side
-plot => "[=>plot_scene][=>plot]", plot.phase != 8
-plot => "", plot.phase == 8
+plot => "[=>plot_scene][=>plot]", plot.phase != 1
+plot => "", plot.phase == 1
 
 # Story outlines
 

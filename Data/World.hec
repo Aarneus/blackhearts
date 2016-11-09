@@ -5,7 +5,11 @@ init_world => "[=>init_agency]"
 
 
 # Main locations
-init_agency => "[=>create_location agency]", let agency.name = "Agency"
+init_agency => "[=>create_location agency]", 
+    let agency.name = "Blackhearts",
+    let agency.name.full = "Blackhearts Detective Agency",
+    let agency.type = "agency",
+    let agency.location = 1
 
 
 # Initializes a location with the appropriate affixes
