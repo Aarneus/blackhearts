@@ -127,7 +127,7 @@ namespace Hecate
 		    if (this.stateValue is string) {
 		        return this.stateValue.Equals(sn);
 		    }
-		    return this.stateValue == (double)sn;
+		    return this.stateValue == sn;
         }
 		
 		public override int GetHashCode()

@@ -78,37 +78,33 @@ namespace Hecate
         // Executes the rule
         public string execute(StateNode[] parameters, StoryGenerator generator, StateNode rootNode) {
             string result = this.text;
-            try {
-                // Push local stack before evaluations
-                StateExpression.PushLocalStack();
-                
-                // Bind parameters
-                for (int i = 0; i < this.parameters.Length; i++) {
-                    StateNode parameter = this.parameters[i].evaluate(generator, rootNode);
-                    parameter.replaceWith(parameters[i]);
-                }
-                
-                // Evaluate effects before insets to avoid rabbithole
-                foreach (StateExpression e in this.effects) {
-                    e.evaluate(generator, rootNode);
-                }
-                
-                // Replace all inset expressions with their evals
-                for (int i = 0; i < this.insets.Length; i++) {
-                    StateNode eval = this.insets[i].evaluate(generator, rootNode);
-                    result = result.Replace("[" + i + "]", eval);
-                }
-                
-                // Pop local stack after evaluations
-                StateExpression.PopLocalStack();
-                
-                // Add special characters
-                result = result.Replace("\\n", "\n");
-                result = result.Replace("\\\"", "\"");
-                
-            } catch (Exception ex) {
-                throw new Exception("Error in rule: " + this.symbolManager.getString(this.name) + "\n" + ex.Message);
+            // Push local stack before evaluations
+            StateExpression.PushLocalStack();
+            
+            // Bind parameters
+            for (int i = 0; i < this.parameters.Length; i++) {
+                StateNode parameter = this.parameters[i].evaluate(generator, rootNode);
+                parameter.replaceWith(parameters[i]);
             }
+            
+            // Evaluate effects before insets to avoid rabbithole
+            foreach (StateExpression e in this.effects) {
+                e.evaluate(generator, rootNode);
+            }
+            
+            // Replace all inset expressions with their evals
+            for (int i = 0; i < this.insets.Length; i++) {
+                StateNode eval = this.insets[i].evaluate(generator, rootNode);
+                result = result.Replace("[" + i + "]", eval);
+            }
+            
+            // Pop local stack after evaluations
+            StateExpression.PopLocalStack();
+            
+            // Add special characters
+            result = result.Replace("\\n", "\n");
+            result = result.Replace("\\\"", "\"");
+                
             return result;
         }
         

@@ -20,6 +20,7 @@ namespace Hecate
         private SymbolManager symbolManager;
         private StoryGenerator generator;
         private bool createSubvars = false;
+        private string original_text = "";
         
         private static StateNode localNode;
         private static List<StateNode> localStack = new List<StateNode>();
@@ -37,14 +38,19 @@ namespace Hecate
             this.condition = false;
             this.tokens = this.tokenize(text);
             this.currentToken = 0;
+            this.original_text = text;
         }
         
         // Evaluates the expression
         public StateNode evaluate(StoryGenerator generator, StateNode rootNode) {
             this.rootNode = rootNode;
             this.currentToken = 0;
+            try {
             StateNode returned = this.expression();
             return returned;
+            } catch (Exception ex) {
+                throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
+            }
         }
         
         // The expression parser
