@@ -1,11 +1,7 @@
 ﻿# Story
-story => "[=>init_story][=>story_structure]"
+story => "[=>init_story][=>plot]"
 init_story => "[=>init_actors][=>init_world][=>init_plot]"
-story_structure => "[=>prologue][=>plot][=>epilogue]"
 
-# Prologue and epilogue
-prologue => ""
-epilogue => ""
 
 # Only start a scene if there is an unresolved main or side
 plot => "[=>plot_scene][=>plot]", plot.phase != 1

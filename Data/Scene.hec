@@ -12,36 +12,49 @@ introduction E => "It was a quiet [plot.time_of_day] at the [=>name E].",
     E.location != null, plot.noise == "low"
 
 # Scenes
-arrival_to_scene => "[=>name plot.main_actor] entered the scene."
-
-call => "[=>phone_rang] [=>caller] [=>job_intro]", let plot.call = "phone"
-call => "[=>letter_arrived] [=>job_intro]", let plot.call = "letter"
-
-clean_up => "Later, the hotel management delivered the money, with a little cut taken for repairs for the destroyed floor."
-desperation => "It seemed the situation was utterly hopeless with no way of recharging the proton packs."
-determination => "It had to work. Otherwise the ghost would just eat them all."
-evidence_collection => "The party soon found evidence of the supernatural: ectoplasm covered the walls."
-final_judgement => "The party rode out beneath benevolent, or at the very least non-threatening stars."
-final_piece => "Maybe, just maybe some of that exposed wiring could be used to provide power to the packs?"
-
+# 1 - Hook
 foreshadow => "But all was not as it appeared."
 foreshadow => "Soon, everything was about to change."
 foreshadow => "Trouble was brewing."
+call => "[=>phone_rang] [=>caller] [=>job_intro]", let plot.call = "phone"
+call => "[=>letter_arrived] [=>job_intro]", let plot.call = "letter"
 
-gear_problem => "But it turned out the proton packs were out of batteries!"
-gear_up => "The party readied their proton packs."
+# 2 - Investigation
+arrival_to_scene => "[=>name plot.main_actor] entered the scene."
+evidence_collection => "The party soon found evidence of the supernatural: ectoplasm covered the walls."
 hypothesis => "The haunting must be caused by an unruly ghost!"
-last_attempt => "He grabbed the sparking wires by the cable and shoved them in the port of his pack."
-look_back => "Still, pretty good for a first job!"
+
+# 3 - Gear up
+gear_up => "The party readied their proton packs."
+gear_problem => "But it turned out the proton packs were out of batteries!"
+pressure => "Suddenly, the party was attacked by the ghost and they crashed through the floor!"
+
+# 4 - Adaptation
 new_situation => "The party groped around in the dark until someone lighted a match."
-no_hope => "Their leader lying motionless on the ground, the party could only shake in terror as the ghost drew nearer."
-plan_conflict => "However, the ghost appeared through the stairs and swiped at her!"
 plan_debate => "The party leader said everyone should split up while the others thought they should all find a way back up together."
 plan_decision => "Everyone agreed to find a way out together."
-plan_failed => "She failed to dodge and rolled down the stairs in a bloody tumble."
+
+# 5 - Plan fails
 plan_mobilize => "The leader finally found a set of stairs and began ascending."
-pressure => "Suddenly, the party was attacked by the ghost and they crashed through the floor!"
+plan_conflict => "However, the ghost appeared through the stairs and swiped at her!"
+plan_failed => "She failed to dodge and rolled down the stairs in a bloody tumble."
+
+# 6 - New hope
+no_hope => "Their leader lying motionless on the ground, the party could only shake in terror as the ghost drew nearer."
+desperation => "It seemed the situation was utterly hopeless with no way of recharging the proton packs."
+final_piece => "Maybe, just maybe some of that exposed wiring could be used to provide power to the packs?"
+
+# 7 - Resolution
+determination => "It had to work. Otherwise the ghost would just eat them all."
+last_attempt => "He grabbed the sparking wires by the cable and shoved them in the port of his pack."
 save_success => "The pack juttered to life and blasted the ghost just before it could devour the rest of the party!"
+
+# 8 - Epilogue
+clean_up => "Later, the hotel management delivered the money, with a little cut taken for repairs for the destroyed floor."
+look_back => "Still, pretty good for a first job!"
+final_judgement => "The party rode out beneath benevolent, or at the very least non-threatening stars."
+
+
 
 # Phrases
 caller => "It was [=>employer] and [plot.employer.he] [plot.employer.was] in a hurry."
