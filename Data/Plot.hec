@@ -1,12 +1,12 @@
 ﻿# All plot related structure goes here
-init_plot => "[=>select_plot_variables]", let plot <- null, let plot = 1, let plot.phase = 0, let plot.main_actor <- main_actor
+init_plot => "[=>select_plot_variables]", let plot <- null, let plot.phase = 0, let plot.main_actor <- main_actor
 
 # Choose plot for scene
-plot_scene => "[=>init_scene][=>scene]\n\n", plot.phase < 8, plot.phase += 1
+plot_scene => "[=>init_scene][=>scene]\n\n", plot.phase < 8, plot.phase += 1, let last_mentioned_actor <- null
 init_scene => "", let scene <- null
 
 # Phase 1 - Hook
-scene => "[=>introduction agency] [=>foreshadow] [=>call]", plot.phase == 1
+scene => "[=>introduce agency] [=>foreshadow] [=>call]", plot.phase == 1
 # Phase 2 - Twist 1
 scene => "[=>arrival_to_scene] [=>evidence_collection] [=>hypothesis]", plot.phase == 2
 # Phase 3 - Pinch 1

@@ -4,8 +4,8 @@ init_story => "[=>init_actors][=>init_world][=>init_plot]"
 
 
 # Only start a scene if there is an unresolved main or side
-plot => "[=>plot_scene][=>plot]", plot.phase != 1
-plot => "", plot.phase == 1
+plot => "[=>plot_scene][=>plot]", plot.phase != 2
+plot => "", plot.phase == 2
 
 # Story outlines
 

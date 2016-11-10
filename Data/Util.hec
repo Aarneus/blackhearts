@@ -7,17 +7,23 @@ set_pronouns E Type => "", Type == "neutral", let E.he = "they", let E.him = "th
 set_pronouns E Type => "", Type == "object", let E.he = "it", let E.him = "it", let E.his = "its", let E.he_s = "it's", let E.is = "is", let E.was = "was"
 
 # Return a variation on the name of the entity
-name E => "[E.name]"
+name E => "[E.name]", last_mentioned_actor != E.name, let last_mentioned_actor = E.name
+name E => "[E.he]", last_mentioned_actor == E.name, let last_mentioned_actor = E.name
 name E => "[E.name]", E.location != null
-name E => "[E.type]", E.location != null
+name E => "the [E.type]", E.location != null
 name E => "[E.name.full]", E.location != null
 
 
 
 # Get the employer or create them if they don't exist
-employer => "[plot.employer.name]", plot.employer != null
-employer => "[=>create_employer][plot.employer.name]", plot.employer == null
+employer => "[=>name plot.employer]", plot.employer != null
+employer => "[=>create_employer][=>employer]", plot.employer == null
 create_employer => "[=>create_random_actor plot.employer]", let plot.employer = 1
+
+# Get the site or create it if it doesn't exist
+site => "[=> name plot.site]", plot.site != null
+site => "[=>create_site][=>site]", plot.site == null
+create_site => "[=>create_random_location plot.site]", let plot.site = 1
 
 # Get the letter type or create it if it doesn't exist
 letter_type => "[plot.call.type]", plot.call.type != null

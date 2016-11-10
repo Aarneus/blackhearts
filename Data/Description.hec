@@ -1,0 +1,31 @@
+﻿# Contains descriptions for all types of entities
+
+# Introduce a location
+introduce E => "[=>update_location E][=>describe E]", E.location != null
+introduce E => "[=>describe E]", E.location == null
+
+
+## Locations
+# Weather
+describe E => "The rain was pouring like a madman outside [=>name E].",
+    E.location != null, plot.weather == "rainy", E.exterior != null, plot.flag.weather_descr == null, let plot.flag.weather_descr = 1
+describe E => "Only the gentle patter of raindrops disturbed the silence of [=>name E].",
+    E.location != null, plot.weather == "rainy", plot.noise == 1, E.exterior != null, plot.flag.weather_descr == null, let plot.flag.weather_descr = 1
+describe E => "Dark clouds peered in through the windows of [=>name E].",
+    E.location != null, plot.weather == "cloudy", E.exterior != null, plot.flag.weather_descr == null, let plot.flag.weather_descr = 1
+describe E => "It was a quiet [plot.time_of_day] at [=>name E].",
+    E.location != null, plot.noise == 1, plot.flag.weather_descr == null, let plot.flag.weather_descr = 1
+describe E => "The rain continued its relentless assault.",
+    E.location != null, plot.weather == "rainy", plot.inside == null, plot.flag.weather_descr != null
+describe E => "The rain continued its relentless assault outside.",
+    E.location != null, plot.weather == "rainy", plot.inside != null, plot.flag.weather_descr != null
+    
+# Mood
+describe E => "Shadows hung over the [E.type] like lonely ghosts.",
+    E.location != null, E.type != "agency", E.dark == null
+describe E => "One could almost hear the echoes of distant travellers.",
+    E.location != null, E.type != "agency", E.station != null, plot.noise == 0
+describe E => "Forgotten papers were slowly gathering dust on every imaginable surface.",
+    E.location != null, E.office != null, plot.inside != null
+describe E => "A smell of ozone permeated the place.",
+    E.location != null, E.type != "agency"
