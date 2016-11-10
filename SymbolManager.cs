@@ -45,9 +45,10 @@ namespace Hecate
         public const int REPLACE = 23;
         public const int AND = 24;
         public const int OR = 25;
-        public const int END_OF_EXPRESSION = 26;
+        public const int CAPITALIZE = 26;
+        public const int END_OF_EXPRESSION = 27;
         
-        public const int FIRST_SYMBOL = 27;
+        public const int FIRST_SYMBOL = 28;
         
         public SymbolManager()
         {
@@ -79,6 +80,7 @@ namespace Hecate
                 {"<-", SymbolManager.REPLACE},
                 {"and", SymbolManager.AND},
                 {"or", SymbolManager.OR},
+                {"^", SymbolManager.CAPITALIZE},
                 {"$$$", SymbolManager.END_OF_EXPRESSION}
             };
             this.strings = new Dictionary<int, string>();

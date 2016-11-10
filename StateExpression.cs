@@ -25,7 +25,7 @@ namespace Hecate
         private static StateNode localNode;
         private static List<StateNode> localStack = new List<StateNode>();
         
-        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|=>|<-|[+\\-*\\/><!=]=?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.])");
+        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|\\^|=>|<-|[+\\-*\\/><!=]=?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.])");
         private static Regex literalRegex = new Regex("^(\".*\"|[0-9]+([.][0-9]+)?)$");
         
         private static bool debugging = false;
@@ -45,12 +45,12 @@ namespace Hecate
         public StateNode evaluate(StoryGenerator generator, StateNode rootNode) {
             this.rootNode = rootNode;
             this.currentToken = 0;
-            try {
+            //try {
             StateNode returned = this.expression();
             return returned;
-            } catch (Exception ex) {
-                throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
-            }
+            //} catch (Exception ex) {
+            //    throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
+            //}
         }
         
         // The expression parser
@@ -97,6 +97,7 @@ namespace Hecate
                     return 40;
                 case SymbolManager.ADD:
                 case SymbolManager.SUB:
+                case SymbolManager.CAPITALIZE:
                     return 50;
                 case SymbolManager.MULTIPLY:
                 case SymbolManager.DIVIDE:
@@ -121,6 +122,10 @@ namespace Hecate
                 case SymbolManager.LOCAL: return StateExpression.localNode.getSubvariable(token.literal, this.createSubvars);
                 case SymbolManager.ADD: return this.expression(100);
                 case SymbolManager.SUB: return -this.expression(100);
+                case SymbolManager.CAPITALIZE: 
+                    string val = this.expression(10);
+                    if (val.Length > 0) { return val.Substring(0, 1).ToUpper() + val.Substring(1); }
+                    return val;
                 case SymbolManager.NEGATE: 
                     StateNode result = this.expression(100);
                     if (result == null) { return 1; }
@@ -213,7 +218,6 @@ namespace Hecate
                 if (SymbolManager.isConditionalOperator(tokens[i].type)) {
                     this.condition = true;
                 }
-                
                 this.DebugLog("[" + tokens[i].type + "]");
                 i++;
             }
