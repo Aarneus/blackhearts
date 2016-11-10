@@ -130,6 +130,10 @@ namespace Hecate
 		    return this.stateValue == sn;
         }
 		
+		public static StateNode Add(StateNode a, StateNode b) {
+		    return a.stateValue + b.stateValue;
+		}
+		
 		public override int GetHashCode()
         {
             return base.GetHashCode();

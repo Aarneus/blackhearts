@@ -156,7 +156,7 @@ namespace Hecate
         private StateNode leftDenotation(Token token, StateNode left) {
             StateNode right = this.expression(this.leftBindingPower(token));
             switch (token.type) {
-                case SymbolManager.ADD: return (int)left + (int)right;
+                case SymbolManager.ADD: return StateNode.Add(left, right);
                 case SymbolManager.SUB: return left - right;
                 case SymbolManager.MULTIPLY: return left * right;
                 case SymbolManager.DIVIDE: return left / right;

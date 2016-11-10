@@ -171,8 +171,6 @@ namespace Hecate
             this.text = text.Substring(1, text.Length - 2);
         }
         
-        
-        
         // Save the expressions in two groups; conditions and effects
         private void setExpressions(StateExpression[] exprs) {
             List<StateExpression> conditions = new List<StateExpression>();
