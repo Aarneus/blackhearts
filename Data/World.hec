@@ -4,7 +4,7 @@ init_world => "[=>init_agency]"
 
 
 # Sets the proper variables when entering a location
-update_location L => "[=>set_lighting L][=>set_noise L][=>set_inside L]"
+update_location L => "[=>set_lighting(L)][=>set_noise(L)][=>set_inside(L)]"
 
 set_lighting L => "", L.lighting == null, set plot.lighting = 3
 set_lighting L => "", L.lighting != null, set plot.lighting = L.lighting
@@ -13,7 +13,7 @@ set_noise L => "", L.noise != null, set plot.noise = L.noise
 set_inside L => "", let plot.inside = L.inside
 
 # Main locations
-init_agency => "[=>create_building agency][=>create_location agency]", 
+init_agency => "[=>create_building(agency)][=>create_location(agency)]", 
     let agency.name = "Blackhearts",
     let agency.name.full = "Blackhearts Detective Agency",
     let agency.type = "agency",
@@ -25,18 +25,18 @@ init_agency => "[=>create_building agency][=>create_location agency]",
 
     
 # Initializes a location with the appropriate affixes
-create_location L => "[=>set_pronouns L \"object\"]", let L.location = 1
+create_location L => "[=>set_pronouns(L \"object\")]", let L.location
 
 # Creates a basic building
-create_building L => "", let L.interior = 1, let L.exterior = 1, let L.inside = 1
+create_building L => "", let L.interior, let L.exterior, let L.inside
 
 # Creates a random location
-create_random_location L => "[=>random_location L][=>random_location_name L][=>set_location_full_name L][=>create_location L]"
+create_random_location L => "[=>random_location(L)][=>random_location_name(L)][=>set_location_full_name(L)][=>create_location(L)]"
 set_location_full_name L => "", let L.name.full = L.name + " " + L.type
 
 # Location types
-random_location L => "[=>create_building L]", let L.type = "law firm", let L.office = 1
-random_location L => "[=>create_building L]", let L.type = "railway station", let L.station = 1
+random_location L => "[=>create_building(L)]", let L.type = "law firm", let L.office
+random_location L => "[=>create_building(L)]", let L.type = "railway station", let L.station
 
 # Location names
 random_location_name L => "", let L.name = "Karnak"

@@ -16,14 +16,14 @@ name E => "[E.name.full]", E.location != null
 
 
 # Get the employer or create them if they don't exist
-employer => "[=>name plot.employer]", plot.employer != null
+employer => "[=>name(plot.employer)]", plot.employer != null
 employer => "[=>create_employer][=>employer]", plot.employer == null
-create_employer => "[=>create_random_actor plot.employer]", let plot.employer = 1
+create_employer => "[=>create_random_actor(plot.employer)]", let plot.employer
 
 # Get the site or create it if it doesn't exist
 site => "[=> name plot.site]", plot.site != null
 site => "[=>create_site][=>site]", plot.site == null
-create_site => "[=>create_random_location plot.site]", let plot.site = 1
+create_site => "[=>create_random_location(plot.site)]", let plot.site
 
 # Get the letter type or create it if it doesn't exist
 letter_type => "[plot.call.type]", plot.call.type != null

@@ -2,15 +2,15 @@
 
 # Main actors
 init_actors => "[=>actor_rue]"
-actor_rue => "[=>create_actor rue N G]", rue == null, let rue = 1, let N = "Rue", let G = "female", let main_actor <- rue
+actor_rue => "[=>create_actor(rue N G)]", rue == null, let rue, let N = "Rue", let G = "female", let main_actor <- rue
 
 
 # Initializes an actor with the appropriate affixes
-create_actor A N G => "[=>set_pronouns A G]", let A.name = N, let A.gender = G
+create_actor A N G => "[=>set_pronouns(A G)]", let A.name = N, let A.gender = G
 
 # Creates a random actor
-create_random_actor A => "[=>random_gender_name G N][=>create_actor A N G]", let N = "", let G = ""
-random_gender_name G N => "[=>random_gender G][=>random_name G N]"
+create_random_actor A => "[=>random_gender_name(G N)][=>create_actor(A N G)]", let N = "", let G = ""
+random_gender_name G N => "[=>random_gender(G)][=>random_name(G N)]"
 
 # Choose random gender G
 random_gender G => "", G = "female"

@@ -5,12 +5,12 @@
 # 1 - Hook
 foreshadow => "But all was not as it appeared."
 foreshadow => "Soon, everything was about to change."
-call => "[=>phone_rang] [=>caller] [=>emote_frustrated plot.main_actor] [=>job_intro]", let plot.call = "phone"
-call => "[=>letter_arrived] [=>emote_frustrated plot.main_actor] [=>job_intro]", let plot.call = "letter"
+call => "[=>phone_rang] [=>caller] [=>emote_frustrated(main_actor)] [=>job_intro]", let plot.call = "phone"
+call => "[=>letter_arrived] [=>emote_frustrated(main_actor)] [=>job_intro]", let plot.call = "letter"
 
 # 2 - Investigation
-arrival_to_scene => "[=>entered_site] [=>introduce plot.site]"
-evidence_collection => ""
+arrival_to_scene => "[=>entered_site] [=>introduce(plot.site)]"
+evidence_collection => "[=>create_demon][=>evidence]"
 hypothesis => ""
 
 # 3 - Gear up
@@ -46,12 +46,12 @@ final_judgement => "The party rode out beneath benevolent, or at the very least 
 
 
 # Phrases
-caller => "It was [=>employer] and [=>name plot.employer] [plot.employer.was] in a hurry."
-entered_site => "[^=>name plot.main_actor] entered [=>site]."
-entered_site => "[^=>name plot.main_actor] walked up to [=>site]."
-entered_site => "[^=>name plot.main_actor] walked to [=>site].", plot.inside == null
-job_intro => "Already it seemed like a tough case. [^=>name plot.main_actor] didn't savor the idea of visiting [=>site] again."
-job_intro => "It seemed trouble was brewing at [=>site]." 
-letter_arrived => "[^=>name plot.main_actor] was reading [=>letter_type] from [=>employer]."
+caller => "It was [=>employer] and [=>name(plot.employer)] [plot.employer.was] in a hurry."
+entered_site => "[^=>name(plot.main_actor)] entered [=>site]."
+entered_site => "[^=>name(plot.main_actor)] walked up to [=>site]."
+entered_site => "[^=>name(plot.main_actor)] walked to [=>site].", plot.inside == null
+evidence => ""
+job_intro => "Already it seemed like a tough case. [^=>name(plot.main_actor)] didn't savour the idea of visiting [=>site] again.", let plot.job = "job"
+letter_arrived => "[^=>name(plot.main_actor)] was reading [=>letter_type] from [=>employer]."
 phone_rang => "Suddenly, the phone rang."
 phone_rang => "The silence was broken by the ringing of the telephone."

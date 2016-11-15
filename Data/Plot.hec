@@ -6,7 +6,7 @@ plot_scene => "[=>init_scene][=>scene]\n\n", plot.phase < 8, plot.phase += 1, le
 init_scene => "", let scene <- null
 
 # Phase 1 - Hook
-scene => "[=>introduce agency] [=>foreshadow] [=>call]", plot.phase == 1
+scene => "[=>introduce(agency)] [=>foreshadow] [=>call]", plot.phase == 1
 # Phase 2 - Twist 1
 scene => "[=>arrival_to_scene] [=>evidence_collection] [=>hypothesis]", plot.phase == 2
 # Phase 3 - Pinch 1

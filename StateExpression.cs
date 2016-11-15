@@ -45,12 +45,12 @@ namespace Hecate
         public StateNode evaluate(StoryGenerator generator, StateNode rootNode) {
             this.rootNode = rootNode;
             this.currentToken = 0;
-            //try {
+            try {
             StateNode returned = this.expression();
             return returned;
-            //} catch (Exception ex) {
-            //    throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
-            //}
+            } catch (Exception ex) {
+                throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
+            }
         }
         
         // The expression parser
@@ -69,7 +69,7 @@ namespace Hecate
         // Advances the parser only if the current token is of the specified type
         private void advance(int type) {
             if (this.tokens[this.currentToken].type != type) {
-                throw new Exception("Syntax error: missing ending parenthesis.");
+                throw new Exception("Syntax error: missing token");
             }
             this.currentToken++;
         }
@@ -103,6 +103,7 @@ namespace Hecate
                 case SymbolManager.DIVIDE:
                     return 60;
                 case SymbolManager.LEFT_PAREN:
+                    return 70;
                 case SymbolManager.DOT:
                 case SymbolManager.CALL:
                     return 80;
@@ -148,9 +149,16 @@ namespace Hecate
                 case SymbolManager.CALL:
                     int rule = this.expression(79);
                     List<StateNode> parameters = new List<StateNode>();
-                    while (this.tokens[this.currentToken].type != SymbolManager.END_OF_EXPRESSION) {
-                        StateNode param = this.expression(0);
-                        parameters.Add(param);
+                    int current = this.tokens[this.currentToken].type;
+                    if (current == SymbolManager.LEFT_PAREN) {
+                        this.currentToken += 1;
+                        current = this.tokens[this.currentToken].type;
+                        while (current != SymbolManager.END_OF_EXPRESSION && current != SymbolManager.RIGHT_PAREN) {
+                            StateNode param = this.expression(0);
+                            parameters.Add(param);
+                            current = this.tokens[this.currentToken].type;
+                        }
+                        this.currentToken += 1;
                     }
                     return this.generator.executeRule(rule, parameters.ToArray());
                 default: throw new Exception("Syntax error: Invalid value!");
@@ -189,7 +197,7 @@ namespace Hecate
                     return (left > 0) && (right > 0) ? 1 : 0;
                 case SymbolManager.OR:
                     return (left > 0) || (right > 0) ? 1 : 0;
-                default: throw new Exception("Syntax error: Invalid operator!");
+                default: throw new Exception("Syntax error: Invalid operator! " + token.type);
             }
         }
         
