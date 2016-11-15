@@ -9,25 +9,25 @@ actor_rue => "[=>create_actor(rue N G)]", rue == null, let rue, let N = "Rue", l
 create_actor A N G => "[=>set_pronouns(A G)]", let A.name = N, let A.gender = G
 
 # Creates a random actor
-create_random_actor A => "[=>random_gender_name(G N)][=>create_actor(A N G)]", let N = "", let G = ""
-random_gender_name G N => "[=>random_gender(G)][=>random_name(G N)]"
+create_random_actor A => "[=>create_actor(A N G)]", let G = =>random_gender, let N = =>random_name(G)
+random_gender_name G N => "[=>random_name(G N)]"
 
 # Choose random gender G
-random_gender G => "", G = "female"
-random_gender G => "", G = "male"
+random_gender => "female"
+random_gender => "male"
 
 # Female names
-random_name G N => "", N = "Annie", G == "female"
-random_name G N => "", N = "Claudia", G == "female"
-random_name G N => "", N = "Susan", G == "female"
+random_name G => "Annie", G == "female"
+random_name G => "Claudia", G == "female"
+random_name G => "Susan", G == "female"
 
 # Male names
-random_name G N => "", N = "Anthony", G == "male"
-random_name G N => "", N = "Benjamin", G == "male"
-random_name G N => "", N = "John", G == "male"
+random_name G => "Anthony", G == "male"
+random_name G => "Benjamin", G == "male"
+random_name G => "John", G == "male"
 
 # Neutral names
-random_name G N => "", N = "Murk"
-random_name G N => "", N = "Pallet"
-random_name G N => "", N = "Narm"
+random_name G => "Murk"
+random_name G => "Pallet"
+random_name G => "Narm"
 

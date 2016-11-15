@@ -21,7 +21,7 @@ employer => "[=>create_employer][=>employer]", plot.employer == null
 create_employer => "[=>create_random_actor(plot.employer)]", let plot.employer
 
 # Get the site or create it if it doesn't exist
-site => "[=> name plot.site]", plot.site != null
+site => "[=>name(plot.site)]", plot.site != null
 site => "[=>create_site][=>site]", plot.site == null
 create_site => "[=>create_random_location(plot.site)]", let plot.site
 
