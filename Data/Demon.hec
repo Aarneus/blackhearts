@@ -1,7 +1,7 @@
 ﻿# Demon rules
 
 # Create a random demon
-create_demon D => "", let D.name = =>demon_prefix + =>demon_suffix, let D.type = =>demon_type
+create_demon D => let D.name = =>demon_prefix + =>demon_suffix, let D.type = =>demon_type
 
 
 # Demon name

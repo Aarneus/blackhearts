@@ -23,7 +23,7 @@ namespace Hecate
         private StoryGenerator generator;
         private SymbolManager symbolManager;
         
-        private static Regex ruleRegex = new Regex("(.*) => (\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")(,)?(.*)");
+        private static Regex ruleRegex = new Regex("(.*) => (\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")?(,)?(.*)");
         private static Regex insetRegex = new Regex("\\[[^\\]]*\\]");
         
         
@@ -173,7 +173,8 @@ namespace Hecate
                     index++;
         	    }
         	}
-            this.text = text.Substring(1, text.Length - 2);
+            
+            this.text = text.Length < 2 ? "" : text.Substring(1, text.Length - 2);
         }
         
         // Save the expressions in two groups; conditions and effects

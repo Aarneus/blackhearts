@@ -12,7 +12,7 @@ call
 
 # 2 - Investigation
 arrival_to_scene => "[=>entered_site] [=>introduce(plot.site)]"
-evidence_collection => "[=>create_demon(demon)][=>evidence]{[demon.name]}", let demon
+evidence_collection => "[=>create_demon(demon)][=>evidence]", let demon
 hypothesis => ""
 
 # 3 - Gear up

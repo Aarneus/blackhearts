@@ -19,19 +19,19 @@ random_gender
 
 # Female names
 random_name G 
-=> "Annie", G == "female"
-=> "Claudia", G == "female"
-=> "Susan", G == "female"
+=> "Annie", G == "female", this.count == 0
+=> "Claudia", G == "female", this.count == 0
+=> "Susan", G == "female",  this.count == 0
 
 # Male names
 random_name G 
-=> "Anthony", G == "male"
-=> "Benjamin", G == "male"
-=> "John", G == "male"
+=> "Anthony", G == "male", this.count == 0
+=> "Benjamin", G == "male", this.count == 0
+=> "John", G == "male", this.count == 0
 
 # Neutral names
 random_name G 
-=> "Murk"
-=> "Pallet"
-=> "Narm"
+=> "Murk", this.count == 0
+=> "Pallet", this.count == 0
+=> "Narm", this.count == 0
 
