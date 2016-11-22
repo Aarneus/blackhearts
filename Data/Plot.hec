@@ -26,8 +26,10 @@ scene => "[=>clean_up] [=>look_back] [=>final_judgement]", plot.phase == 8
 # Selects the plot environment variables
 select_plot_variables => "[=>select_weather][=>select_time_of_day]"
 
-select_time_of_day => "", let plot.time_of_day = "afternoon"
-select_time_of_day => "", let plot.time_of_day = "evening"
-select_time_of_day => "", let plot.time_of_day = "night"
-select_weather => "", let plot.weather = "rainy"
-select_weather => "", let plot.weather = "cloudy"
+select_time_of_day 
+=> "", let plot.time_of_day = "afternoon"
+=> "", let plot.time_of_day = "evening"
+=> "", let plot.time_of_day = "night"
+select_weather 
+=> "", let plot.weather = "rainy"
+=> "", let plot.weather = "cloudy"

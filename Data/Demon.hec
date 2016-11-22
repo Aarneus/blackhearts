@@ -1,0 +1,16 @@
+﻿# Demon rules
+
+# Create a random demon
+create_demon D => "", let D.name = =>demon_prefix + =>demon_suffix, let D.type = =>demon_type
+
+
+# Demon name
+demon_prefix 
+=> "carna"
+=> "aure"
+
+demon_suffix 
+=> "trix"
+=> "don"
+
+

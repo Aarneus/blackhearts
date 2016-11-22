@@ -67,14 +67,30 @@ namespace Hecate
         public void parseRuleFile(string filename) {
             string line;
             string rule = "";
+            string set_beginning = "";
             System.IO.StreamReader file = new System.IO.StreamReader(filename);
             while((line = file.ReadLine()) != null)
             {
-               rule += line;
-               if (!line.TrimEnd().EndsWith(",")) {
-                   this.parseRuleString(rule);
+                line = line.Trim();
+                
+                // Collect the rule from multiple lines if the line ends with a comma
+                rule += line;
+                if (!line.TrimEnd().EndsWith(",")) {
+                   
+                   // Begins a set of rules
+                   if (!rule.Contains("=>")) {
+                       set_beginning = rule;
+                   }
+                   // A continued list line
+                   else if (rule.StartsWith("=>")) {
+                       this.parseRuleString(set_beginning + " " + rule);
+                   }
+                   // A self-contained rule
+                   else {
+                       this.parseRuleString(rule);
+                   }
                    rule = "";
-               }
+                }
             }
             file.Close();
         }

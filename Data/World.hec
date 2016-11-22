@@ -39,6 +39,7 @@ random_location L => "[=>create_building(L)]", let L.type = "law firm", let L.of
 random_location L => "[=>create_building(L)]", let L.type = "railway station", let L.station
 
 # Location names
-random_location_name L => "", let L.name = "Karnak"
-random_location_name L => "", let L.name = "Luke"
-random_location_name L => "", let L.name = "Torpor"
+random_location_name L 
+=> "", let L.name = "Karnak"
+=> "", let L.name = "Luke"
+=> "", let L.name = "Torpor"

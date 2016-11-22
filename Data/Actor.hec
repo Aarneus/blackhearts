@@ -13,21 +13,25 @@ create_random_actor A => "[=>create_actor(A N G)]", let G = =>random_gender, let
 random_gender_name G N => "[=>random_name(G N)]"
 
 # Choose random gender G
-random_gender => "female"
-random_gender => "male"
+random_gender 
+=> "female"
+=> "male"
 
 # Female names
-random_name G => "Annie", G == "female"
-random_name G => "Claudia", G == "female"
-random_name G => "Susan", G == "female"
+random_name G 
+=> "Annie", G == "female"
+=> "Claudia", G == "female"
+=> "Susan", G == "female"
 
 # Male names
-random_name G => "Anthony", G == "male"
-random_name G => "Benjamin", G == "male"
-random_name G => "John", G == "male"
+random_name G 
+=> "Anthony", G == "male"
+=> "Benjamin", G == "male"
+=> "John", G == "male"
 
 # Neutral names
-random_name G => "Murk"
-random_name G => "Pallet"
-random_name G => "Narm"
+random_name G 
+=> "Murk"
+=> "Pallet"
+=> "Narm"
 
