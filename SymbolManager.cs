@@ -16,6 +16,7 @@ namespace Hecate
         private Dictionary<int, string> strings;
         private int currentSymbolIndex;
         
+        public const int THIS = -4;
         public const int NULL = -3;
         public const int LOCAL = -2;
         public const int VARIABLE = -1;
@@ -54,6 +55,7 @@ namespace Hecate
         {
             this.integers = new Dictionary<string, int> 
             {
+                {"this", SymbolManager.THIS},
                 {"null", SymbolManager.NULL},
                 {"+", SymbolManager.ADD},
                 {"-", SymbolManager.SUB},

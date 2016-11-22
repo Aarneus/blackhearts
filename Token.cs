@@ -3,6 +3,7 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Hecate
 {
@@ -13,6 +14,9 @@ namespace Hecate
     {
         public int type;
         public StateNode literal;
+        
+        
+        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|\\^|=>|<-|[+\\-*\\/><!=]=?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.])");
         
         private static Regex stringRegex = new Regex("^(\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")$");
         private static Regex numberRegex = new Regex("^-?[0-9]+([.][0-9]+)?$");
@@ -28,7 +32,7 @@ namespace Hecate
             Token token = null;
             
             // Commands or null
-            if (s.Equals("let") || s.Equals("del") || s.Equals("and") || s.Equals("or") || s.Equals("null")) {
+            if (s.Equals("let") || s.Equals("del") || s.Equals("and") || s.Equals("or") || s.Equals("null") || s.Equals("this")) {
                 token = new Token(symbolManager.getInt(s), null);
             }
             // Literal string
@@ -64,6 +68,30 @@ namespace Hecate
             
             Debug.Assert(token != null);
             return token;
+        }
+        
+         // Splits the string into tokens
+        public static Token[] tokenize(string text, SymbolManager symbolManager) {
+            
+            // Split the string into string tokens
+            Match match = Token.tokenRegex.Match(text);
+            List<string> strings = new List<string>();
+            while (match.Success) {
+                strings.Add(match.Groups[0].Value);
+                match = match.NextMatch();
+            }
+            
+            // Create the actual token array from the string tokens
+            Token[] tokens = new Token[strings.Count + 1];
+            int i = 0;
+            int prevToken = 0;
+            foreach (string s in strings) {
+                tokens[i] = Token.getToken(s, prevToken, symbolManager);
+                prevToken = tokens[i].type;
+                i++;
+            }
+            tokens[tokens.Length - 1] = new Token(SymbolManager.END_OF_EXPRESSION, null);
+            return tokens;
         }
     }
 }

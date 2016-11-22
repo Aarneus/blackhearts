@@ -12,11 +12,11 @@ namespace Hecate
     /// </summary>
     public class StateExpression
     {
-        
         private Token[] tokens;
         private int currentToken;
         private bool condition;
         private StateNode rootNode;
+        private StateNode ruleNode;
         private SymbolManager symbolManager;
         private StoryGenerator generator;
         private bool createSubvars = false;
@@ -25,32 +25,42 @@ namespace Hecate
         private static StateNode localNode;
         private static List<StateNode> localStack = new List<StateNode>();
         
-        private static Regex tokenRegex = new Regex("([0-9]+([.][0-9]+)?|[()]|\\^|=>|<-|[+\\-*\\/><!=]=?|\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\"|[a-zA-Z0-9_]+|[.])");
         private static Regex literalRegex = new Regex("^(\".*\"|[0-9]+([.][0-9]+)?)$");
         
         private static bool debugging = false;
         
-        public StateExpression(string text, StoryGenerator generator, SymbolManager symbolManager)
+        public StateExpression(string text, StoryGenerator generator, SymbolManager symbolManager, Rule rule)
         {
             this.DebugLog(text + "\n");
             this.generator = generator;
             this.symbolManager = symbolManager;
+            
+            // Even one conditional token marks this expression as a condition
+            this.tokens = Token.tokenize(text, symbolManager);
             this.condition = false;
-            this.tokens = this.tokenize(text);
+            foreach (Token t in this.tokens) {
+                if (SymbolManager.isConditionalOperator(t.type)) {
+                    this.condition = true;
+                    break;
+                }
+            }
             this.currentToken = 0;
             this.original_text = text;
+            if (rule != null) {
+                this.ruleNode = rule.getNode();
+            }
         }
         
         // Evaluates the expression
         public StateNode evaluate(StoryGenerator generator, StateNode rootNode) {
             this.rootNode = rootNode;
             this.currentToken = 0;
-            try {
+            //try {
             StateNode returned = this.expression();
             return returned;
-            } catch (Exception ex) {
-                throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
-            }
+            //} catch (Exception ex) {
+            //    throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
+            //}
         }
         
         // The expression parser
@@ -120,6 +130,7 @@ namespace Hecate
                 case SymbolManager.NULL: return null;
                 case SymbolManager.LITERAL: return token.literal;
                 case SymbolManager.VARIABLE: return this.rootNode.getSubvariable(token.literal, this.createSubvars);
+                case SymbolManager.THIS: return this.ruleNode;
                 case SymbolManager.LOCAL: return StateExpression.localNode.getSubvariable(token.literal, this.createSubvars);
                 case SymbolManager.ADD: return this.expression(100);
                 case SymbolManager.SUB: return -this.expression(100);
@@ -201,48 +212,14 @@ namespace Hecate
             }
         }
         
-        // Splits the string into tokens
-        private Token[] tokenize(string text) {
-            
-            // Split the string into string tokens
-            Match match = StateExpression.tokenRegex.Match(text);
-            List<string> strings = new List<string>();
-            while (match.Success) {
-                this.DebugLog("[" + match.Groups[0] + "]");
-                strings.Add(match.Groups[0].Value);
-                match = match.NextMatch();
-            }
-            this.DebugLog("\n");
-            
-            // Create the actual token array from the string tokens
-            this.tokens = new Token[strings.Count + 1];
-            int i = 0;
-            int prevToken = 0;
-            foreach (string s in strings) {
-                tokens[i] = Token.getToken(s, prevToken, this.symbolManager);
-                prevToken = tokens[i].type;
-                
-                // Even one conditional token marks this expression as a condition
-                if (SymbolManager.isConditionalOperator(tokens[i].type)) {
-                    this.condition = true;
-                }
-                this.DebugLog("[" + tokens[i].type + "]");
-                i++;
-            }
-            this.DebugLog("\n");
-            tokens[tokens.Length - 1] = new Token(SymbolManager.END_OF_EXPRESSION, null);
-            return tokens;
-        }
-        
         public bool isCondition() {
             return this.condition;
         }
         
-        
-        public static StateExpression[] StringArrayToExpressionArray(string[] strings, StoryGenerator generator, SymbolManager symbolManager) {
+        public static StateExpression[] StringArrayToExpressionArray(string[] strings, StoryGenerator generator, SymbolManager symbolManager, Rule rule) {
             StateExpression[] exprs = new StateExpression[strings.Length];
             for (int i = 0; i < strings.Length; i++) {
-                exprs[i] = new StateExpression(strings[i].Trim(), generator, symbolManager);
+                exprs[i] = new StateExpression(strings[i].Trim(), generator, symbolManager, rule);
             }
             return exprs;
         }

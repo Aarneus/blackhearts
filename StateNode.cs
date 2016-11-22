@@ -46,7 +46,7 @@ namespace Hecate
 		// Sets the value of the child variable
 		public StateNode setSubvariable(int name, StateNode setValue) {
 		    if (!this.children.ContainsKey(name)) {
-		            this.children[name] = new StateNode(setValue.stateValue);
+		            this.children[name] = new StateNode(setValue.stateValue, this, name);
 		    }
 		    else {
 		        this.children[name].setValue(setValue.stateValue);

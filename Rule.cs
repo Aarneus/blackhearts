@@ -17,6 +17,8 @@ namespace Hecate
         private StateExpression[] conditions;
         private StateExpression[] parameters;
         private StateExpression[] insets;
+        private StateNode ruleNode;
+        private int COUNT;
         
         private StoryGenerator generator;
         private SymbolManager symbolManager;
@@ -24,18 +26,10 @@ namespace Hecate
         private static Regex ruleRegex = new Regex("(.*) => (\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")(,)?(.*)");
         private static Regex insetRegex = new Regex("\\[[^\\]]*\\]");
         
+        
         public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager) : this(name, text, generator, symbolManager, new string[0], new string[0]) {}
         public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs) : this(name, text, generator, symbolManager, exprs, new string[0]) {}
-        public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs, string[] parameters)
-        {
-            this.name = name;
-            this.generator = generator;
-            this.symbolManager = symbolManager;
-            this.setText(text, symbolManager);
-            this.setExpressions(StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager));
-            this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager);
-        }
-        
+        public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs, string[] parameters) { this.initialize(name, text, generator, symbolManager, exprs, parameters); }
         public Rule(string line, StoryGenerator generator, SymbolManager symbolManager) 
         {
             Match ruleMatch = Rule.ruleRegex.Match(line);
@@ -45,9 +39,6 @@ namespace Hecate
                 string leftside = ruleMatch.Groups[1].Value.Trim();
                 string text = ruleMatch.Groups[2].Value.Trim();
                 string evalstring = ruleMatch.Groups[5].Value.Trim();
-                
-                
-                //System.Console.WriteLine(": " + leftside + "; " + text + "; " + evalstring);
                 
                 // Separate the name from the parameters
                 string[] nameAndParameters = Rule.splitHelper(leftside, ' ');
@@ -65,21 +56,33 @@ namespace Hecate
                 }
                 
                 // Finalize
-                this.name = name;
-                this.generator = generator;
-                this.symbolManager = symbolManager;
-                this.setText(text, symbolManager);
-                this.setExpressions(StateExpression.StringArrayToExpressionArray(evals, generator, symbolManager));
-                this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager);
+                this.initialize(name, text, generator, symbolManager, evals, parameters);
             }
         }
         
+        // Initialization method for easier constructor overload
+        private void initialize(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs, string[] parameters)
+        {
+            this.name = name;
+            this.generator = generator;
+            this.symbolManager = symbolManager;
+            this.ruleNode = new StateNode(0, null, 0);
+            this.COUNT = this.symbolManager.getInt("count");
+            
+            this.setText(text, symbolManager);
+            this.setExpressions(StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager, this));
+            this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager, this);
+        }
         
         // Executes the rule
         public string execute(StateNode[] parameters, StoryGenerator generator, StateNode rootNode) {
             string result = this.text;
             // Push local stack before evaluations
             StateExpression.PushLocalStack();
+            
+            // Add 1 to the number of times this rule has ran
+            StateNode count = this.ruleNode.getSubvariable(this.COUNT);
+            this.ruleNode.setSubvariable(this.COUNT, count == null ? 1 : count + 1);
             
             // Bind parameters
             for (int i = 0; i < this.parameters.Length; i++) {
@@ -144,6 +147,10 @@ namespace Hecate
             return this.name;
         }
         
+        public StateNode getNode() {
+            return this.ruleNode;
+        }
+        
         // Save the text in a more efficient form by separating the inset expressions
         private void setText(string text, SymbolManager symbolManager) {
             MatchCollection matches = Rule.insetRegex.Matches(text);
@@ -161,13 +168,10 @@ namespace Hecate
                     text = text.Insert(capture.Index + offset, replacer);
                     offset -= capture.Length - replacer.Length;
                     
-                    this.insets[index] = new StateExpression(expr, this.generator, symbolManager);
+                    this.insets[index] = new StateExpression(expr, this.generator, symbolManager, this);
                     index++;
         	    }
         	}
-            
-            //System.Console.Write("RULE: " + symbolManager.getString(this.name) + ": ");
-            //System.Console.WriteLine(text);
             this.text = text.Substring(1, text.Length - 2);
         }
         
