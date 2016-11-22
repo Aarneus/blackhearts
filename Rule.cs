@@ -68,6 +68,7 @@ namespace Hecate
             this.symbolManager = symbolManager;
             this.ruleNode = new StateNode(0, null, 0);
             this.COUNT = this.symbolManager.getInt("count");
+            this.ruleNode.setSubvariable(COUNT, 0);
             
             this.setText(text, symbolManager);
             this.setExpressions(StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager, this));
