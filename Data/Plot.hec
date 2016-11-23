@@ -24,7 +24,7 @@ scene => "[=>clean_up] [=>look_back] [=>final_judgement]", plot.phase == 8
 
 
 # Selects the plot environment variables
-select_plot_variables => "[=>select_weather][=>select_time_of_day]"
+select_plot_variables => "[=>select_weather][=>select_time_of_day][=>select_subplot]"
 
 select_time_of_day 
 => let plot.time_of_day = "afternoon"
@@ -33,3 +33,14 @@ select_time_of_day
 select_weather 
 => let plot.weather = "rainy"
 => let plot.weather = "cloudy"
+
+
+select_subplot
+=> let plot.sub = "repair", let plot.sub.type = =>select_subplot_type
+
+select_subplot_type
+=> "plumbing", plot.sub == "repair"
+=> "roof", plot.sub == "repair"
+=> "door", plot.sub == "repair"
+=> "windows", plot.sub == "repair"
+

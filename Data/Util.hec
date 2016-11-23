@@ -32,3 +32,8 @@ letter_type => "[plot.call.type]", plot.call.type != null
 letter_type => "a letter", plot.call.type == null, let plot.call.type = "a letter"
 letter_type => "a note", plot.call.type == null, let plot.call.type = "a note"
 
+# Hated authority
+hated_authority 
+=> "lord mayor"
+=> "lord captain"
+=> "lord barrister"

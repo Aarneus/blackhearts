@@ -1,4 +1,5 @@
 ﻿# Gestures for showing internals without telling
 
-emote_frustrated A 
-=> "[^=>name(A)] furrowed [A.his] brow."
+emote_negative
+=> "I furrow my brow.", this.count < counter
+=> "My gut sinks.", this.count < counter
