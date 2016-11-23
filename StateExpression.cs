@@ -195,7 +195,7 @@ namespace Hecate
                 case SymbolManager.REPLACE:
                     return left.replaceWith(right);
                 case SymbolManager.ASSIGN:
-                    return left.setValue(right.getValue());
+                    return right == null ? left.replaceWith(null) : left.setValue(right.getValue());
                 case SymbolManager.ADD_TO:
                     return left.setValue((int)left + (int)right);
                 case SymbolManager.SUB_TO: 

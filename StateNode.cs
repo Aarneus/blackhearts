@@ -56,13 +56,18 @@ namespace Hecate
 		
 		// Replaces the node with the given tree
 		public StateNode setSubtree(int name, StateNode tree) {
-		    if (!(tree is StateNode)) {
-		        tree = new StateNode(tree);
+		    if (tree == null) {
+		        this.children.Remove(name);
 		    }
-		    this.children[name] = tree;
-		    tree.parent = this;
-		    tree.parentName = name;
-		    return tree;
+		    else {
+    		    if (!(tree is StateNode)) {
+    		        tree = new StateNode(tree);
+    		    }
+    		    this.children[name] = tree;
+    		    tree.parent = this;
+    		    tree.parentName = name;
+		    }
+	        return tree;
 		}
 		
 		// Destroys the subvariable (and all named with it)
