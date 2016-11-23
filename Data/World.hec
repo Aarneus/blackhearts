@@ -17,10 +17,10 @@ init_agency => "[=>create_building(agency)][=>create_location(agency)]",
     let agency.name = "Blackhearts",
     let agency.name.full = "Blackhearts Detective Agency",
     let agency.type = "agency",
-    let agency.interior = 1,
-    let agency.exterior = 1,
-    let agency.office = 1,
-    let agency.inside = 1
+    let agency.interior,
+    let agency.exterior,
+    let agency.office,
+    let agency.inside
 
 
     

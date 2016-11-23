@@ -3,14 +3,15 @@
 
 # Scenes
 # 1 - Hook
+introduction
+=> "The [agency.name.full]. [=>home_sweet_home]"
 foreshadow 
-=> "The [plot.sub.type] could use a little work but it's mine.", plot.sub == "repair"
+=> "[=>subplot_intro] [=>subplot_problem] [=>subplot_solution]"
 call 
-=> "[=>phone_rings] [=>caller] [=>emote_negative] [=>job_intro]", let plot.call = "phone"
-=> "[=>letter_arrives] [=>emote_frustrated(main_actor)] [=>job_intro]", let plot.call = "letter"
+=> "[=>get_job] [=>emote_negative] [=>job_intro]"
 
 # 2 - Investigation
-arrival_to_scene => "[=>enter_site] [=>introduce(plot.site)]"
+arrival_to_scene => "[=>arrive_site] [=>enter_site] [=>introduce(plot.site)]"
 evidence_collection => "[=>create_demon(demon)][=>evidence]", let demon
 hypothesis => ""
 
@@ -47,18 +48,38 @@ final_judgement => ""
 
 
 # Phrases
+arrive_site 
+=> "I walk up to [=>site].", let plot.inside <- null
+=> "I walk to [=>site].", let plot.inside <- null
+=> "I arrive at [=>site].", let plot.inside <- null
 caller 
 => "It's [=>employer]. [^=>name(plot.employer)] [plot.employer.is] in a hurry."
-enter_site 
-=> "I enter [=>site]."
-=> "I walk up to [=>site]."
-=> "I walk to [=>site].", plot.inside == null
+enter_site
+=> "I go in.", plot.site.interior != null, let plot.inside
+=> "I step inside.", plot.site.interior != null, let plot.inside
+=> "I cross the fence.", plot.site.interior == null
+=> "I inspect the lock. Basic model. A few minutes work. I'm in.", let plot.inside = plot.site.interior
 evidence 
 => ""
+get_job
+=> "[=>phone_rings] [=>caller]", let plot.call = "phone"
+=> "[=>letter_arrives]", let plot.call = "letter"
+home_sweet_home
+=> "It's not perfect but it's home."
+=> "No place like home."
 job_intro 
-=> "Already this seems like a tough case. I don't savour the idea of visiting [=>site] again.", let plot.job = "job"
+=> "Already it seems like a tough case. I don't savour the idea of visiting [=>site] again.", let plot.job = "job"
 letter_arrives 
-=> "I'm reading [=>letter_type] from [=>employer]."
+=> "I look back at the [=>letter_type] from [=>employer]."
 phone_rings
 => "I'm throwing darts at the [=>hated_authority]'s picture when the phone rings."
 => "The silence is broken by the ringing of the telephone."
+
+subplot_intro
+=> "Wind howls through the broken [plot.sub.type].", plot.sub == "repair", plot.sub.air != null
+=> "The [plot.sub.type] gurgles and clanks ominously.", plot.sub == "repair", plot.sub.water != null
+=> "The [plot.sub.type] could use a little work.", plot.sub == "repair"
+subplot_problem
+=> "It will be bad if I can't get it fixed soon.", plot.sub == "repair"
+subplot_solution
+=> "Problem is, a detective's pay is not exactly luxurious. I need a job.", plot.sub.money != null

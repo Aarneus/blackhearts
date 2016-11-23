@@ -6,7 +6,7 @@ plot_scene => "[=>init_scene][=>scene]\n\n", plot.phase < 8, plot.phase += 1, le
 init_scene => let scene <- null
 
 # Phase 1 - Hook
-scene => "[=>introduce(agency)] [=>foreshadow] [=>call]", plot.phase == 1
+scene => "[=>introduction] [=>foreshadow] [=>call]", plot.phase == 1
 # Phase 2 - Twist 1
 scene => "[=>arrival_to_scene] [=>evidence_collection] [=>hypothesis]", plot.phase == 2
 # Phase 3 - Pinch 1
@@ -36,11 +36,12 @@ select_weather
 
 
 select_subplot
-=> let plot.sub = "repair", let plot.sub.type = =>select_subplot_type
+=> let plot.sub = "repair", let plot.sub.money, let plot.sub.type = =>select_subplot_type
 
 select_subplot_type
-=> "plumbing", plot.sub == "repair"
-=> "roof", plot.sub == "repair"
-=> "door", plot.sub == "repair"
-=> "windows", plot.sub == "repair"
+=> "plumbing", plot.sub == "repair", let plot.sub.water
+=> "sink", plot.sub == "repair", let plot.sub.water
+=> "roof", plot.sub == "repair", let plot.sub.air
+=> "door", plot.sub == "repair", let plot.sub.air
+=> "window", plot.sub == "repair", let plot.sub.air
 

@@ -29,8 +29,8 @@ create_site => "[=>create_random_location(plot.site)]", let plot.site
 
 # Get the letter type or create it if it doesn't exist
 letter_type => "[plot.call.type]", plot.call.type != null
-letter_type => "a letter", plot.call.type == null, let plot.call.type = "a letter"
-letter_type => "a note", plot.call.type == null, let plot.call.type = "a note"
+letter_type => "letter", plot.call.type == null, let plot.call.type = "letter"
+letter_type => "note", plot.call.type == null, let plot.call.type = "note"
 
 # Hated authority
 hated_authority 

@@ -9,7 +9,7 @@ plot => "", plot.phase == 2
 
 
 # Counter for preventing the same unique rules to fire in the same story
-init_counter => counter == null, let counter = 0
+init_counter => counter == null, let counter = 1
 init_counter => counter != null, counter += 1
 
 # Story outlines
