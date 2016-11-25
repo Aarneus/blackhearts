@@ -3,78 +3,106 @@
 
 # Scenes
 # 1 - Hook
-introduction
-=> "The [agency.name.full]. [=>home_sweet_home]"
-foreshadow 
-=> "[=>subplot_intro] [=>subplot_problem] [=>subplot_solution]"
-call 
-=> "[=>get_job] [=>emote_negative] [=>job_intro]"
+introduction => "The [agency.name.full]. [=>home_sweet_home]"
+foreshadow => "[=>subplot_intro] [=>subplot_problem] [=>subplot_solution]"
+call => "[=>get_job] [=>emote] [=>job_intro]"
 
 # 2 - Investigation
-arrival_to_scene => "[=>arrive_site] [=>enter_site] [=>introduce(plot.site)]"
-evidence_collection => "[=>create_demon(demon)][=>evidence]", let demon
-hypothesis => ""
+arrival_to_scene => "[=>arrive_site] [=>introduce(plot.site)] [=>enter_site]"
+evidence_collection => "[=>wax_on_site] [=>time_for_work] [=>set_up_bag] [=>examine_evidence]"
+hypothesis => "[=>deduce_demon] [=>wax_on_deduction] [=>make_plan]"
 
-# 3 - Gear up
-gear_up => ""
-gear_problem => ""
-pressure => ""
+# TODO:
+# 3, 5, 7 - Plan fails
+plan_fire => "[=>probe_situation] [=>determination] [=>attempt_plan]"
+plan_problem => "[=>problem_appears] [=>problem_is_bad] [=>problem_is_impossible]"
+plan_failure => "[=>problem_hits] [=>status_change] [=>new_situation]"
 
-# 4 - Adaptation
-new_situation => ""
-plan_debate => ""
-plan_decision => ""
+# 4, 6 - New plan
+assess_situation => "[=>describe_situation] [=>emote] [=>silver_lining]"
+plan_debate => "[=>consider_situation] [=>consider_options] [=>despair]"
+plan_decision => "[=>need_to_focus] [=>moment_of_clarity] [=>make_plan]"
 
-# 5 - Plan fails
-plan_mobilize => ""
-plan_conflict => ""
-plan_failed => ""
-
-# 6 - New hope
-no_hope => ""
-desperation => ""
-final_piece => ""
-
-# 7 - Resolution
-determination => ""
-last_attempt => ""
-save_success => ""
+# 7 - Miracle save
+plan_success => "[=>problem_hits] [=>plan_succeeds] [=>victory]"
 
 # 8 - Epilogue
-clean_up => ""
-look_back => ""
-final_judgement => ""
+clean_up => "[=>future_of_job] [=>job_good_sides] [=>job_bad_sides]"
+look_back => "[=>rewards] [=>subplot_outro] [=>why_go_on]"
+final_judgement => "[=>must_go_on] [=>just_another_day] [=>fade_to_black]"
 
 
 
 # Phrases
 arrive_site 
-=> "I walk up to [=>site].", let plot.inside <- null
-=> "I walk to [=>site].", let plot.inside <- null
-=> "I arrive at [=>site].", let plot.inside <- null
+=> "I walk up to [=>site].", let plot.inside = null
+=> "I walk to [=>site].", let plot.inside = null
+=> "I arrive at [=>site].", let plot.inside = null
+=> "I stop outside [=>site].", let plot.inside = null
+attempt_plan
 caller 
 => "It's [=>employer]. [^=>name(plot.employer)] [plot.employer.is] in a hurry."
+consider_options
+deduce_demon
+=> "The scene suggests a not-too-bright demon.", plot.demon.type == "brute"
+=> "It's obvious this is a bad case of a demon swarm.", plot.demon.type == "swarm"
+=> "Obviously the demon is more cunning or subtle than average.", plot.demon.type == "trickster"
+describe_situation
+despair
+determination
 enter_site
 => "I go in.", plot.site.interior != null, let plot.inside
 => "I step inside.", plot.site.interior != null, let plot.inside
 => "I cross the fence.", plot.site.interior == null
 => "I inspect the lock. Basic model. A few minutes work. I'm in.", let plot.inside = plot.site.interior
-evidence 
-=> ""
+evidence_type
+=> "I can see large claw marks covering the [plot.site.type]", plot.demon.type == "brute"
+=> "thousands of tiny tracks criss-cross across all imaginable surfaces of the [plot.site.type]", plot.demon.type == "swarm"
+=> "the [plot.site.type] stands in suspiciously good condition", plot.demon.type == "trickster"
+evidence_flavour
+=> "the air smells of traces of copper or iron", plot.demon.flavour == "construct"
+=> "tiny arcs of electricity dance on metallic surfaces", plot.demon.flavour == "ethereal"
+=> "a faint smell of formaldehyde lingers in the place", plot.demon.flavour == "possessed"
+examine_evidence 
+=> "[=>look_around] [^=>evidence_type] and [=>evidence_flavour]."
+=> "[=>look_around] [^=>evidence_flavour] and [=>evidence_type]."
+fade_to_black
+future_of_job
 get_job
 => "[=>phone_rings] [=>caller]", let plot.call = "phone"
 => "[=>letter_arrives]", let plot.call = "letter"
 home_sweet_home
 => "It's not perfect but it's home."
 => "No place like home."
+job_bad_sides
+job_good_sides
 job_intro 
 => "Already it seems like a tough case. I don't savour the idea of visiting [=>site] again.", let plot.job = "job"
+just_another_day
 letter_arrives 
 => "I look back at the [=>letter_type] from [=>employer]."
+look_around
+=> "I look around."
+=> "I examine my surroundings."
+make_plan
+=> "I need to set up a barrier circle so I can contain [=>demon].", this.count < counter, let plot.plan = "circle"
+moment_of_clarity
+must_go_on
+need_to_focus
+new_situation
+plan_succeeds
+probe_situation
+problem_appears
+problem_hits
+problem_is_bad
+problem_is_impossible
 phone_rings
 => "I'm throwing darts at the [=>hated_authority]'s picture when the phone rings."
 => "The silence is broken by the ringing of the telephone."
-
+rewards
+set_up_bag
+=> "I open my bag and set it up on [plot.bag_location].", let plot.bag_location = =>location_object(plot.site)
+status_change
 subplot_intro
 => "Wind howls through the broken [plot.sub.type].", plot.sub == "repair", plot.sub.air != null
 => "The [plot.sub.type] gurgles and clanks ominously.", plot.sub == "repair", plot.sub.water != null
@@ -83,3 +111,17 @@ subplot_problem
 => "It will be bad if I can't get it fixed soon.", plot.sub == "repair"
 subplot_solution
 => "Problem is, a detective's pay is not exactly luxurious. I need a job.", plot.sub.money != null
+subplot_outro
+time_for_work
+=> "Time for work. [^=>demon] won't catch itself."
+=> "Okay, enough waxing poetic. Time to exorcise [=>demon]."
+victory
+wax_on_deduction
+=> "Shouldn't be too hard. It's all about the brains, after all.", plot.demon.type == "brute"
+=> "The problem is containing the whole swarm. I don't think nobody will sing my praises if I only get rid of half the swarm.", plot.demon.type == "swarm"
+=> "I should be able to outsmart it, though. After all, demons don't actually possess the capacity for real thought.", plot.demon.type == "trickster"
+wax_on_site
+=> "I don't know why, but [plot.site.type]s always give me the creeps."
+=> "Here the coroners of justice dissect and diagnose the corpse of law.", plot.site.type == "law firm"
+=> "The station seems so empty. Only a few homeless people shuffle slowly around the vicinity.", plot.site.type == "train station"
+why_go_on

@@ -6,7 +6,7 @@ actor_rue => "[=>create_actor(rue N G)]", rue == null, let rue, let N = "Rue", l
 
 
 # Initializes an actor with the appropriate affixes
-create_actor A N G => "[=>set_pronouns(A G)]", let A.name = N, let A.gender = G
+create_actor A N G => "[=>set_pronouns(A G)]", let A.actor, let A.name = N, let A.gender = G
 
 # Creates a random actor
 create_random_actor A => "[=>create_actor(A N G)]", let G = =>random_gender, let N = =>random_name(G)

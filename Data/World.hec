@@ -13,7 +13,9 @@ set_noise L => L.noise != null, set plot.noise = L.noise
 set_inside L => let plot.inside = L.inside
 
 # Main locations
-init_agency => "[=>create_building(agency)][=>create_location(agency)]", 
+init_agency => agency != null
+init_agency => "[=>create_building(agency)][=>create_location(agency)]",
+    agency == null,
     let agency.name = "Blackhearts",
     let agency.name.full = "Blackhearts Detective Agency",
     let agency.type = "agency",
@@ -36,10 +38,19 @@ set_location_full_name L => "", let L.name.full = L.name + " " + L.type
 
 # Location types
 random_location L => "[=>create_building(L)]", let L.type = "law firm", let L.office
-random_location L => "[=>create_building(L)]", let L.type = "railway station", let L.station
+random_location L => "[=>create_building(L)]", let L.type = "train station", let L.station
 
 # Location names
 random_location_name L 
 => let L.name = "Karnak"
 => let L.name = "Luke"
 => let L.name = "Torpor"
+
+
+# Random location object
+location_object L
+=> "the floor", L.interior != null, plot.inside != null
+=> "the ground", L.exterior != null, plot.inside == null
+=> "a desk", L.office != null
+=> "a bench", L.station != null
+

@@ -10,15 +10,15 @@ scene => "[=>introduction] [=>foreshadow] [=>call]", plot.phase == 1
 # Phase 2 - Twist 1
 scene => "[=>arrival_to_scene] [=>evidence_collection] [=>hypothesis]", plot.phase == 2
 # Phase 3 - Pinch 1
-scene => "[=>gear_up] [=>gear_problem] [=>pressure]", plot.phase == 3
+scene => "[=>plan_fire] [=>plan_problem] [=>plan_failure]", plot.phase == 3
 # Phase 4 - Midpoint
-scene => "[=>new_situation] [=>plan_debate] [=>plan_decision]", plot.phase == 4
+scene => "[=>assess_situation] [=>plan_debate] [=>plan_decision]", plot.phase == 4
 # Phase 5 - Pinch 2
-scene => "[=>plan_mobilize] [=>plan_conflict] [=>plan_failed]", plot.phase == 5
+scene => "[=>plan_fire] [=>plan_problem] [=>plan_failure]", plot.phase == 5
 # Phase 6 - Twist 2
-scene => "[=>no_hope] [=>desperation] [=>final_piece]", plot.phase == 6
+scene => "[=>assess_situation] [=>plan_debate] [=>plan_decision]", plot.phase == 6
 # Phase 7 - Resolution
-scene => "[=>determination] [=>last_attempt] [=>save_success]", plot.phase == 7
+scene => "[=>plan_fire] [=>plan_problem] [=>plan_success]", plot.phase == 7
 # Phase 8 - Epilogue
 scene => "[=>clean_up] [=>look_back] [=>final_judgement]", plot.phase == 8
 

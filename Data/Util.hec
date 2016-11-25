@@ -9,12 +9,12 @@ set_pronouns E Type
 
 # Return a variation on the name of the entity
 name E 
-=> "[E.name]", last_mentioned_actor != E.name, let last_mentioned_actor = E.name
-=> "[E.he]", last_mentioned_actor == E.name, let last_mentioned_actor = E.name
-=> "[E.name]", E.location != null
+=> "[E.name]", E.actor != null, last_mentioned_actor != E.name, let last_mentioned_actor = E.name
+=> "[E.he]", E.actor != null, last_mentioned_actor == E.name, let last_mentioned_actor = E.name
 => "the [E.type]", E.location != null
 => "[E.name.full]", E.location != null
-
+=> "the [E.name]", E.demon != null, E.name_known != null
+=> "the [=>demon_euphemism(E)]", E.demon != null, E.name_known == null
 
 
 # Get the employer or create them if they don't exist
@@ -27,6 +27,10 @@ site => "[=>name(plot.site)]", plot.site != null
 site => "[=>create_site][=>site]", plot.site == null
 create_site => "[=>create_random_location(plot.site)]", let plot.site
 
+# Get the demon or create it if it doesn't exist
+demon => "[=>name(plot.demon)]", plot.demon != null
+demon => "[=>create_demon(plot.demon)][=>demon]", plot.demon == null, let plot.demon
+
 # Get the letter type or create it if it doesn't exist
 letter_type => "[plot.call.type]", plot.call.type != null
 letter_type => "letter", plot.call.type == null, let plot.call.type = "letter"
@@ -37,3 +41,4 @@ hated_authority
 => "lord mayor"
 => "lord captain"
 => "lord barrister"
+

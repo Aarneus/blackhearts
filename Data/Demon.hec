@@ -1,7 +1,11 @@
 ﻿# Demon rules
 
 # Create a random demon
-create_demon D => let D.name = =>demon_prefix + =>demon_suffix, let D.type = =>demon_type
+create_demon D => let D.demon,
+    let D.name = =>demon_prefix + =>demon_suffix, 
+    let D.type = =>demon_type, 
+    let D.flavour = =>demon_flavour, 
+    let D.form = =>demon_form
 
 
 # Demon name
@@ -13,4 +17,36 @@ demon_suffix
 => "trix"
 => "don"
 
+# Demon type
+demon_type
+=> "brute"
+=> "trickster"
+=> "swarm"
 
+# Demon flavour
+demon_flavour
+=> "construct"
+=> "possessed"
+=> "ethereal"
+
+# Demon form
+demon_form
+=> "avian"
+=> "mammal"
+=> "humanoid"
+=> "reptile"
+=> "insect"
+=> "mollusc"
+
+# Demon descriptions
+demon_euphemism D
+=> "demon"
+=> "thing"
+=> "monster"
+=> "monstrosity"
+=> "brute", D.type == "brute"
+=> "swarm", D.type == "swarm"
+=> "tricky devil", D.type == "trickster"
+=> "creature", D.flavour == "construct"
+=> "abomination", D.flavour == "possessed"
+=> "wraith", D.flavour == "ethereal"
