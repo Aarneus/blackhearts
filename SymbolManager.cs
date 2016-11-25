@@ -83,7 +83,7 @@ namespace Hecate
                 {"and", SymbolManager.AND},
                 {"or", SymbolManager.OR},
                 {"^", SymbolManager.CAPITALIZE},
-                {"$$$", SymbolManager.END_OF_EXPRESSION}
+                {"end_of_expression", SymbolManager.END_OF_EXPRESSION}
             };
             this.strings = new Dictionary<int, string>();
             foreach (KeyValuePair<string, int> entry in this.integers) {
@@ -95,15 +95,15 @@ namespace Hecate
         }
         
         // Returns the symbol for the given string
-        public int getInt(string symbol) {
+        public int GetInt(string symbol) {
             if (!this.integers.ContainsKey(symbol)) {
-                return this.addSymbol(symbol);
+                return this.AddSymbol(symbol);
             }
             return this.integers[symbol];
         }
         
         // Returns the string for the given symbol
-        public string getString(int index) {
+        public string GetString(int index) {
             if (!this.strings.ContainsKey(index)) {
                 throw new IndexOutOfRangeException();
             }
@@ -111,7 +111,7 @@ namespace Hecate
         }
         
         // Adds the given string to the symbol database and returns its index number
-        private int addSymbol(string symbol) {
+        private int AddSymbol(string symbol) {
             if (!this.integers.ContainsKey(symbol)) {
                 this.strings[this.currentSymbolIndex] = symbol;
                 this.integers[symbol] = this.currentSymbolIndex;
@@ -121,7 +121,7 @@ namespace Hecate
         }
         
         // Returns true if the symbol is a conditional (>=, ==, <, etc)
-        public static bool isConditionalOperator(int symbol) {
+        public static bool IsConditionalOperator(int symbol) {
             switch (symbol) {
                 case EQUALS:
                 case NOT_EQUALS:

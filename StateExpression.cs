@@ -36,10 +36,10 @@ namespace Hecate
             this.symbolManager = symbolManager;
             
             // Even one conditional token marks this expression as a condition
-            this.tokens = Token.tokenize(text, symbolManager);
+            this.tokens = Token.Tokenize(text, symbolManager);
             this.condition = false;
             foreach (Token t in this.tokens) {
-                if (SymbolManager.isConditionalOperator(t.type)) {
+                if (SymbolManager.IsConditionalOperator(t.type)) {
                     this.condition = true;
                     break;
                 }
@@ -47,37 +47,37 @@ namespace Hecate
             this.currentToken = 0;
             this.original_text = text;
             if (rule != null) {
-                this.ruleNode = rule.getNode();
+                this.ruleNode = rule.GetNode();
             }
         }
         
         // Evaluates the expression
-        public StateNode evaluate(StoryGenerator generator, StateNode rootNode) {
+        public StateNode Evaluate(StoryGenerator generator, StateNode rootNode) {
             this.rootNode = rootNode;
             this.currentToken = 0;
-            //try {
-            StateNode returned = this.expression();
+            try {
+            StateNode returned = this.Expression();
             return returned;
-            //} catch (Exception ex) {
-            //    throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
-            //}
+            } catch (Exception ex) {
+                throw new Exception("Error in expression: " + this.original_text + "\n" + ex.Message);
+            }
         }
         
         // The expression parser
-        private StateNode expression(int rightBindingPower=0) {
+        private StateNode Expression(int rightBindingPower=0) {
             int t = this.currentToken;
             this.currentToken++;
-            StateNode left = this.nullDenotation(this.tokens[t]);
-            while (rightBindingPower < this.leftBindingPower(this.tokens[this.currentToken])) {
+            StateNode left = this.NullDenotation(this.tokens[t]);
+            while (rightBindingPower < this.LeftBindingPower(this.tokens[this.currentToken])) {
                 t = this.currentToken;
                 this.currentToken++;
-                left = this.leftDenotation(this.tokens[t], left);
+                left = this.LeftDenotation(this.tokens[t], left);
             }
             return left;
         }
         
         // Advances the parser only if the current token is of the specified type
-        private void advance(int type) {
+        private void Advance(int type) {
             if (this.tokens[this.currentToken].type != type) {
                 throw new Exception("Syntax error: missing token");
             }
@@ -85,7 +85,7 @@ namespace Hecate
         }
         
         // Returns the left binding power of the token
-        private int leftBindingPower(Token token) {
+        private int LeftBindingPower(Token token) {
             switch (token.type) {
                 case SymbolManager.ASSIGN:
                 case SymbolManager.REPLACE:
@@ -124,86 +124,86 @@ namespace Hecate
         }
         
         // The value of the literal
-        private StateNode nullDenotation(Token token) {
+        private StateNode NullDenotation(Token token) {
             StateNode expr;
             switch (token.type) {
                 case SymbolManager.NULL: return null;
                 case SymbolManager.LITERAL: return token.literal;
-                case SymbolManager.VARIABLE: return this.rootNode.getSubvariable(token.literal, this.createSubvars);
+                case SymbolManager.VARIABLE: return this.rootNode.GetSubvariable(token.literal, this.createSubvars);
                 case SymbolManager.THIS: return this.ruleNode;
-                case SymbolManager.LOCAL: return StateExpression.localNode.getSubvariable(token.literal, this.createSubvars);
-                case SymbolManager.ADD: return this.expression(100);
-                case SymbolManager.SUB: return -this.expression(100);
+                case SymbolManager.LOCAL: return StateExpression.localNode.GetSubvariable(token.literal, this.createSubvars);
+                case SymbolManager.ADD: return this.Expression(100);
+                case SymbolManager.SUB: return -this.Expression(100);
                 case SymbolManager.CAPITALIZE: 
-                    string val = this.expression(10);
+                    string val = this.Expression(10);
                     if (val.Length > 0) { return val.Substring(0, 1).ToUpper() + val.Substring(1); }
                     return val;
                 case SymbolManager.NEGATE: 
-                    StateNode result = this.expression(100);
+                    StateNode result = this.Expression(100);
                     if (result == null) { return 1; }
                     return result > 0 ? 0 : 1;
                 case SymbolManager.LEFT_PAREN:
                     bool temp = this.createSubvars;
                     this.createSubvars = false;
-                    expr = this.expression();
+                    expr = this.Expression();
                     this.createSubvars = temp;
-                    this.advance(SymbolManager.RIGHT_PAREN);
+                    this.Advance(SymbolManager.RIGHT_PAREN);
                     return expr;
                 case SymbolManager.LET:
                     this.createSubvars = true;
-                    expr = this.expression(79);
+                    expr = this.Expression(79);
                     this.createSubvars = false;
                     return expr;
                 case SymbolManager.DEL:
-                    StateNode node = this.expression(79);
-                    return node.removeFromParent();
+                    StateNode node = this.Expression(79);
+                    return node.RemoveFromParent();
                 case SymbolManager.CALL:
-                    int rule = this.expression(79);
+                    int rule = this.Expression(79);
                     List<StateNode> parameters = new List<StateNode>();
                     int current = this.tokens[this.currentToken].type;
                     if (current == SymbolManager.LEFT_PAREN) {
                         this.currentToken += 1;
                         current = this.tokens[this.currentToken].type;
                         while (current != SymbolManager.END_OF_EXPRESSION && current != SymbolManager.RIGHT_PAREN) {
-                            StateNode param = this.expression(0);
+                            StateNode param = this.Expression(0);
                             parameters.Add(param);
                             current = this.tokens[this.currentToken].type;
                         }
                         this.currentToken += 1;
                     }
-                    return this.generator.executeRule(rule, parameters.ToArray());
+                    return this.generator.ExecuteRule(rule, parameters.ToArray());
                 default: throw new Exception("Syntax error: Invalid value!");
             }
         }
         
         // The left denotation of a token
-        private StateNode leftDenotation(Token token, StateNode left) {
-            StateNode right = this.expression(this.leftBindingPower(token));
+        private StateNode LeftDenotation(Token token, StateNode left) {
+            StateNode right = this.Expression(this.LeftBindingPower(token));
             switch (token.type) {
                 case SymbolManager.ADD: return StateNode.Add(left, right);
                 case SymbolManager.SUB: return left - right;
                 case SymbolManager.MULTIPLY: return left * right;
                 case SymbolManager.DIVIDE: return left / right;
-                case SymbolManager.EQUALS: return StateNode.EqualNodes(left, right) ? 1 : 0;
-                case SymbolManager.NOT_EQUALS: return StateNode.EqualNodes(left, right) ? 0 : 1;
+                case SymbolManager.EQUALS: return StateNode.EqualsWithNull(left, right) ? 1 : 0;
+                case SymbolManager.NOT_EQUALS: return StateNode.EqualsWithNull(left, right) ? 0 : 1;
                 case SymbolManager.LESS_THAN: return left < right ? 1 : 0;
                 case SymbolManager.GREATER_THAN: return left > right ? 1 : 0;
                 case SymbolManager.LESS_OR: return left <= right ? 1 : 0;
                 case SymbolManager.GREATER_OR: return left >= right ? 1 : 0;
                 case SymbolManager.DOT: 
-                    return left == null ? null : left.getSubvariable(right, this.createSubvars);
+                    return left == null ? null : left.GetSubvariable(right, this.createSubvars);
                 case SymbolManager.REPLACE:
-                    return left.replaceWith(right);
+                    return left.ReplaceWith(right);
                 case SymbolManager.ASSIGN:
-                    return right == null ? left.replaceWith(null) : left.setValue(right.getValue());
+                    return right == null ? left.ReplaceWith(null) : left.SetValue(right.GetValue());
                 case SymbolManager.ADD_TO:
-                    return left.setValue((int)left + (int)right);
+                    return left.SetValue((int)left + (int)right);
                 case SymbolManager.SUB_TO: 
-                    return left.setValue(left - right);
+                    return left.SetValue(left - right);
                 case SymbolManager.MULTIPLY_TO: 
-                    return left.setValue(left * right);
+                    return left.SetValue(left * right);
                 case SymbolManager.DIVIDE_TO: 
-                    return left.setValue(left / right);
+                    return left.SetValue(left / right);
                 case SymbolManager.AND:
                     return (left > 0) && (right > 0) ? 1 : 0;
                 case SymbolManager.OR:
@@ -212,7 +212,7 @@ namespace Hecate
             }
         }
         
-        public bool isCondition() {
+        public bool IsCondition() {
             return this.condition;
         }
         

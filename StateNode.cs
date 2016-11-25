@@ -22,17 +22,17 @@ namespace Hecate
 			this.parentName = parentName;
         }
 		
-		public dynamic getValue() {
+		public dynamic GetValue() {
 		    return this.stateValue;
 		}
 		
-		public StateNode setValue(dynamic setValue) {
+		public StateNode SetValue(dynamic setValue) {
 		    this.stateValue = setValue;
 		    return this;
 		}
 		
 		// Returns the child variable according to the given name
-		public StateNode getSubvariable(int name, bool createIfNull=false) {
+		public StateNode GetSubvariable(int name, bool createIfNull=false) {
 		    if (this.children.ContainsKey(name)) {
 		        return this.children[name];
 		    }
@@ -44,18 +44,18 @@ namespace Hecate
 		}
 		
 		// Sets the value of the child variable
-		public StateNode setSubvariable(int name, StateNode setValue) {
+		public StateNode SetSubvariable(int name, StateNode setValue) {
 		    if (!this.children.ContainsKey(name)) {
 		            this.children[name] = new StateNode(setValue.stateValue, this, name);
 		    }
 		    else {
-		        this.children[name].setValue(setValue.stateValue);
+		        this.children[name].SetValue(setValue.stateValue);
 		    }
 		    return this.children[name];
 		}
 		
 		// Replaces the node with the given tree
-		public StateNode setSubtree(int name, StateNode tree) {
+		public StateNode SetSubtree(int name, StateNode tree) {
 		    if (tree == null) {
 		        this.children.Remove(name);
 		    }
@@ -71,7 +71,7 @@ namespace Hecate
 		}
 		
 		// Destroys the subvariable (and all named with it)
-		public StateNode removeSubvariable(int name) {
+		public StateNode RemoveSubvariable(int name) {
 		    if (this.children.ContainsKey(name)) {
 		        StateNode subvar = this.children[name];
 		        this.children.Remove(name);
@@ -82,36 +82,36 @@ namespace Hecate
 		}
 		
 		// Removes this node from it's parent
-		public StateNode removeFromParent() {
+		public StateNode RemoveFromParent() {
 		    if (this.parent != null) {
-		        this.parent.removeSubvariable(this.parentName);
+		        this.parent.RemoveSubvariable(this.parentName);
 		        return this;
 		    }
 		    throw new ArgumentException("Invalid parent variable.");
 		}
 		
 		// Replaces the node in it's parent's tree
-		public StateNode replaceWith(StateNode replacement) {
+		public StateNode ReplaceWith(StateNode replacement) {
 		    if (this.parent != null) {
-		        this.parent.setSubtree(this.parentName, replacement);
+		        this.parent.SetSubtree(this.parentName, replacement);
 		          return this;
 		    }
 		    throw new ArgumentException("Invalid parent variable");
 		}
 		
 		// Debug print to the console the whole tree
-		public void printTree(SymbolManager symbolManager, int name, int level=0) {
+		public void PrintTree(SymbolManager symbolManager, int name, int level=0) {
 		    for (int i = 0; i < level; i++) {
 		        System.Console.Write(" ");
 		    }
-		    System.Console.WriteLine(symbolManager.getString(name) + ": " + this.stateValue);
+		    System.Console.WriteLine(symbolManager.GetString(name) + ": " + this.stateValue);
 		    foreach (KeyValuePair<int, StateNode> node in children) {
-		        node.Value.printTree(symbolManager, node.Key, level + 1);
+		        node.Value.PrintTree(symbolManager, node.Key, level + 1);
 		    }
 		}
 		
 		// Compares two instances of StateNode
-		public static bool EqualNodes(StateNode a, StateNode b) {
+		public static bool EqualsWithNull(StateNode a, StateNode b) {
 		    if (a == null) {
 		        if (b == null) {
 		            return true;

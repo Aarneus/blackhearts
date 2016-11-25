@@ -15,10 +15,10 @@ namespace Hecate
             
             // Initialize generator
             StoryGenerator generator = new StoryGenerator();
-            generator.parseRuleDirectory("E:\\Code\\C#\\Hecate\\Data");
+            generator.ParseRuleDirectory("E:\\Code\\C#\\Hecate\\Data");
             
             do {
-                string result = generator.generate("[=>story]");
+                string result = generator.Generate("[=>story]");
                 System.Console.WriteLine("\n== STORY\n" + result);
             } while (System.Console.ReadKey().KeyChar != 'q');
             

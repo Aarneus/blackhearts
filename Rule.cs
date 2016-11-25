@@ -29,7 +29,7 @@ namespace Hecate
         
         public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager) : this(name, text, generator, symbolManager, new string[0], new string[0]) {}
         public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs) : this(name, text, generator, symbolManager, exprs, new string[0]) {}
-        public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs, string[] parameters) { this.initialize(name, text, generator, symbolManager, exprs, parameters); }
+        public Rule(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs, string[] parameters) { this.Initialize(name, text, generator, symbolManager, exprs, parameters); }
         public Rule(string line, StoryGenerator generator, SymbolManager symbolManager) 
         {
             Match ruleMatch = Rule.ruleRegex.Match(line);
@@ -41,14 +41,14 @@ namespace Hecate
                 string evalstring = ruleMatch.Groups[5].Value.Trim();
                 
                 // Separate the name from the parameters
-                string[] nameAndParameters = Rule.splitHelper(leftside, ' ');
-                int name = symbolManager.getInt(nameAndParameters[0]);
+                string[] nameAndParameters = Rule.SplitHelper(leftside, ' ');
+                int name = symbolManager.GetInt(nameAndParameters[0]);
                 int numberOfParameters = nameAndParameters.Length - 1;
                 string[] parameters = new String[numberOfParameters];
                 Array.Copy(nameAndParameters, 1, parameters, 0, numberOfParameters);
                 
                 // Separate the evaluations
-                string[] evals = Rule.splitHelper(evalstring, ',');
+                string[] evals = Rule.SplitHelper(evalstring, ',');
                 
                 // Massage the parameter strings from "X" to "let X = 0"
                 for (int i = 0; i < parameters.Length; i++) {
@@ -56,49 +56,49 @@ namespace Hecate
                 }
                 
                 // Finalize
-                this.initialize(name, text, generator, symbolManager, evals, parameters);
+                this.Initialize(name, text, generator, symbolManager, evals, parameters);
             }
         }
         
         // Initialization method for easier constructor overload
-        private void initialize(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs, string[] parameters)
+        private void Initialize(int name, string text, StoryGenerator generator, SymbolManager symbolManager, string[] exprs, string[] parameters)
         {
             this.name = name;
             this.generator = generator;
             this.symbolManager = symbolManager;
             this.ruleNode = new StateNode(0, null, 0);
-            this.COUNT = this.symbolManager.getInt("count");
-            this.ruleNode.setSubvariable(COUNT, 0);
+            this.COUNT = this.symbolManager.GetInt("count");
+            this.ruleNode.SetSubvariable(COUNT, 0);
             
-            this.setText(text, symbolManager);
-            this.setExpressions(StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager, this));
+            this.SetText(text, symbolManager);
+            this.SetExpressions(StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager, this));
             this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager, this);
         }
         
         // Executes the rule
-        public string execute(StateNode[] parameters, StoryGenerator generator, StateNode rootNode) {
+        public string Execute(StateNode[] parameters, StoryGenerator generator, StateNode rootNode) {
             string result = this.text;
             // Push local stack before evaluations
             StateExpression.PushLocalStack();
             
             // Add 1 to the number of times this rule has ran
-            StateNode count = this.ruleNode.getSubvariable(this.COUNT);
-            this.ruleNode.setSubvariable(this.COUNT, count == null ? 1 : count + 1);
+            StateNode count = this.ruleNode.GetSubvariable(this.COUNT);
+            this.ruleNode.SetSubvariable(this.COUNT, count == null ? 1 : count + 1);
             
             // Bind parameters
             for (int i = 0; i < this.parameters.Length; i++) {
-                StateNode parameter = this.parameters[i].evaluate(generator, rootNode);
-                parameter.replaceWith(parameters[i]);
+                StateNode parameter = this.parameters[i].Evaluate(generator, rootNode);
+                parameter.ReplaceWith(parameters[i]);
             }
             
             // Evaluate effects before insets to avoid rabbithole
             foreach (StateExpression e in this.effects) {
-                e.evaluate(generator, rootNode);
+                e.Evaluate(generator, rootNode);
             }
             
             // Replace all inset expressions with their evals
             for (int i = 0; i < this.insets.Length; i++) {
-                StateNode eval = this.insets[i].evaluate(generator, rootNode);
+                StateNode eval = this.insets[i].Evaluate(generator, rootNode);
                 result = result.Replace("[" + i + "]", eval);
             }
             
@@ -113,7 +113,7 @@ namespace Hecate
         }
         
         // Returns true when the rule can be executed with these parameters
-        public bool check(StateNode[] parameters, StateNode rootNode) {
+        public bool Check(StateNode[] parameters, StateNode rootNode) {
             // Must be given at least as much parameters as required
             if (parameters.Length < this.parameters.Length) {
                 return false;
@@ -124,13 +124,13 @@ namespace Hecate
             
             // Bind parameters
             for (int i = 0; i < this.parameters.Length; i++) {
-                StateNode parameter = this.parameters[i].evaluate(generator, rootNode);
-                parameter.replaceWith(parameters[i]);
+                StateNode parameter = this.parameters[i].Evaluate(generator, rootNode);
+                parameter.ReplaceWith(parameters[i]);
             }
             
             // If all conditions return true
             foreach (StateExpression c in this.conditions) {
-                int result = c.evaluate(this.generator, rootNode);
+                int result = c.Evaluate(this.generator, rootNode);
                 if (result == 0) {
                     StateExpression.PopLocalStack();
                     return false;
@@ -144,16 +144,16 @@ namespace Hecate
             return true;
         }
         
-        public int getName() {
+        public int GetName() {
             return this.name;
         }
         
-        public StateNode getNode() {
+        public StateNode GetNode() {
             return this.ruleNode;
         }
         
         // Save the text in a more efficient form by separating the inset expressions
-        private void setText(string text, SymbolManager symbolManager) {
+        private void SetText(string text, SymbolManager symbolManager) {
             MatchCollection matches = Rule.insetRegex.Matches(text);
             this.insets = new StateExpression[matches.Count];
             int offset = 0;
@@ -178,12 +178,12 @@ namespace Hecate
         }
         
         // Save the expressions in two groups; conditions and effects
-        private void setExpressions(StateExpression[] exprs) {
+        private void SetExpressions(StateExpression[] exprs) {
             List<StateExpression> conditions = new List<StateExpression>();
             List<StateExpression> effects = new List<StateExpression>();
             
             foreach (StateExpression ex in exprs) {
-                if (ex.isCondition()) {
+                if (ex.IsCondition()) {
                     conditions.Add(ex);
                 }
                 else {
@@ -194,7 +194,7 @@ namespace Hecate
             this.effects = effects.ToArray();
         }
         
-        public static string[] splitHelper(string text, char separator) {
+        public static string[] SplitHelper(string text, char separator) {
             return text.Split(new char[] {separator}, StringSplitOptions.RemoveEmptyEntries);
         }
     }

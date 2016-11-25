@@ -28,12 +28,12 @@ namespace Hecate
             this.literal = literal;
         }
         
-        public static Token getToken(string s, int prevToken, SymbolManager symbolManager) {
+        public static Token GetToken(string s, int prevToken, SymbolManager symbolManager) {
             Token token = null;
             
             // Commands or null
             if (s.Equals("let") || s.Equals("del") || s.Equals("and") || s.Equals("or") || s.Equals("null") || s.Equals("this")) {
-                token = new Token(symbolManager.getInt(s), null);
+                token = new Token(symbolManager.GetInt(s), null);
             }
             // Literal string
             else if (Token.stringRegex.IsMatch(s)) {
@@ -47,20 +47,20 @@ namespace Hecate
             else if (Token.variableRegex.IsMatch(s)) {
                 // Path literal or rule name
                 if (prevToken == SymbolManager.DOT || prevToken == SymbolManager.CALL) {
-                    token = new Token(SymbolManager.LITERAL, symbolManager.getInt(s));
+                    token = new Token(SymbolManager.LITERAL, symbolManager.GetInt(s));
                 }
                 // Global variable name
                 else if (!char.IsUpper(s[0])) {
-                    token = new Token(SymbolManager.VARIABLE, symbolManager.getInt(s));
+                    token = new Token(SymbolManager.VARIABLE, symbolManager.GetInt(s));
                 }
                 // Local variable name
                 else {
-                    token = new Token(SymbolManager.LOCAL, symbolManager.getInt(s));
+                    token = new Token(SymbolManager.LOCAL, symbolManager.GetInt(s));
                 }
             }
             // Not a literal
             else {
-                int op = symbolManager.getInt(s);
+                int op = symbolManager.GetInt(s);
                 if (op < SymbolManager.FIRST_SYMBOL) {
                     token = new Token(op, null);
                 }
@@ -71,7 +71,7 @@ namespace Hecate
         }
         
          // Splits the string into tokens
-        public static Token[] tokenize(string text, SymbolManager symbolManager) {
+        public static Token[] Tokenize(string text, SymbolManager symbolManager) {
             
             // Split the string into string tokens
             Match match = Token.tokenRegex.Match(text);
@@ -86,7 +86,7 @@ namespace Hecate
             int i = 0;
             int prevToken = 0;
             foreach (string s in strings) {
-                tokens[i] = Token.getToken(s, prevToken, symbolManager);
+                tokens[i] = Token.GetToken(s, prevToken, symbolManager);
                 prevToken = tokens[i].type;
                 i++;
             }

@@ -25,22 +25,22 @@ namespace Hecate
         }
         
         
-        public string generate(string symbol) {
+        public string Generate(string symbol) {
             
             Rule tempRule = new Rule(-3, "\"" + symbol + "\"", this, this.symbolManager);
-            string text = tempRule.execute(new StateNode[0], this, this.rootNode);
+            string text = tempRule.Execute(new StateNode[0], this, this.rootNode);
             return text;
         }
         
         // Chooses an applicable rule and executes it
-        public string executeRule(int rule, StateNode[] parameters) {
+        public string ExecuteRule(int rule, StateNode[] parameters) {
             // Choose a rule
             if (this.rules.ContainsKey(rule)) {
                 Rule chosen = null;
                 int count = 1;
                 
                 foreach (Rule r in this.rules[rule]) {
-                    if (r.check(parameters, this.rootNode)) {
+                    if (r.Check(parameters, this.rootNode)) {
                         if (this.random.Next(count) == 0) {
                             chosen = r;
                             count += 1;
@@ -49,7 +49,7 @@ namespace Hecate
                 }
                 
                 if (chosen != null) {
-                    return chosen.execute(parameters, this, this.rootNode);
+                    return chosen.Execute(parameters, this, this.rootNode);
                 }
             }
             
@@ -57,14 +57,14 @@ namespace Hecate
         }
         
         
-        public void parseRuleDirectory(string filepath) {
+        public void ParseRuleDirectory(string filepath) {
             string[] files = System.IO.Directory.GetFiles(filepath, "*.hec");
             foreach (string file in files) {
-                this.parseRuleFile(file);
+                this.ParseRuleFile(file);
             }
         }
         
-        public void parseRuleFile(string filename) {
+        public void ParseRuleFile(string filename) {
             string line;
             string rule = "";
             string set_beginning = "";
@@ -83,11 +83,11 @@ namespace Hecate
                    }
                    // A continued list line
                    else if (rule.StartsWith("=>")) {
-                       this.parseRuleString(set_beginning + " " + rule);
+                       this.ParseRuleString(set_beginning + " " + rule);
                    }
                    // A self-contained rule
                    else {
-                       this.parseRuleString(rule);
+                       this.ParseRuleString(rule);
                    }
                    rule = "";
                 }
@@ -95,16 +95,16 @@ namespace Hecate
             file.Close();
         }
         
-        public void parseRuleString(string line) {
+        public void ParseRuleString(string line) {
             line = line.Trim();
             if (!line.Equals("") && !line.StartsWith("#")) {
                 Rule rule = new Rule(line, this, this.symbolManager);
-                int name = rule.getName();
-                this.addRule(name, rule);
+                int name = rule.GetName();
+                this.AddRule(name, rule);
             }
         }
         
-        private void addRule(int name, Rule rule) {
+        private void AddRule(int name, Rule rule) {
             if (!this.rules.ContainsKey(name)) {
                 this.rules[name] = new List<Rule>();
             }
