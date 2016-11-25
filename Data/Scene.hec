@@ -12,12 +12,12 @@ arrival_to_scene => "[=>arrive_site] [=>introduce(plot.site)] [=>enter_site]"
 evidence_collection => "[=>wax_on_site] [=>time_for_work] [=>set_up_bag] [=>examine_evidence]"
 hypothesis => "[=>deduce_demon] [=>wax_on_deduction] [=>make_plan]"
 
-# TODO:
-# 3, 5, 7 - Plan fails
+# 3, 5 - Plan fails
 plan_fire => "[=>probe_situation] [=>determination] [=>attempt_plan]"
 plan_problem => "[=>problem_appears] [=>problem_is_bad] [=>problem_is_impossible]"
 plan_failure => "[=>problem_hits] [=>status_change] [=>new_situation]"
 
+# TODO:
 # 4, 6 - New plan
 assess_situation => "[=>describe_situation] [=>emote] [=>silver_lining]"
 plan_debate => "[=>consider_situation] [=>consider_options] [=>despair]"
@@ -40,16 +40,21 @@ arrive_site
 => "I arrive at [=>site].", let plot.inside = null
 => "I stop outside [=>site].", let plot.inside = null
 attempt_plan
+=> "I begin drawing a large circle on the floor.", plot.plan == "circle", plot.inside != null
+=> "I begin drawing a large circle on the ground with my foot.", plot.plan == "circle", plot.inside == null
+=> "I take a stance and ready myself for an assault.", plot.plan == "attack"
 caller 
 => "It's [=>employer]. [^=>name(plot.employer)] [plot.employer.is] in a hurry."
 consider_options
 deduce_demon
 => "The scene suggests a not-too-bright demon.", plot.demon.type == "brute"
-=> "It's obvious this is a bad case of a demon swarm.", plot.demon.type == "swarm"
+=> "It's obvious we're dealing with a demonic swarm.", plot.demon.type == "swarm"
 => "Obviously the demon is more cunning or subtle than average.", plot.demon.type == "trickster"
 describe_situation
 despair
 determination
+=> "Time to kick some demon ass."
+=> "This has to work."
 enter_site
 => "I go in.", plot.site.interior != null, let plot.inside
 => "I step inside.", plot.site.interior != null, let plot.inside
@@ -85,17 +90,36 @@ look_around
 => "I look around."
 => "I examine my surroundings."
 make_plan
-=> "I need to set up a barrier circle so I can contain [=>demon].", this.count < counter, let plot.plan = "circle"
+=> "All I need to do is set up a barrier circle so I can contain [=>demon].", this.count < counter, let plot.plan = "circle"
+=> "I have to first weaken [=>demon] with an electric assault before I can properly banish it.", this.count < counter, let plot.plan = "attack"
 moment_of_clarity
 must_go_on
 need_to_focus
 new_situation
+=> "I tumble across the [=>floor] and crumble into a heap.", plot.situation == "trapped"
+=> "I run and swerve as I desperately think of some way to evade [=>demon] behind me.", plot.situation == "chased"
 plan_succeeds
 probe_situation
+=> "I clear some space for the circle.", plot.plan == "circle"
+=> "I take the electric brand from my pocket.", plot.plan == "attack", plot.stolen == null
+=> "I reach for my bag for my tools.", plot.stolen == null
+=> "I steady my breath."
 problem_appears
+=> "I hear it too late. A loud [=>demon_sound] comes from behind me and chills me to the bone."
+=> "I haven't even finished the first layer of the circle when [=>demon] appears.", plot.plan == "circle"
+=> "[^=>demon] shows itself and I start to second guess a full-on assault.", plot.plan == "attack"
 problem_hits
+=> "[^=>demon] punches me right through a plaster wall.", plot.demon.type == "brute", plot.inside != null, let plot.situation = "breach"
+=> "I hit [=>demon] with all my might. It only makes it angrier.", plot.plan == "attack", let plot.situation = "menace"
+=> "The whirling swarm completely overruns me and I get swept along the tide of demon matter.", plot.demon.type == "swarm", let plot.situation = "breach"
+=> "[^=>demon] cracks my circle in half, erasing all hope of using it to destroy it.", plot.plan == "circle", let plot.situation = "menace"
 problem_is_bad
+=> "It's bigger than I thought.", plot.demon.type == "brute"
+=> "The room becomes dim as the swarm covers all the light bulbs.", plot.demon.type == "swarm", let plot.lighting = 2
+=> "A mad electric giggle echoes around me and inside my brain.", plot.demon.type == "trickster"
 problem_is_impossible
+=> "How am I going to finish the circle now?", plot.plan == "circle"
+=> "I'm supposed to attack that? Really?", plot.plan == "attack"
 phone_rings
 => "I'm throwing darts at the [=>hated_authority]'s picture when the phone rings."
 => "The silence is broken by the ringing of the telephone."
@@ -103,6 +127,10 @@ rewards
 set_up_bag
 => "I open my bag and set it up on [plot.bag_location].", let plot.bag_location = =>location_object(plot.site)
 status_change
+=> "I'm tossed inside a small room.", plot.situation == "breach", plot.site.interior != null, let plot.situation = "trapped"
+=> "I'm tossed on the ground underneath the sky.", plot.situation == "breach", plot.site.exterior != null, let plot.situation = "chased"
+=> "[^=>demon] cracks the [=>floor] underneath me and I'm plunged into the darkness below.", plot.situation == "menace", let plot.situation = "trapped", let plot.lighting = 1
+=> "I decide to retreat and take off running, [=>demon] fast behind me.", plot.situation = "menace", let plot.situation = "chased"
 subplot_intro
 => "Wind howls through the broken [plot.sub.type].", plot.sub == "repair", plot.sub.air != null
 => "The [plot.sub.type] gurgles and clanks ominously.", plot.sub == "repair", plot.sub.water != null

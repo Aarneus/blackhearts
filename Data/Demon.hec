@@ -38,6 +38,11 @@ demon_form
 => "insect"
 => "mollusc"
 
+# Demon sound
+demon_sound
+=> "screech"
+=> "howl", plot.demon.form == "mammal"
+
 # Demon descriptions
 demon_euphemism D
 => "demon"
