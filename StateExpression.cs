@@ -35,8 +35,10 @@ namespace Hecate
             this.generator = generator;
             this.symbolManager = symbolManager;
             
-            // Even one conditional token marks this expression as a condition
+            // Translate into executable script
             this.tokens = Token.Tokenize(text, symbolManager);
+            
+            // Even one conditional token marks this expression as a condition
             this.condition = false;
             foreach (Token t in this.tokens) {
                 if (SymbolManager.IsConditionalOperator(t.type)) {

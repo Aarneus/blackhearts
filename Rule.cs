@@ -24,6 +24,7 @@ namespace Hecate
         private SymbolManager symbolManager;
         
         private static Regex ruleRegex = new Regex("(.*) => (\"\"|\"(\\\\\"|[^\"])*(?<!\\\\)\")?(,)?(.*)");
+        private static Regex flagRegex = new Regex("flag ([A-Za-z0-9_.]+)");
         private static Regex insetRegex = new Regex("\\[[^\\]]*\\]");
         
         
@@ -47,7 +48,13 @@ namespace Hecate
                 string[] parameters = new String[numberOfParameters];
                 Array.Copy(nameAndParameters, 1, parameters, 0, numberOfParameters);
                 
-                // Separate the evaluations
+                // Separate the evaluations (and unpack flag evaluations)
+                Match flagMatch = Rule.flagRegex.Match(evalstring);
+                while (flagMatch.Groups.Count > 1) {
+                    string flag = flagMatch.Groups[1].Value;
+                    evalstring = evalstring.Replace("flag " + flag, "flags." + flag + " == null, let flags." + flag);
+                    flagMatch = Rule.flagRegex.Match(evalstring);
+                }
                 string[] evals = Rule.SplitHelper(evalstring, ",");
                 
                 // Massage the parameter strings from "X" to "let X = 0"
