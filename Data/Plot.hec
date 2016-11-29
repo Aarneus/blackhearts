@@ -6,21 +6,21 @@ plot_scene => "[=>init_scene][=>scene]\n\n", plot.phase < 8, plot.phase += 1, le
 init_scene => let scene <- null
 
 # Phase 1 - Hook
-scene => "[=>introduction] [=>foreshadow] [=>call]", plot.phase == 1
+scene => "[=>introduction]\n[=>foreshadow]\n[=>call]", plot.phase == 1
 # Phase 2 - Twist 1
-scene => "[=>arrival_to_scene] [=>evidence_collection] [=>hypothesis]", plot.phase == 2
+scene => "[=>arrival_to_scene]\n[=>evidence_collection]\n[=>hypothesis]", plot.phase == 2
 # Phase 3 - Pinch 1
-scene => "[=>plan_fire] [=>plan_problem] [=>plan_failure]", plot.phase == 3
+scene => "[=>plan_fire]\n[=>plan_problem]\n[=>plan_failure]", plot.phase == 3
 # Phase 4 - Midpoint
-scene => "[=>assess_situation] [=>plan_debate] [=>plan_decision]", plot.phase == 4
+scene => "[=>assess_situation]\n[=>plan_debate]\n[=>plan_decision]", plot.phase == 4
 # Phase 5 - Pinch 2
-scene => "[=>plan_fire] [=>plan_problem] [=>plan_failure]", plot.phase == 5
+scene => "[=>plan_fire]\n[=>plan_problem]\n[=>plan_failure]", plot.phase == 5
 # Phase 6 - Twist 2
-scene => "[=>assess_situation] [=>plan_debate] [=>plan_decision]", plot.phase == 6
+scene => "[=>assess_situation]\n[=>plan_debate]\n[=>plan_decision]", plot.phase == 6
 # Phase 7 - Resolution
-scene => "[=>plan_fire] [=>plan_problem] [=>plan_success]", plot.phase == 7
+scene => "[=>plan_fire]\n[=>plan_problem]\n[=>plan_success]", plot.phase == 7
 # Phase 8 - Epilogue
-scene => "[=>clean_up] [=>look_back] [=>final_judgement]", plot.phase == 8
+scene => "[=>clean_up]\n[=>look_back]\n[=>final_judgement]", plot.phase == 8
 
 
 # Selects the plot environment variables

@@ -61,7 +61,7 @@ deduce_demon
 describe_situation
 => "I find myself trapped outside.", plot.situation == "trapped", plot.inside == null
 => "I find myself trapped in a small room.", plot.situation == "trapped", plot.inside != null
-=> "I run like a madman, scrambling over [=>furniture].", plot.situation == "chased"
+=> "I run like a madman, scrambling over [=>furniture(plot.site)].", plot.situation == "chased"
 despair
 => "Oh this is just hopeless."
 => "No, that won't work."
@@ -169,7 +169,7 @@ problem_hits
 => "[^=>demon] crushes the only viable receptacle with its [=>demon_weapon].", plot.plan == "bind", let plot.situation = "menace"
 => "[^=>demon] flings me through the door before I have a chance to finish unmooring it.", plot.demon.type != "swarm", plot.plan == "uproot", let plot.situation = "breach"
 => "[^=>demon] carries me through the door before I have a chance to finish unmooring it.", plot.demon.type == "swarm", plot.plan == "uproot", let plot.situation = "breach"
-=> "I try and drain [^=>demon], but find the grounding is all wrong. [^=>demon] is not even phased.", plot.plan == "drain", let plot.situation = "menace"
+=> "I try and drain [=>demon], but find the grounding is all wrong. [^=>demon] is not even phased.", plot.plan == "drain", let plot.situation = "menace"
 => "I zap [=>demon], but it only slows it down for a second before the power fails and sparks fly from the wires as a fuse busts broken.", plot.plan == "overload", let plot.situation = "menace"
 problem_is_bad
 => "It's bigger than I thought.", plot.demon.type == "brute"
