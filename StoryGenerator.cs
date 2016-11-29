@@ -80,8 +80,8 @@ namespace Hecate
                     
                     // Begins a set of rules
                     if (!rule.Contains("=>")) {
-                        if (rule.Contains(":>")) {
-                            string[] parts = Rule.SplitHelper(rule, ":>");
+                        if (rule.Contains("+>")) {
+                            string[] parts = Rule.SplitHelper(rule, "+>");
                             set_beginning = parts[0];
                             set_end = parts[1];
                        }
