@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Hecate
 {
@@ -20,6 +21,8 @@ namespace Hecate
             do {
                 string result = generator.Generate("[=>story]");
                 System.Console.WriteLine("\n== STORY\n" + result);
+                File.WriteAllText("../../test.txt", result.Replace("\n", Environment.NewLine));
+                
             } while (System.Console.ReadKey().KeyChar != 'q');
             
             
