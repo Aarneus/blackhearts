@@ -1,0 +1,86 @@
+﻿# Contains lists of things not related to location or demon or person names
+
+# Gestures for showing internals without telling
+emote_negative +> this.count < story_index
+=> "I furrow my brow."
+=> "My gut sinks."
+=> "I frown."
+=> "Sigh."
+=> "My jaw clenches."
+=> "My fists clench."
+=> "I bite my lip."
+=> "I tap my feet."
+=> "I grit my teeth."
+=> "I freeze."
+=> "My grip tightens."
+=> "I tremble."
+=> "I raise an eyebrow."
+=> "I feel my body tense."
+=> "I reel."
+=> "I feel a cold sweat coming on."
+
+emote_positive
+=> "I grin."
+=> "I relax."
+=> "I stretch."
+=> "I smile."
+=> "I roll my eyes."
+=> "I rest my chin on my hand."
+=> "I stroke my imaginary beard."
+
+# Random furniture
+furniture L
+=> "the [=>floor]"
+=> "a desk", L.office != null
+=> "a bench", L.station != null
+
+# Hated authorities
+hated_authority 
+=> "lord mayor"
+=> "lord captain"
+=> "lord barrister"
+
+# Words for alive and dead
+alive
+=> "alive"
+=> "kicking"
+=> "breathing"
+=> "alive and kicking"
+=> "sharp"
+
+dead
+=> "dead"
+=> "sleeping the big sleep"
+=> "room temperature"
+=> "cashed in"
+=> "croaked"
+=> "worm food"
+=> "feeding the worms"
+=> "liquidated"
+=> "out of business"
+=> "resting in peace"
+=> "six feet under"
+=> "snuffed out"
+
+# Synonyms for think/stop
+think
+=> "think"
+=> "stop"
+=> "breathe"
+=> "focus"
+=> "concentrate"
+=> "get myself together"
+=> "work this out"
+
+# Something hits like this
+hits_like
+=> "a ton of bricks"
+=> "a freight train"
+=> "a moody monday", this.count == 0
+=> "a hurling hammer", this.count == 0
+=> "a belligerent badger", this.count == 0
+=> "a mad melody", this.count == 0
+=> "a crazed cultist", this.count == 0
+=> "a rampaging rhino", this.count == 0
+=> "a steel stallion", this.count == 0
+=> "a sunday on a bad weekend", this.count == 0

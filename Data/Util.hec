@@ -39,10 +39,3 @@ floor => "ground", plot.inside == null
 letter_type => "[plot.call.type]", plot.call.type != null
 letter_type => "letter", plot.call.type == null, let plot.call.type = "letter"
 letter_type => "note", plot.call.type == null, let plot.call.type = "note"
-
-# Hated authority
-hated_authority 
-=> "lord mayor"
-=> "lord captain"
-=> "lord barrister"
-

@@ -1,5 +1,5 @@
 ﻿# Story
-story => "[=>init_story][=>plot]"
+story => "[=>init_story][=>plot]", let flags = null
 init_story => "[=>init_counter][=>init_actors][=>init_world][=>init_plot]"
 
 
@@ -9,8 +9,8 @@ plot => "", plot.phase == 8
 
 
 # Counter for preventing the same unique rules to fire in the same story
-init_counter => counter == null, let counter = 1
-init_counter => counter != null, counter += 1
+init_counter => story_index == null, let story_index = 1
+init_counter => story_index != null, story_index += 1
 
 # Story outlines
 

@@ -18,20 +18,20 @@ random_gender
 => "male"
 
 # Female names
-random_name G 
-=> "Annie", G == "female", this.count == 0
-=> "Claudia", G == "female", this.count == 0
-=> "Susan", G == "female",  this.count == 0
+random_name G +> G == "female", this.count == 0
+=> "Annie" 
+=> "Claudia"
+=> "Susan"
 
 # Male names
-random_name G 
-=> "Anthony", G == "male", this.count == 0
-=> "Benjamin", G == "male", this.count == 0
-=> "John", G == "male", this.count == 0
+random_name G +> G == "male", this.count == 0
+=> "Anthony"
+=> "Benjamin"
+=> "John"
 
 # Neutral names
-random_name G 
-=> "Murk", this.count == 0
-=> "Pallet", this.count == 0
-=> "Narm", this.count == 0
+random_name G +> this.count == 0
+=> "Murk" 
+=> "Pallet"
+=> "Narm"
 

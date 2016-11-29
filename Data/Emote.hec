@@ -1,8 +1,0 @@
-﻿# Gestures for showing internals without telling
-
-emote
-=> "[=>emote_negative]"
-
-emote_negative
-=> "I furrow my brow.", this.count < counter
-=> "My gut sinks.", this.count < counter

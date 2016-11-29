@@ -25,7 +25,6 @@ init_agency => "[=>create_building(agency)][=>create_location(agency)]",
     let agency.inside
 
 
-    
 # Initializes a location with the appropriate affixes
 create_location L => "[=>set_pronouns(L \"object\")]", let L.location
 
@@ -46,11 +45,4 @@ random_location_name L
 => let L.name = "Luke"
 => let L.name = "Torpor"
 
-
-# Random location object
-location_object L
-=> "the floor", L.interior != null, plot.inside != null
-=> "the ground", L.exterior != null, plot.inside == null
-=> "a desk", L.office != null
-=> "a bench", L.station != null
 
