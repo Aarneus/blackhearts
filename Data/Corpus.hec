@@ -9,7 +9,6 @@ emote_negative +> this.count < story_index
 => "My jaw clenches."
 => "My fists clench."
 => "I bite my lip."
-=> "I tap my feet."
 => "I grit my teeth."
 => "I freeze."
 => "My grip tightens."
@@ -65,7 +64,7 @@ dead
 # Synonyms for think/stop
 think
 => "think"
-=> "stop"
+=> "stop and think"
 => "breathe"
 => "focus"
 => "concentrate"
@@ -76,11 +75,20 @@ think
 hits_like
 => "a ton of bricks"
 => "a freight train"
-=> "a moody monday", this.count == 0
+=> "a moody Monday", this.count == 0
 => "a hurling hammer", this.count == 0
 => "a belligerent badger", this.count == 0
 => "a mad melody", this.count == 0
 => "a crazed cultist", this.count == 0
 => "a rampaging rhino", this.count == 0
 => "a steel stallion", this.count == 0
-=> "a sunday on a bad weekend", this.count == 0
+=> "the end of a bad weekend", this.count == 0
+
+# Maneuvers under or over something
+maneuver
+=> "slide under"
+=> "jump over"
+=> "duck under"
+=> "sidestep"
+=> "strafe around"
+=> "step back"

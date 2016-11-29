@@ -41,7 +41,21 @@ demon_form
 # Demon sound
 demon_sound
 => "screech"
-=> "howl", plot.demon.form == "mammal"
+=> "howl"
+=> "screeching howl"
+=> "laughter"
+
+demon_weapon
+=> "claws"
+=> "jaws"
+=> "fist"
+=> "beak"
+=> "tail"
+=> "talons"
+=> "nails"
+=> "stinger"
+=> "tentacle"
+=> "pseudopod"
 
 # Demon descriptions
 demon_euphemism D
