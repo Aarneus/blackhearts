@@ -68,6 +68,7 @@ namespace Hecate
             string line;
             string rule = "";
             string set_beginning = "";
+            string set_end = "";
             System.IO.StreamReader file = new System.IO.StreamReader(filename);
             while((line = file.ReadLine()) != null)
             {
@@ -76,20 +77,28 @@ namespace Hecate
                 // Collect the rule from multiple lines if the line ends with a comma
                 rule += line;
                 if (!line.TrimEnd().EndsWith(",")) {
-                   
-                   // Begins a set of rules
-                   if (!rule.Contains("=>")) {
-                       set_beginning = rule;
-                   }
-                   // A continued list line
-                   else if (rule.StartsWith("=>")) {
-                       this.ParseRuleString(set_beginning + " " + rule);
-                   }
-                   // A self-contained rule
-                   else {
+                    
+                    // Begins a set of rules
+                    if (!rule.Contains("=>")) {
+                        if (rule.Contains(":>")) {
+                            string[] parts = Rule.SplitHelper(rule, ":>");
+                            set_beginning = parts[0];
+                            set_end = parts[1];
+                       }
+                       else {
+                            set_beginning = rule;
+                            set_end = "";
+                       }
+                    }
+                    // A continued list line
+                    else if (rule.StartsWith("=>")) {
+                       this.ParseRuleString(set_beginning + " " + rule + ", " + set_end);
+                    }
+                    // A self-contained rule
+                    else {
                        this.ParseRuleString(rule);
-                   }
-                   rule = "";
+                    }
+                    rule = "";
                 }
             }
             file.Close();
