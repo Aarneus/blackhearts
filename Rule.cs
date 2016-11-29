@@ -41,14 +41,14 @@ namespace Hecate
                 string evalstring = ruleMatch.Groups[5].Value.Trim();
                 
                 // Separate the name from the parameters
-                string[] nameAndParameters = Rule.SplitHelper(leftside, ' ');
+                string[] nameAndParameters = Rule.SplitHelper(leftside, " ");
                 int name = symbolManager.GetInt(nameAndParameters[0]);
                 int numberOfParameters = nameAndParameters.Length - 1;
                 string[] parameters = new String[numberOfParameters];
                 Array.Copy(nameAndParameters, 1, parameters, 0, numberOfParameters);
                 
                 // Separate the evaluations
-                string[] evals = Rule.SplitHelper(evalstring, ',');
+                string[] evals = Rule.SplitHelper(evalstring, ",");
                 
                 // Massage the parameter strings from "X" to "let X = 0"
                 for (int i = 0; i < parameters.Length; i++) {
@@ -194,8 +194,8 @@ namespace Hecate
             this.effects = effects.ToArray();
         }
         
-        public static string[] SplitHelper(string text, char separator) {
-            return text.Split(new char[] {separator}, StringSplitOptions.RemoveEmptyEntries);
+        public static string[] SplitHelper(string text, string separator) {
+            return text.Split(new string[] {separator}, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }
