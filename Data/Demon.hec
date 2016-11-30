@@ -1,31 +1,13 @@
 ﻿# Demon rules
 
 # Create a random demon
-create_demon D => let D.demon,
-    let D.type = =>demon_type, 
-    let D.flavour = =>demon_flavour, 
-    let D.form = =>demon_form
+create_demon D => let D.demon, let D.type = =>demon_type, 
 
 # Demon type
 demon_type
 => "brute"
 => "trickster"
 => "swarm"
-
-# Demon flavour
-demon_flavour
-=> "construct"
-=> "possessed"
-=> "ethereal"
-
-# Demon form
-demon_form
-=> "avian"
-=> "mammal"
-=> "humanoid"
-=> "reptile"
-=> "insect"
-=> "mollusc"
 
 # Demon sound
 demon_sound
