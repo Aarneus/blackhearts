@@ -19,9 +19,15 @@ namespace Hecate
             generator.ParseRuleDirectory("E:\\Code\\C#\\Hecate\\Data");
             
             do {
-                string result = generator.Generate("[=>story]");
-                System.Console.WriteLine("\n== STORY\n" + result);
-                File.WriteAllText("../../test.txt", result.Replace("\n", Environment.NewLine));
+                int stories = 72;
+                string whole_text = stories + " cases of the Blackhearts Detective Agency\n\nBy Aarne Uotila\nNaNoGenMo 2016\nhttps://github.com/NaNoGenMo/2016/issues/111\n\n\n";
+                for (int i = 0; i < stories; i++) {
+                    whole_text += "Chapter " + (i + 1) + "\n\n";
+                    string result = generator.Generate("[=>story]");
+                    whole_text += result + "\n\n";
+                    System.Console.WriteLine("\n== STORY\n" + result);
+                }
+                File.WriteAllText("blackhearts.txt", whole_text.Replace("\n", Environment.NewLine));
                 
             } while (System.Console.ReadKey().KeyChar != 'q');
             
