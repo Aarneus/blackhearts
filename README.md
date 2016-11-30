@@ -1,8 +1,18 @@
 # 72 Cases of the Blackhearts Detective Agency
-NaNoGenMo 2016 novel generator
+NaNoGenMo 2016 Novel Generator
+
+
+Sample Grammar syntax:
+<blockquote>
+# Random furniture<br>
+furniture L<br>
+=> "the [=>floor]"<br>
+=> "a windowsill", plot.inside != null<br>
+=> "a desk", L.office != null<br>
+=> "a filing cabinet", L.office != null<br>
+</blockquote>
 
 Sample output:
-
 <blockquote>
 Chapter 1<br>
 
