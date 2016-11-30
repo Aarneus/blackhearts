@@ -37,13 +37,14 @@ namespace Hecate
             // Choose a rule
             if (this.rules.ContainsKey(rule)) {
                 Rule chosen = null;
-                int count = 1;
+                int count = 0;
                 
                 foreach (Rule r in this.rules[rule]) {
                     if (r.Check(parameters, this.rootNode)) {
-                        if (this.random.Next(count) == 0) {
+                        int rank = r.GetRank();
+                        count += rank;
+                        if (this.random.Next(count) < rank) {
                             chosen = r;
-                            count += 1;
                         }
                     }
                 }

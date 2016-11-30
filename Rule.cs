@@ -18,6 +18,7 @@ namespace Hecate
         private StateExpression[] parameters;
         private StateExpression[] insets;
         private StateNode ruleNode;
+        private int rank;
         private int COUNT;
         
         private StoryGenerator generator;
@@ -80,6 +81,7 @@ namespace Hecate
             this.SetText(text, symbolManager);
             this.SetExpressions(StateExpression.StringArrayToExpressionArray(exprs, generator, symbolManager, this));
             this.parameters = StateExpression.StringArrayToExpressionArray(parameters, generator, symbolManager, this);
+            this.rank = (this.conditions.Length + 1);
         }
         
         // Executes the rule
@@ -157,6 +159,10 @@ namespace Hecate
         
         public StateNode GetNode() {
             return this.ruleNode;
+        }
+        
+        public StateNode GetRank() {
+            return this.rank;
         }
         
         // Save the text in a more efficient form by separating the inset expressions
