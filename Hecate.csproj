@@ -55,9 +55,8 @@
   <ItemGroup>
     <None Include="Data\Actor.hec" />
     <None Include="Data\Core.hec" />
+    <None Include="Data\Corpus.hec" />
     <None Include="Data\Demon.hec" />
-    <None Include="Data\Description.hec" />
-    <None Include="Data\Emote.hec" />
     <None Include="Data\Plot.hec" />
     <None Include="Data\Scene.hec" />
     <None Include="Data\Test.hec" />
