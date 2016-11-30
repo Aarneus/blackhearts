@@ -24,9 +24,6 @@ emote_positive
 => "I relax."
 => "I stretch."
 => "I smile."
-=> "I roll my eyes."
-=> "I rest my chin on my hand."
-=> "I stroke my imaginary beard."
 
 # Random furniture
 furniture L

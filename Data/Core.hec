@@ -12,5 +12,4 @@ plot => "", plot.phase == 8
 init_counter => story_index == null, let story_index = 1
 init_counter => story_index != null, story_index += 1
 
-# Story outlines
 
