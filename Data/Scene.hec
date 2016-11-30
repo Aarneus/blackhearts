@@ -25,7 +25,6 @@ plan_decision => "[=>need_to_focus] [=>moment_of_clarity] [=>make_plan]"
 # 7 - Miracle save
 plan_success => "[=>problem_averted] [=>plan_succeeds] [=>victory]"
 
-# TODO:
 # 8 - Epilogue
 clean_up => "[=>future_of_job] [=>job_good_sides] [=>job_bad_sides]"
 look_back => "[=>rewards] [=>subplot_outro] [=>why_go_on]"
@@ -34,11 +33,12 @@ final_judgement => "[=>must_go_on] [=>just_another_day] [=>fade_to_black]"
 
 
 # Phrases
-arrive_site 
-=> "I walk up to [=>site].", let plot.inside = null
-=> "I walk to [=>site].", let plot.inside = null
-=> "I arrive at [=>site].", let plot.inside = null
-=> "I stop outside [=>site].", let plot.inside = null
+arrive_site +> let plot.inside = null
+=> "I walk up to [=>site]."
+=> "I walk to [=>site]."
+=> "I arrive at [=>site]."
+=> "I take a cab to [=>site]."
+=> "I stop outside [=>site]."
 attempt_plan
 => "I begin drawing a large circle on the [=>floor].", plot.plan == "circle", plot.inside != null
 => "I take a stance and ready myself for an assault.", plot.plan == "attack"
@@ -53,7 +53,7 @@ consider_options
 => "Maybe I could try and improvise a containment circle and trap it?" flags.plan.circle == null
 => "Maybe it will just go away on its own? One can only hope."
 consider_situation
-=> "Okay, [=>think]. [=>what_now] [=>look_around]"
+=> "Okay, got to [=>think]. [=>what_now] [=>look_around]"
 deduce_demon
 => "The scene suggests a not-too-bright demon.", plot.demon.type == "brute"
 => "It's obvious we're dealing with a demonic swarm.", plot.demon.type == "swarm"
@@ -62,6 +62,10 @@ describe_situation
 => "I find myself trapped outside.", plot.situation == "trapped", plot.inside == null
 => "I find myself trapped in a small room.", plot.situation == "trapped", plot.inside != null
 => "I run like a madman, scrambling over [=>furniture(plot.site)].", plot.situation == "chased"
+=> "I check my [plot.injury]. It's bad.", plot.situation == "injured"
+=> "I grope around in the dark.", plot.situation == "darkness"
+=> "I find myself without my gear.", plot.situation == "stolen"
+=> "I'm rolling on the floor, holding my head between my hands.", plot.situation == "stunned"
 despair
 => "Oh this is just hopeless."
 => "No, that won't work."
@@ -70,10 +74,12 @@ despair
 determination
 => "Time to kick some demon ass."
 => "This has to work."
+employer_visits
+=> "[=>employer] comes to my office and lays out [plot.employer.his] problems."
 enter_site
-=> "I go in.", plot.site.interior != null, let plot.inside
-=> "I step inside.", plot.site.interior != null, let plot.inside
-=> "I cross the fence.", plot.site.interior == null
+=> "[^=>emote_negative] I go in.", plot.site.interior != null, let plot.inside
+=> "[^=>emote_negative] I step inside.", plot.site.interior != null, let plot.inside
+=> "[^=>emote_negative] I cross the fence.", plot.site.interior == null
 => "I inspect the lock. Basic model. A few minutes work. I'm in.", let plot.inside = plot.site.interior
 evidence_type
 => "I can see large claw marks covering the [plot.site.type]", plot.demon.type == "brute"
@@ -95,6 +101,7 @@ future_of_job
 get_job
 => "[=>phone_rings] [=>caller]", let plot.call = "phone"
 => "[=>letter_arrives]", let plot.call = "letter"
+=> "[=>employer_visits]", let plot.call = "visit"
 home_sweet_home
 => "It's not perfect but it's home."
 => "No place like home."
@@ -105,7 +112,9 @@ job_good_sides
 => "Well, it wasn't as bad as it could have been."
 => "Now I can tend to my injuries.", plot.injury != null
 job_intro 
-=> "Already it seems like a tough case. I don't savour the idea of visiting [=>site] again.", let plot.job = "job"
+=> "[=>tough_case] I don't savour the idea of visiting [=>site] again.", let plot.job = "job"
+=> "[=>tough_case] [^plot.employer.he] really needs my help. I guess I don't have a choice. I'm going to [=>site].", let plot.job = "help"
+=> "[=>tough_case] [^plot.employer.he] will owe me after this. I get ready to leave for [=>site].", let plot.job = "favor"
 just_another_day
 => "Oh well. Just another day in the life of an occult detective."
 letter_arrives 
@@ -127,12 +136,21 @@ moment_of_clarity
 => "Right."
 must_go_on
 => "I suppose it has to be done."
+need_a_job
+=> "I need a job."
+=> "I need a job. Fast."
 need_to_focus
 => "Okay, I need to [=>think]."
 => "I really need to [=>think]."
 new_situation
 => "I tumble across the [=>floor] and crumble into a heap.", plot.situation == "trapped"
 => "I run and swerve as I desperately think of some way to evade [=>demon] behind me.", plot.situation == "chased"
+=> "My [plot.injury] hurts like the dickens. I check my injury.", plot.situation == "injured"
+=> "I can't see anything in this darkness.", plot.situation == "darkness"
+=> "I double-check my pockets. Yep. All empty.", plot.situation == "stolen"
+=> "I fall down on the [=>floor] and reel in pain.", plot.situation == "stunned"
+=> "I'm in deep trouble."
+=> "This hasn't gone at all according to plan."
 plan_succeeds
 => "I smash it between the eyes! It reels in pain.", plot.plan == "attack"
 => "I complete the circle and it's trapped within!", plot.plan == "circle"
@@ -155,7 +173,7 @@ problem_appears
 => "[^=>demon] shows itself and I start to second guess a full-on assault.", plot.plan == "attack"
 => "I've barely finished preparing the receptacle when [=>demon] appears.", plot.plan == "bind"
 => "I've managed to destroy all anchors but one when [=>demon] attacks.", plot.plan == "uproot"
-=> "I haven't even tested the grounding as [=>demon] already is upon me.", plot.plan == "drain"
+=> "I haven't even tested the grounding as [=>demon] pounces on me.", plot.plan == "drain"
 => "The wire sizzles as a telltale sign of [=>demon] drawing near.", plot.plan == "overload"
 problem_averted
 => "I dodge [=>demon]'s gigantic [=>demon_weapon] and [=>maneuver] it.", plot.demon.type == "brute"
@@ -171,16 +189,29 @@ problem_hits
 => "[^=>demon] carries me through the door before I have a chance to finish unmooring it.", plot.demon.type == "swarm", plot.plan == "uproot", let plot.situation = "breach"
 => "I try and drain [=>demon], but find the grounding is all wrong. [^=>demon] is not even phased.", plot.plan == "drain", let plot.situation = "menace"
 => "I zap [=>demon], but it only slows it down for a second before the power fails and sparks fly from the wires as a fuse busts broken.", plot.plan == "overload", let plot.situation = "menace"
+=> "[^=>demon] creates multiple illusionary copies of itself, leaving me wondering which is the original.", plot.demon.type == "trickster", let plot.situation = "illusion"
+=> "[^=>demon] disappears into the shadows. I hear it snickering.", plot.demon.type == "trickster", let plot.situation = "ambush"
+=> "[^=>demon] crawls all over the wiring, making sparks fly.", plot.demon.type == "swarm", let plot.situation = "glitch"
+=> "[^=>demon] covers all light sources in the room, leaving it in darkness.", plot.demon.type == "swarm", let plot.situation = "darkness"
+=> "[^=>demon]'s hind muscles flex as it charges straight at me.", plot.demon.type == "brute", let plot.situation = "pounce"
+=> "[^=>demon] smashes the wall, making sparks fly from the exposed wiring.", plot.demon.type == "brute", let plot.situation = "glitch"
+=> "The unfinished circle breaks as the demon jumps at me and scrapes the [=>floor] with its claws.", plot.plan == "circle", let plot.situation = "pounce"
+=> "I hit [=>demon] with all my might but my attack just whiffs through the illusionary copy.", plot.plan == "attack", let plot.situation = "illusion"
+=> "[^=>demon] sees the vessel, pounces at me in a blind rage.", plot.plan == "bind", let plot.situation = "pounce"
+=> "I try and destroy an anchor, only to discover that it is merely an illusion.", plot.plan == "uproot", let plot.situation = "illusion"
+=> "[^=>demon] disappears into the shadows when it sees the drain I'm holding.", plot.plan == "drain", let plot.situation = "ambush"
+=> "[^=>demon] roars and my wire starts throwing sparks around the room.", plot.plan == "overload", let plot.situation = "glitch"
+
 problem_is_bad
 => "It's bigger than I thought.", plot.demon.type == "brute"
-=> "The room becomes dim as the swarm covers all the light bulbs.", plot.demon.type == "swarm", let plot.lighting = 2
+=> "The demonic swarm covers all the walls and even the ceiling.", plot.demon.type == "swarm"
 => "A mad electric giggle echoes around me and inside my brain.", plot.demon.type == "trickster"
 problem_is_impossible
 => "How am I going to finish the circle now?", plot.plan == "circle"
 => "I'm supposed to attack that? Really?", plot.plan == "attack"
 => "Can anything even hold it though?", plot.plan == "bind"
 => "How am I supposed to break its anchoring like this?", plot.plan == "uproot"
-=> "Have I even connected the drain correctly?", plot.plan == "drain"
+=> "I don't even know if I've grounded the drain correctly.", plot.plan == "drain"
 => "Is this even enough to overload something like that?", plot.plan == "overload"
 => "I start to second guess my plan."
 phone_rings
@@ -189,7 +220,8 @@ phone_rings
 => "The phone rings."
 rewards
 => "In any case, [^=>employer] compensates me for my troubles.", let plot.compensation, plot.job == "job"
-=> "At least there's one less [=>demon] haunting the world.", plot.job != "job"
+=> "In any case, [^=>employer] now owes me one.", plot.job == "favor"
+=> "At least there's one less [=>demon] haunting the world.", plot.job == "help"
 set_up_bag
 => "I open my bag and set it up on [plot.bag_location].", let plot.bag_location = =>furniture(plot.site)
 silver_lining
@@ -198,23 +230,63 @@ silver_lining
 => "At least I'm not [=>dead] yet."
 status_change
 => "I'm tossed inside a small room.", plot.situation == "breach", plot.site.interior != null, let plot.situation = "trapped"
-=> "I'm tossed on the ground underneath the sky.", plot.situation == "breach", plot.site.exterior != null, let plot.situation = "chased"
-=> "[^=>demon] cracks the [=>floor] underneath me and I'm plunged into the darkness below.", plot.situation == "menace", let plot.situation = "trapped", let plot.lighting = 1
-=> "I decide to retreat and take off running, [=>demon] fast behind me.", plot.situation = "menace", let plot.situation = "chased"
+=> "I wrestle with [=>demon] and crash into a side room ", plot.situation == "pounce", let plot.situation = "trapped"
+=> "I decide to retreat and take off running, with [=>demon] fast behind me.", plot.situation = "menace", let plot.situation = "chased"
+=> "I run wildly through the illusions, [=>demon] hot on my tail.", plot.situation == "illusion",let plot.situation = "chased"
+=> "[^=>demon] cracks the [=>floor] underneath me and I'm plunged into the darkness below.", plot.situation == "menace", let plot.situation = "darkness"
+=> "The electric shocks short the lights and the room is plunged into darkness.", plot.situation == "glitch", let plot.situation = "darkness"
+=> "[^=>demon] maims my [plot.injury] with its [=>demon_weapon].", plot.situation == "pounce", let plot.situation = "injured", let plot.injury = =>body_part
+=> "I fly through the air and land on my [plot.injury], busting it.", plot.situation == "breach", let plot.situation = "injured", let plot.injury = =>body_part
+=> "The illusions fade and I notice my pockets are empty.", plot.situation == "illusion", let plot.situation = "stolen", let plot.stolen
+=> "[^=>demon] pounces and then retreats, leaving me confused until I notice my equipment is gone.", plot.situation == "ambush", let plot.situation = "stolen", let plot.stolen
+=> "[^=>demon] appears from the shadows, cracking my head and leaving me seeing stars.", plot.situation == "ambush", let plot.situation = "stunned"
+=> "I get a shock from the stray electricity that leaves my head reeling.", plot.situation == "glitch", let plot.situation = "stunned"
 subplot_intro
 => "Wind howls through the broken [plot.sub.type].", plot.sub == "repair", plot.sub.air != null
 => "The [plot.sub.type] gurgles and clanks ominously.", plot.sub == "repair", plot.sub.water != null
 => "The [plot.sub.type] could use a little work.", plot.sub == "repair"
+=> "Unpaid [plot.sub.type] bills are starting to overflow my desk.", plot.sub == "bills"
+=> "My [plot.sub.type] are breathing down my neck about those debts though.", plot.sub == "debt"
+=> "A jolt of pain hits my [plot.sub.type]. I think it's infected.", plot.sub == "surgery"
+=> "I feel the familiar craving for [plot.sub.type].", plot.sub == "addiction"
+=> "I feel a pang of hunger in my stomach.", plot.sub == "hunger"
 subplot_problem
 => "It will be bad if I can't get it fixed soon.", plot.sub == "repair"
+=> "I wonder how long it will take before they cut me off entirely.", plot.sub == "bills"
+=> "I've just gotten my last warning, too.", plot.sub == "debt"
+=> "I should get it checked out.", plot.sub == "surgery"
+=> "My stash is empty and I desperately need some more.", plot.sub == "addiction"
+=> "I'd fill my fridge if I could.", plot.sub == "hunger"
 subplot_solution
-=> "Problem is, a detective's pay is not exactly luxurious. I need a job.", plot.sub.money != null
+=> "Problem is, a detective's pay is not exactly luxurious. [=>need_a_job]", plot.sub.money != null
+=> "Problem is, I don't exactly have a lot of cash at hand. [=>need_a_job]", plot.sub.money != null
 subplot_outro
 => "At least the money should help fix the [plot.sub.type].", plot.sub == "repair", plot.compensation != null
 => "Well, I still need to get that [plot.sub.type] fixed.", plot.sub == "repair", plot.compensation == null
+=> "Maybe I'll call in my favor to help fix the [plot.sub.type].", plot.sub == "repair", plot.job == "favor"
+=> "I can't pay the bills with good intentions though.", plot.sub == "bills", plot.compensation != null
+=> "Maybe I can get [=>employer] to help me with the [plot.sub.type] bills.", plot.sub == "bills", plot.job == "favor"
+=> "This should go nicely towards my [plot.sub.type] bills.", plot.sub == "bills", plot.compensation == null
+=> "I hope my [plot.sub.type] take credit.", plot.sub == "debt", plot.compensation != null
+=> "I'm still neck deep in debt though.", plot.sub == "debt", plot.compensation == null
+=> "This should negate my debt nicely.", plot.sub == "debt", plot.job == "favor"
+=> "Maybe I'll use the money to go get my [plot.sub.type] checked.", plot.sub == "surgery", plot.compensation != null
+=> "My [plot.sub.type] still hurts though.", plot.sub == "surgery", plot.compensation == null
+=> "Maybe [=>employer] can help me get my [plot.sub.type] checked.", plot.sub == "surgery", plot.job == "favor"
+=> "Time to refill that stash. Oh yeah.", plot.sub == "addiction", plot.compensation != null
+=> "I feel the familiar crawl of deprivation. My stash is till empty.", plot.sub == "addiction", plot.compensation == null
+=> "I'll have [=>employer] refill my stash.", plot.sub == "addiction", plot.job == "favor"
+=> "Now I can fill my larder again.", plot.sub == "hunger", plot.compensation != null
+=> "Both my stomach and the larder are still empty though.", plot.sub == "hunger", plot.compensation == null
+=> "I'll make [=>employer] make me dinner. It's the least [plot.employer.he] can do.", plot.sub == "hunger", plot.job == "favor"
 time_for_work
-=> "Anyway. Time for work. [^=>demon] won't catch itself."
-=> "Okay, enough waxing poetic. Time to exorcise [=>demon]."
+=> "I snap out of it. Time for work. [^=>demon] won't catch itself."
+=> "Okay, enough waxing poetic. [^=>demon] won't catch itself."
+tough_case
+=> "Already it seems like a tough case."
+=> "It sounds bad."
+=> "It doesn't seem good."
+=> "I feel like this one is going to be a hard one."
 victory
 => "I pummel it again and again until it can't hold itself together any more and disintegrates.", plot.plan == "attack"
 => "I quickly perform the rite while it's contained and send it screeching back to hell.", plot.plan == "circle"
@@ -227,9 +299,16 @@ wax_on_deduction
 => "The problem is containing the whole swarm. I don't think nobody will sing my praises if I only get rid of half the swarm.", plot.demon.type == "swarm"
 => "I should be able to outsmart it, though. After all, demons don't actually possess the capacity for real thought.", plot.demon.type == "trickster"
 wax_on_site
-=> "I don't know why, but [plot.site.type]s always give me the creeps."
-=> "Here the coroners of justice dissect and diagnose the corpse of law.", plot.site.type == "law firm"
+=> "I don't know why, but the thought of a haunted [plot.site.type] always gives me the creeps."
+=> "The air is heavy with the sweat and dust of a thousand wasted man-hours.", plot.site.office != null
+=> "Here the coroners of justice dissect and diagnose the corpse of law.", plot.site.law != null
 => "The station seems so empty. Only a few homeless people shuffle slowly around the vicinity, lending the place a destitute atmosphere.", plot.site.type == "train station"
+=> "I can almost hear the cash register ringing, as full of itself as it is money.", plot.site.store != null
+=> "A sad crop of trees surround me, whispering of the dark things they've seen.", plot.site.park != null
+=> "The stench of death floats in the air like a persistent miasma.", plot.site.death != null
+=> "Tens of thousands of words stare at me from the bookshelves, bound in crumbling leather.", plot.site.books != null
+=> "Heavy metal machines though still, show signs of the relentless march of industry.", plot.site.industry != null
+=> "The place smells of dried alcohol, vomit and blood.", plot.site.alcohol != null
 what_now
 => "What now?"
 => "What do I do now?"

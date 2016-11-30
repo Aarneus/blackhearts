@@ -26,8 +26,13 @@ scene => "[=>clean_up]\n[=>look_back]\n[=>final_judgement]", plot.phase == 8
 # Selects the plot environment variables
 select_plot_variables => "[=>select_subplot]"
 
-select_subplot
-=> let plot.sub = "repair", let plot.sub.money, let plot.sub.type = =>select_subplot_type
+select_subplot +>  let plot.sub.type = =>select_subplot_type
+=> let plot.sub = "repair", let plot.sub.money
+=> let plot.sub = "bills", let plot.sub.money
+=> let plot.sub = "debt", let plot.sub.money
+=> let plot.sub = "surgery", let plot.sub.money
+=> let plot.sub = "addiction", let plot.sub.money
+=> let plot.sub = "hunger", let plot.sub.money
 
 select_subplot_type
 => "plumbing", plot.sub == "repair", let plot.sub.water
@@ -35,4 +40,14 @@ select_subplot_type
 => "roof", plot.sub == "repair", let plot.sub.air
 => "door", plot.sub == "repair", let plot.sub.air
 => "window", plot.sub == "repair", let plot.sub.air
-
+=> "electricity", plot.sub == "bills"
+=> "heating", plot.sub == "bills"
+=> "bank", plot.sub == "bills"
+=> "bookies", plot.sub == "debt"
+=> "loan shark", plot.sub == "debt"
+=> "poker buddies", plot.sub == "debt"
+=> "[=>body_part]", plot.sub == "surgery"
+=> "painkillers", plot.sub == "addiction"
+=> "laudanum", plot.sub == "addiction"
+=> "opium", plot.sub == "addiction"
+=> "hunger", plot.sub == "hunger"

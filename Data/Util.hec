@@ -13,8 +13,7 @@ name E
 => "[E.he]", E.actor != null, last_mentioned_actor == E.name, let last_mentioned_actor = E.name
 => "the [E.type]", E.location != null
 => "[E.name.full]", E.location != null
-=> "the [E.name]", E.demon != null, E.name_known != null
-=> "the [=>demon_euphemism(E)]", E.demon != null, E.name_known == null
+=> "the [=>demon_euphemism(E)]", E.demon != null
 
 
 # Get the employer or create them if they don't exist
@@ -34,8 +33,10 @@ demon => "[=>create_demon(plot.demon)][=>demon]", plot.demon == null, let plot.d
 # Floor
 floor => "floor", plot.inside != null
 floor => "ground", plot.inside == null
+floor => "dancefloor", plot.site.type == "nightclub"
 
 # Get the letter type or create it if it doesn't exist
 letter_type => "[plot.call.type]", plot.call.type != null
 letter_type => "letter", plot.call.type == null, let plot.call.type = "letter"
 letter_type => "note", plot.call.type == null, let plot.call.type = "note"
+letter_type => "telegram", plot.call.type == null, let plot.call.type = "telegram"

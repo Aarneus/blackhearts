@@ -4,13 +4,8 @@ init_world => "[=>init_agency]"
 
 
 # Sets the proper variables when entering a location
-update_location L => "[=>set_lighting(L)][=>set_noise(L)][=>set_inside(L)]"
-
-set_lighting L => L.lighting == null, set plot.lighting = 3
-set_lighting L => L.lighting != null, set plot.lighting = L.lighting
-set_noise L => L.noise == null, set plot.noise = 1
-set_noise L => L.noise != null, set plot.noise = L.noise
-set_inside L => let plot.inside = L.inside
+update_location L => "[=>set_inside(L)]"
+set_inside L => let plot.inside = L.interior
 
 # Main locations
 init_agency => agency != null
@@ -20,29 +15,122 @@ init_agency => "[=>create_building(agency)][=>create_location(agency)]",
     let agency.name.full = "Blackhearts Detective Agency",
     let agency.type = "agency",
     let agency.interior,
-    let agency.exterior,
-    let agency.office,
-    let agency.inside
+    let agency.office
 
 
 # Initializes a location with the appropriate affixes
 create_location L => "[=>set_pronouns(L \"object\")]", let L.location
 
 # Creates a basic building
-create_building L => let L.interior, let L.exterior, let L.inside
+create_building L => let L.interior
 
 # Creates a random location
 create_random_location L => "[=>random_location(L)][=>random_location_name(L)][=>set_location_full_name(L)][=>create_location(L)]"
-set_location_full_name L => "", let L.name.full = L.name + " " + L.type
+set_location_full_name L => let L.name.full = L.name + " " + L.type
 
 # Location types
-random_location L => "[=>create_building(L)]", let L.type = "law firm", let L.office
-random_location L => "[=>create_building(L)]", let L.type = "train station", let L.station
+random_location L 
+=> "[=>create_building(L)][=>set_building_type(L)]"
+
+set_building_type L
+=> let L.type = "law firm", let L.office, let L.law
+=> let L.type = "police station", let L.office, let L.law
+=> let L.type = "courthouse", let L.office, let let L.law
+=> let L.type = "archive", let L.office, let L.books
+=> let L.type = "library", let L.books
+=> let L.type = "college", let L.books
+=> let L.type = "train station", let L.station
+=> let L.type = "balloon terminal", let L.station
+=> let L.type = "metro station", let L.station
+=> let L.type = "train station", let L.station
+=> let L.type = "grocery store", let L.store
+=> let L.type = "hardware store", let L.store
+=> let L.type = "general store", let L.store
+=> let L.type = "park", let L.park, let L.interior <- null
+=> let L.type = "graveyard", let L.park, let L.death <- null
+=> let L.type = "garden", let L.park, let L.interior <- null
+=> let L.type = "crypt", let L.death
+=> let L.type = "morgue", let L.death, let L.office
+=> let L.type = "power plant", let L.industry
+=> let L.type = "factory", let L.industry
+=> let L.type = "mill", let L.industry
+=> let L.type = "bar", let L.alcohol
+=> let L.type = "nightclub", let L.alcohol
+=> let L.type = "speakeasy", let L.alcohol
+
+
 
 # Location names
-random_location_name L 
-=> let L.name = "Karnak"
-=> let L.name = "Luke"
-=> let L.name = "Torpor"
-
-
+random_location_name L +> this.count == 0
+=> let L.name = "Ashdown"
+=> let L.name = "Brewer"
+=> let L.name = "Down"
+=> let L.name = "Forge"
+=> let L.name = "Gedge"
+=> let L.name = "Griggs"
+=> let L.name = "Kaylock"
+=> let L.name = "Lynch"
+=> let L.name = "Adams"
+=> let L.name = "Beechworth"
+=> let L.name = "Blair"
+=> let L.name = "Brewer"
+=> let L.name = "Devitt"
+=> let L.name = "Hyem"
+=> let L.name = "Sheills"
+=> let L.name = "Stanbury"
+=> let L.name = "Urwin"
+=> let L.name = "Vinge"
+=> let L.name = "Wakefield"
+=> let L.name = "Yea"
+=> let L.name = "Mast"
+=> let L.name = "Rowe"
+=> let L.name = "Sinnett"
+=> let L.name = "Strain"
+=> let L.name = "Wakefield"
+=> let L.name = "Wickes"
+=> let L.name = "Wraith"
+=> let L.name = "Younger"
+=> let L.name = "Chattoway"
+=> let L.name = "Kidd"
+=> let L.name = "Kenward"
+=> let L.name = "Dosett"
+=> let L.name = "Godwin"
+=> let L.name = "Gunn"
+=> let L.name = "Hawk"
+=> let L.name = "Hayward"
+=> let L.name = "Whittock"
+=> let L.name = "Seymour"
+=> let L.name = "Strong"
+=> let L.name = "Hopkin"
+=> let L.name = "Weston"
+=> let L.name = "Whitlock"
+=> let L.name = "Whiston"
+=> let L.name = "Whipple"
+=> let L.name = "Highmore"
+=> let L.name = "Ashmore"
+=> let L.name = "Baldwin"
+=> let L.name = "Halbard"
+=> let L.name = "Simmons"
+=> let L.name = "Patterson"
+=> let L.name = "Jordan"
+=> let L.name = "Reynolds"
+=> let L.name = "Hamilton"
+=> let L.name = "Graham"
+=> let L.name = "Kim"
+=> let L.name = "Gonzales"
+=> let L.name = "Alexander"
+=> let L.name = "Ramos"
+=> let L.name = "Wallace"
+=> let L.name = "Griffin"
+=> let L.name = "West"
+=> let L.name = "Cole"
+=> let L.name = "Hayes"
+=> let L.name = "Chavez"
+=> let L.name = "Gibson"
+=> let L.name = "Bryant"
+=> let L.name = "Ellis"
+=> let L.name = "Stevens"
+=> let L.name = "Murray"
+=> let L.name = "Ford"
+=> let L.name = "Marshall"
+=> let L.name = "Owens"

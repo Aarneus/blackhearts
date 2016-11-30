@@ -6,6 +6,7 @@ emote_negative +> this.count < story_index
 => "My gut sinks."
 => "I frown."
 => "Sigh."
+=> "I hesitate."
 => "My jaw clenches."
 => "My fists clench."
 => "I bite my lip."
@@ -30,8 +31,26 @@ emote_positive
 # Random furniture
 furniture L
 => "the [=>floor]"
+=> "a windowsill", plot.inside != null
 => "a desk", L.office != null
+=> "a filing cabinet", L.office != null
+=> "a paper shredder", L.office != null
 => "a bench", L.station != null
+=> "a radio tower", L.station != null
+=> "a luggage cart", L.station != null
+=> "a counter", L.store != null or L.alcohol != null
+=> "a safe", L.law != null or L.store != null
+=> "a statue", L.park != null
+=> "a coffin", L.death != null
+=> "a bookshelf", L.books != null
+=> "a workbench", L.industry != null
+=> "a control panel", L.industry != null
+=> "a stool", L.alcohol != null
+=> "a billiard table", L.alcohol != null
+=> "a jukebox", L.alcohol != null
+=> "a tombstone", L.type == "graveyard"
+=> "a slab", L.type == "morgue"
+=> "a sarcophagus", L.type == "crypt" or L.type == "graveyard"
 
 # Hated authorities
 hated_authority 
@@ -68,7 +87,7 @@ think
 => "breathe"
 => "focus"
 => "concentrate"
-=> "get myself together"
+=> "get it together"
 => "work this out"
 
 # Something hits like this
@@ -92,3 +111,13 @@ maneuver
 => "sidestep"
 => "strafe around"
 => "step back"
+
+body_part
+=> "arm"
+=> "leg"
+=> "hand"
+=> "foot"
+=> "shoulder"
+=> "back"
+=> "chest"
+=> "stomach"

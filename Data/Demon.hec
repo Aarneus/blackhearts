@@ -2,20 +2,9 @@
 
 # Create a random demon
 create_demon D => let D.demon,
-    let D.name = =>demon_prefix + =>demon_suffix, 
     let D.type = =>demon_type, 
     let D.flavour = =>demon_flavour, 
     let D.form = =>demon_form
-
-
-# Demon name
-demon_prefix 
-=> "carna"
-=> "aure"
-
-demon_suffix 
-=> "trix"
-=> "don"
 
 # Demon type
 demon_type
@@ -59,6 +48,7 @@ demon_weapon
 
 # Demon descriptions
 demon_euphemism D
+=> "it"
 => "demon"
 => "thing"
 => "monster"
