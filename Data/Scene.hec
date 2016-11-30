@@ -95,7 +95,7 @@ determination +> this.count < story_index
 => "Time to kick some demon ass."
 => "This has to work."
 => "This is my last chance."
-=> "I pray that this will work"
+=> "I pray that this will work."
 => "This has got to work."
 => "I need this to work."
 employer_enters
@@ -310,7 +310,7 @@ silver_lining
 => "At least I'm not [=>dead] yet."
 status_change
 => "I'm tossed inside a small room.", plot.situation == "breach", plot.site.interior != null, let plot.situation = "trapped"
-=> "I wrestle with [=>demon] and crash into a side room ", plot.situation == "pounce", let plot.situation = "trapped"
+=> "I wrestle with [=>demon] and crash into a side room.", plot.situation == "pounce", let plot.situation = "trapped"
 => "I decide to retreat and take off running, with [=>demon] fast behind me.", plot.situation = "menace", let plot.situation = "chased"
 => "I run wildly through the illusions, [=>demon] hot on my tail.", plot.situation == "illusion",let plot.situation = "chased"
 => "[^=>demon] cracks the [=>floor] underneath me and I'm plunged into the darkness below.", plot.situation == "menace", let plot.situation = "darkness"
