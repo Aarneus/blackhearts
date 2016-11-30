@@ -246,7 +246,7 @@ problem_appears
 => "I haven't even tested the grounding as [=>demon] pounces on me.", plot.plan == "drain"
 => "The wire sizzles as a tell-tale sign of [=>demon] drawing near.", plot.plan == "overload"
 problem_averted
-=> "I dodge [=>demon]'s gigantic [=>demon_weapon] and [=>maneuver] it.", plot.demon.type == "brute"
+=> "I dodge its gigantic [=>demon_weapon] and [=>maneuver] it.", plot.demon.type == "brute"
 => "I [=>maneuver] a wave of demonic critters and it crashes into the [=>floor].", plot.demon.type == "swarm"
 => "I fake out [=>demon] and [=>maneuver] it.", plot.demon.type == "trickster"
 problem_hits
