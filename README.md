@@ -1,6 +1,7 @@
 # 72 Cases of the Blackhearts Detective Agency
 NaNoGenMo 2016 Novel Generator
 
+Better documentation may be incoming.
 
 Sample Grammar syntax:
 <blockquote>
