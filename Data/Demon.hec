@@ -48,7 +48,6 @@ demon_weapon
 
 # Demon descriptions
 demon_euphemism D
-=> "it"
 => "demon"
 => "thing"
 => "monster"
