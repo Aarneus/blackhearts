@@ -61,7 +61,7 @@ set_building_type L
 
 
 # Location names
-random_location_name L +> this.count == 0
+random_location_name L +> this.count < 2
 => let L.name = "Ashdown"
 => let L.name = "Brewer"
 => let L.name = "Down"

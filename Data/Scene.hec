@@ -327,7 +327,7 @@ subplot_intro
 => "The [plot.sub.type] could use a little work.", plot.sub == "repair"
 => "Unpaid [plot.sub.type] bills are starting to overflow my desk.", plot.sub == "bills"
 => "My [plot.sub.type] are breathing down my neck about those debts though.", plot.sub == "debt"
-=> "A jolt of pain hits my [plot.sub.type]. I think it's infected.", plot.sub == "surgery"
+=> "I feel a pain in my [plot.sub.type]. I think it's infected.", plot.sub == "surgery"
 => "I feel the familiar craving for [plot.sub.type].", plot.sub == "addiction"
 => "I feel a pang of hunger in my stomach.", plot.sub == "hunger"
 subplot_problem
