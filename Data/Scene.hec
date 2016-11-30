@@ -18,7 +18,7 @@ plan_problem => "[=>problem_appears] [=>problem_is_bad] [=>problem_is_impossible
 plan_failure => "[=>problem_hits] [=>status_change] [=>new_situation]"
 
 # 4, 6 - New plan
-assess_situation => "[=>describe_situation] [=>emote_negative] [=>silver_lining]"
+assess_situation => "[=>emote_negative] [=>describe_situation] [=>silver_lining]"
 plan_debate => "[=>consider_situation] [=>consider_options] [=>despair]"
 plan_decision => "[=>need_to_focus] [=>moment_of_clarity] [=>make_plan]"
 
@@ -26,7 +26,7 @@ plan_decision => "[=>need_to_focus] [=>moment_of_clarity] [=>make_plan]"
 plan_success => "[=>problem_averted] [=>plan_succeeds] [=>victory]"
 
 # 8 - Epilogue
-clean_up => "[=>future_of_job] [=>job_good_sides] [=>job_bad_sides]"
+clean_up => "[=>emote_positive] [=>job_good_sides] [=>job_bad_sides]"
 look_back => "[=>rewards] [=>subplot_outro] [=>why_go_on]"
 final_judgement => "[=>must_go_on] [=>just_another_day] [=>fade_to_black]"
 
@@ -67,7 +67,7 @@ deduce_demon
 => "The scene suggests a not-too-bright [=>demon].", plot.demon.type == "brute"
 => "It seems to be a violent but not too clever.", plot.demon.type == "brute"
 => "It's obvious we're dealing with a demonic swarm.", plot.demon.type == "swarm"
-=> "This must be the work of a swarm demon.", plot.demon.type == "swarm"
+=> "This must be the work of a swarm of demons.", plot.demon.type == "swarm"
 => "Obviously [=>demon] is more cunning than average.", plot.demon.type == "trickster"
 => "[^=>demon] must be more subtle than your average demon.", plot.demon.type == "trickster"
 describe_situation
@@ -144,10 +144,6 @@ fade_end
 => "the fog"
 => "the rain"
 => "the sunrise"
-future_of_job
-=> "The situation at [=>site] should be under control now."
-=> "[^=>site] quickly gets up on its feet."
-=> "[^=>site] is opened for business soon after."
 get_job
 => "[=>phone_rings] [=>caller]", let plot.call = "phone"
 => "[=>letter_arrives]", let plot.call = "letter"
@@ -171,6 +167,7 @@ job_intro
 => "[=>tough_case] [^plot.employer.he] will owe me after this. I get ready to leave for [=>site].", let plot.job = "favor"
 just_another_day
 => "Oh well. Just another day in the life."
+=> "Oh well. Another day, another job."
 => "Oh well. Life goes on."
 letter_arrives 
 => "I look back at the [=>letter_type] from [=>employer]."
@@ -235,7 +232,7 @@ probe_situation
 => "I locate the anchor points.", plot.plan == "uproot"
 => "I connect a piece of wire to a piece of plumbing. That should be grounded properly now.", plot.plan == "drain"
 => "I grab a loose live wire hanging from the wall by the safe part.", plot.plan == "overload"
-=> "I reach for my bag for my tools.", plot.stolen == null
+=> "I reach for my tools.", plot.stolen == null
 => "I steady my breath."
 problem_appears
 => "I hear it too late. A loud [=>demon_sound] comes from behind me and chills me to the bone."
@@ -243,7 +240,7 @@ problem_appears
 => "[^=>demon] shows itself and I start to second guess a full-on assault.", plot.plan == "attack"
 => "I've barely finished preparing the receptacle when [=>demon] appears.", plot.plan == "bind"
 => "I've managed to destroy all anchors but one when [=>demon] attacks.", plot.plan == "uproot"
-=> "I haven't even tested the grounding as [=>demon] pounces on me.", plot.plan == "drain"
+=> "I haven't even tested the grounding when [=>demon] pounces on me.", plot.plan == "drain"
 => "The wire sizzles as a tell-tale sign of [=>demon] drawing near.", plot.plan == "overload"
 problem_averted
 => "I dodge its gigantic [=>demon_weapon] and [=>maneuver] it.", plot.demon.type == "brute"
@@ -292,7 +289,7 @@ phone_rings
 => "The phone rings."
 reward_doesnt_pay
 => "I get no monetary compensation"
-=> "It doesn't pay"
+=> "I don't get paid"
 => "I get no money out of this"
 rewards
 => "In any case, [^=>employer] compensates me for my troubles.", let plot.compensation, plot.job == "job"
@@ -360,7 +357,7 @@ subplot_outro
 => "Both my stomach and the larder are still empty though.", plot.sub == "hunger", plot.compensation == null
 => "I'll make [=>employer] make me dinner. It's the least [plot.employer.he] can do.", plot.sub == "hunger", plot.job == "favor"
 time_for_work
-=> "I snap out of it. Time for work. [^=>demon] won't catch itself."
+=> "I snap out of it. Time for work; [=>demon] won't catch itself."
 => "Okay, enough waxing poetic. [^=>demon] won't catch itself."
 tough_case
 => "Already it seems like a tough case."
@@ -375,9 +372,9 @@ victory
 => "It screeches unbearably and shrinks in size as its power is drained until it disappears with a fizzle.", plot.plan == "drain"
 => "It screeches and pulses as the energy overloads it, exploding it in a burst of static electricity.", plot.plan == "overload"
 wax_on_deduction
-=> "Shouldn't be too hard. It's all about the brains, after all.", plot.demon.type == "brute"
-=> "The problem is containing the whole swarm. I don't think nobody will sing my praises if I only get rid of half the swarm.", plot.demon.type == "swarm"
-=> "I should be able to outsmart it, though. After all, demons don't actually possess the capacity for real thought.", plot.demon.type == "trickster"
+=> "Shouldn't be too hard. It's all about the brains, after all. Still, I need a plan.", plot.demon.type == "brute"
+=> "The problem is containing them all. I don't think nobody will sing my praises if I only get rid of some of it. I need a plan.", plot.demon.type == "swarm"
+=> "I should be able to outsmart it, though. After all, demons don't actually possess the capacity for real thought. I need a plan, though.", plot.demon.type == "trickster"
 wax_on_site
 => "I don't know why, but the thought of a haunted [plot.site.type] always gives me the creeps."
 => "The air is heavy with the sweat and dust of a thousand wasted man-hours.", plot.site.office != null
@@ -387,7 +384,7 @@ wax_on_site
 => "A sad crop of trees surround me, whispering of the dark things they've seen.", plot.site.park != null
 => "The stench of death floats in the air like a persistent miasma.", plot.site.death != null
 => "Tens of thousands of words stare at me from the bookshelves, bound in crumbling leather.", plot.site.books != null
-=> "Heavy metal machines though still, show signs of the relentless march of industry.", plot.site.industry != null
+=> "Heavy metal machines, though still, are a sign of the relentless march of industry.", plot.site.industry != null
 => "The place smells of dried alcohol, vomit and blood.", plot.site.alcohol != null
 what_now
 => "What now?"

@@ -5,7 +5,6 @@ emote_negative +> this.count < story_index
 => "I furrow my brow."
 => "My gut sinks."
 => "I frown."
-=> "Sigh."
 => "I hesitate."
 => "My jaw clenches."
 => "My fists clench."
@@ -14,7 +13,6 @@ emote_negative +> this.count < story_index
 => "I freeze."
 => "My grip tightens."
 => "I tremble."
-=> "I raise an eyebrow."
 => "I feel my body tense."
 => "I reel."
 => "I feel a cold sweat coming on."
@@ -22,7 +20,6 @@ emote_negative +> this.count < story_index
 emote_positive
 => "I grin."
 => "I relax."
-=> "I stretch."
 => "I smile."
 
 # Random furniture
@@ -81,7 +78,7 @@ dead
 think
 => "think"
 => "stop and think"
-=> "breathe"
+=> "breathe and think"
 => "focus"
 => "concentrate"
 => "get it together"
